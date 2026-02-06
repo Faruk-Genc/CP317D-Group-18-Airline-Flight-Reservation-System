@@ -1,0 +1,58 @@
+.flight-container {
+    display: flex;
+    position: relative;
+    gap: 1rem; 
+}
+
+.flight-card {
+    flex: 1;
+    position: relative;
+    height: 150px;
+    width: 300px;
+    background-color: gray;
+    border-radius: 8px;
+  
+    display: flex;
+    flex-direction: column;
+    align-items: center;      
+    justify-content: center;  
+}
+
+.flight-card:hover {
+    outline: 1px solid var(--highlight-color);
+    border-radius: 8px;
+    color: #ddd;
+}
+.switch-card {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+    background-color: var(--background-color); 
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.rotated {
+    transform: rotate(180deg);
+    transition: transform 0.5s ease;
+}
+
+.switch-card svg {
+    transition: transform 0.5s ease;
+}
+
+h1, p {
+    margin: 0;
+}
+
+
+
