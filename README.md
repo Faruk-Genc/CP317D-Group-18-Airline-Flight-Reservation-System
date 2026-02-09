@@ -10,6 +10,7 @@ Basic flight reservation web app for a school project.
 ## Folder structure
 ```
 backend/          Flask app, API, database access
+backend/app/      Query scripts (e.g., flight_queries.py)
 frontend/         React app (Vite)
 docs/             Architecture notes and diagrams
 scripts/          Helper scripts
@@ -58,10 +59,10 @@ https://console.neon.tech/app/projects/wandering-resonance-86050727
 To populate the PostgreSQL database with flight schedules:
 
 ```python
-from backend.app.flightgenerator import insert_daily_schedule
+from .insert_flights import insert_daily_schedule
 
-# Function signature
-insert_daily_schedule(date: str = "MM-DD-YY", num_flights: int)
+# Inserts a 365-day flight schedule starting from the current date and removes any past flights.
+insert_daily_schedule() 
 ```
 
 
