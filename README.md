@@ -36,7 +36,7 @@ Frontend:
 3. `npm run dev`
 
 ## PostgreSQL Configuration
-Set up your `.env` file with the correct database credentials.  
+Set up your `.env` file with the correct password  
 Click below to reveal the password for the `DB_PASSWORD` variable:
 
 <details>
