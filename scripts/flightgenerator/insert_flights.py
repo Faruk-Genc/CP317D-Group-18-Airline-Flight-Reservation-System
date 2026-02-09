@@ -80,7 +80,8 @@ def generate_flights(date_obj, n_flights):
         )
 
         aircraft = random.choice(AIRCRAFT_NAMES)
-        base_cost = round(dist_km * BASE_COST_PER_KM, 2)
+        MIN_FARE = 50.0  
+        base_cost = max(round(dist_km * BASE_COST_PER_KM, 2), MIN_FARE)
 
         flights.append((
             flight_no,
