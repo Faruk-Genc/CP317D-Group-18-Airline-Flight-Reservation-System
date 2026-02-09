@@ -7,16 +7,6 @@ Basic flight reservation web app for a school project.
 - Frontend: React (Vite)
 - Database: PostgreSQL
 
-## Flight Generation
-
-To populate the PostgreSQL database with flight schedules:
-
-```python
-from backend.app.flightgenerator import insert_daily_schedule
-
-# Function signature
-insert_daily_schedule(date: str = "MM-DD-YY", num_flights: int)
-```
 ## Folder structure
 ```
 backend/          Flask app, API, database access
@@ -56,12 +46,23 @@ DB_PASSWORD=npg_WIoOsj86URTn
 ```
 </details>
 
-## Neon Dashboard
+### Neon Dashboard
 <details>
   <summary>Neon PostgreSQL serverless dashboard</summary>
 
 https://console.neon.tech/app/projects/wandering-resonance-86050727
 </details>
+
+## Flight Generation
+
+To populate the PostgreSQL database with flight schedules:
+
+```python
+from backend.app.flightgenerator import insert_daily_schedule
+
+# Function signature
+insert_daily_schedule(date: str = "MM-DD-YY", num_flights: int)
+```
 
 
 
