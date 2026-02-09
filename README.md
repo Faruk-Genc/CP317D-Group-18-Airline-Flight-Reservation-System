@@ -10,22 +10,62 @@ Basic flight reservation web app for a school project.
 ## Folder structure
 ```
 backend/          Flask app, API, database access
+backend/app/      Query scripts (e.g., flight_queries.py)
 frontend/         React app (Vite)
 docs/             Architecture notes and diagrams
 scripts/          Helper scripts
 ```
 
 ## Quick start
+
 Backend:
 1. `cd backend`
-2. `pip install -r requirements.txt`
-3. `flask --app app.main run`
+2. **Create virtual environment**  
+   - **Windows:** `python -m venv venv`  
+   - **macOS/Linux:** `python3 -m venv venv`
+3. **Activate virtual environment**  
+   - **Windows (PowerShell):** `.\venv\Scripts\Activate.ps1`  
+   - **Windows (cmd):** `.\venv\Scripts\activate.bat`  
+   - **macOS/Linux:** `source venv/bin/activate`
+4. `pip install -r requirements.txt`
+5. `flask --app app.main run`
 
 Frontend:
 1. `cd frontend`
-2. `npm create vite@latest . -- --template react`
-3. `npm install`
-4. `npm run dev`
+2. `npm install`
+3. `npm run dev`
+
+## PostgreSQL Configuration
+Set up your `.env` file with the correct database credentials.  
+Click below to reveal the password for the `DB_PASSWORD` variable:
+
+<details>
+  <summary>Show DB_PASSWORD</summary>
+
+```env
+DB_PASSWORD=npg_WIoOsj86URTn
+```
+</details>
+
+### Neon Dashboard
+<details>
+  <summary>Neon PostgreSQL serverless dashboard</summary>
+
+https://console.neon.tech/app/projects/wandering-resonance-86050727
+</details>
+
+## Flight Generation
+
+To populate the PostgreSQL database with flight schedules:
+
+```python
+from .insert_flights import insert_daily_schedule
+
+# Inserts a 365-day flight schedule starting from the current date and removes any past flights.
+insert_daily_schedule() 
+```
+
+
 
 ## Docs
 - `docs/architecture.md`
