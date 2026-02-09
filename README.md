@@ -18,8 +18,10 @@ scripts/          Helper scripts
 
 ## Quick start
 
-Configure Environment:
-1. Refer to [**PostgreSQL Configuration**](#Postgresql-Configuration) for details.
+> [!IMPORTANT] Setup
+> **Important:** Configure Environment  
+> Refer to [**PostgreSQL Configuration**](#postgresql-configuration) for details.
+
 
 Backend:
 1. `cd backend`
