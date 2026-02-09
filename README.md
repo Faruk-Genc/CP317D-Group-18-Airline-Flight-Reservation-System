@@ -63,7 +63,7 @@ from .insert_flights import insert_daily_schedule
 
 # Optional: can run manually to populate 365-day flight schedule.
 # Handled automatically by GitHub Actions every day at UTC midnight.
-# insert_daily_schedule()
+insert_daily_schedule()
 ```
 
 
