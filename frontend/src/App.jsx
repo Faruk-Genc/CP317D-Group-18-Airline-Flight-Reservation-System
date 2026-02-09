@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import FlightInfo from './components/flightinfo'
+import FlighCard from './components/FlightCard'
+import FlighCardSelection from './components/FlightCardSelection'
 import './App.css'
 
 function App() {
@@ -29,19 +30,21 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p> */}
-      <FlightInfo
+      <FlighCard
         aita1="TKO"
         city1="Tokyo"
         aita2="NYC"
         city2="New York City"
       />
       <br/>
-      <FlightInfo
+      <FlighCard
         aita1="TOR"
         city1="Toronto"
         aita2="LON"
         city2="London"
       />
+      <br/><br/><br/>
+      {/* <FlighCardSelection></FlighCardSelection> */}
     </>
   )
 }

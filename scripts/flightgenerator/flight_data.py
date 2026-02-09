@@ -54,9 +54,9 @@ def generate_base_flights(date_obj, n_flights):
         while dest_code == origin_code:
             dest_code = random.choice(airport_codes)
 
-        flight_no = IATA + str(random.randint(100, 9999))
+        flight_no = IATA + str(random.randint(100, 9999)) + "-" + date_obj.strftime("%y%m%d")
         while flight_no in assigned_flight_nos:
-            flight_no = IATA + str(random.randint(100, 9999))
+            flight_no = IATA + str(random.randint(100, 9999)) + "-" + date_obj.strftime("%y%m%d")
         assigned_flight_nos.append(flight_no)
 
         origin_airport = airports[origin_code]

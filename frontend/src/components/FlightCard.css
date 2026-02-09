@@ -5,7 +5,6 @@
 }
 
 .flight-card {
-    flex: 1;
     position: relative;
     height: 150px;
     width: 300px;
@@ -55,4 +54,26 @@ h1, p {
 }
 
 
+.selection-overlay {
+    position: absolute;
+    inset: 0; 
 
+    transform: translateY(130px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+
+    border-radius: 8px;
+    z-index: 10;
+}
+
+.flight-card:hover .selection-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
