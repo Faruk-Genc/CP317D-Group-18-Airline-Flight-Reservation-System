@@ -58,18 +58,6 @@ DB_PASSWORD=npg_WIoOsj86URTn
 https://console.neon.tech/app/projects/wandering-resonance-86050727
 </details>
 
-## Flight Generation
-
-To populate the PostgreSQL database with flight schedules:
-
-```python
-from .insert_flights import insert_daily_schedule
-
-# Optional: can run manually to populate 365-day flight schedule.
-# Handled automatically by GitHub Actions every day at UTC midnight.
-insert_daily_schedule()
-```
-
 
 
 ## Docs
