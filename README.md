@@ -18,17 +18,24 @@ scripts/          Helper scripts
 
 ## Quick start
 
+Configure Environment:
+1. Refer to [**PostgreSQL Configuration**](#Postgresql-Configuration) for details.
+
 Backend:
 1. `cd backend`
 2. **Create virtual environment**  
    - **Windows:** `python -m venv venv`  
-   - **macOS/Linux:** `python3 -m venv venv`
+   - **macOS/Linux:** 
+   `python3 -m venv venv`
 3. **Activate virtual environment**  
-   - **Windows (PowerShell):** `.\venv\Scripts\Activate.ps1`  
-   - **Windows (cmd):** `.\venv\Scripts\activate.bat`  
-   - **macOS/Linux:** `source venv/bin/activate`
+   - **Windows (PowerShell):** 
+   `.\venv\Scripts\Activate.ps1`  
+   - **Windows (cmd):** 
+   `.\venv\Scripts\activate.bat`  
+   - **macOS/Linux:** 
+   `source venv/bin/activate`
 4. `pip install -r requirements.txt`
-5. `flask --app app.main run`
+5. `python -m flask --app app.main run`
 
 Frontend:
 1. `cd frontend`
