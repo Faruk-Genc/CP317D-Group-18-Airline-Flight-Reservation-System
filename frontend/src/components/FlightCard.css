@@ -37,7 +37,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 999;
+    z-index: 2;
+}
+
+.flight-card {
+  position: relative;
+  cursor: pointer; /* indicates clickable */
+}
+
+.selection-overlay {
+  position: absolute;
+  top: 100%; /* appear below card, or 0 if over card */
+  left: 0;
+  width: 100%;
+  z-index: 10;
 }
 
 .rotated {
@@ -58,7 +71,7 @@ h1, p {
     position: absolute;
     inset: 0; 
 
-    transform: translateY(130px);
+    transform: translateY(80px);
 
     display: flex;
     align-items: center;

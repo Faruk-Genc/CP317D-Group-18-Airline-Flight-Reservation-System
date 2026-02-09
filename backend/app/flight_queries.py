@@ -72,28 +72,79 @@ def get_flights_between_dates(start_date, end_date):
     finally:
         conn.close()
 
-def get_flights_from_origin(origin_iata=None):
+def get_all_flights_from_origin(origin):
     """
-    Returns flights departing from a specific airport.
-
+    Return all flights from the given origin (IATA, city, country, or country code).
+    
     Args:
-        origin_iata (str, optional): IATA code of the origin airport. If None, returns all flights.
-
+        origin (str): Exact or partial origin identifier (city, IATA, country, or country code)
+        
     Returns:
-        List[dict]: List of flight records from `daily_flights`.
+        List[dict]: All matching flights
+    """
+    if not origin or not origin.strip():
+        return []  
+
+    origin_lower = origin.lower()
+    contains_pattern = "%" + origin_lower + "%"
+
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT *
+                FROM daily_flights
+                WHERE LOWER(origin_iata) LIKE %s
+                   OR LOWER(origin_city) LIKE %s
+                   OR LOWER(origin_country) LIKE %s
+                   OR LOWER(origin_country_code) LIKE %s
+                ORDER BY departure_time
+            """, (contains_pattern, contains_pattern, contains_pattern, contains_pattern))
+            
+            return cur.fetchall()
+    finally:
+        conn.close()
+
+def get_unique_origins(origin=None):
+    """
+    Fetch unique origins from the unique_origins table.
+    Performs a search if origin string is provided (3+ chars).
+    Prioritizes exact matches first.
     """
     conn = get_connection()
     try:
         with conn.cursor() as cur:
-            if origin_iata:
+            if origin and len(origin) >= 3:
+                origin_lower = origin.lower()
+                like_pattern = f"%{origin_lower}%"
                 cur.execute("""
-                    SELECT * FROM daily_flights
-                    WHERE origin_iata = %s
-                    ORDER BY departure_time
-                """, (origin_iata,))
+                    SELECT *
+                    FROM unique_origins
+                    WHERE LOWER(origin_iata) LIKE %s
+                       OR LOWER(origin_city) LIKE %s
+                       OR LOWER(origin_country) LIKE %s
+                       OR LOWER(origin_country_code) LIKE %s
+                    ORDER BY
+                      CASE 
+                        WHEN LOWER(origin_iata) = %s THEN 1
+                        WHEN LOWER(origin_country_code) = %s THEN 2
+                        WHEN LOWER(origin_city) LIKE %s THEN 3
+                        WHEN LOWER(origin_country) LIKE %s THEN 4
+                        ELSE 5
+                      END,
+                      origin_country, origin_city;
+                """, (
+                    like_pattern, like_pattern, like_pattern, like_pattern,
+                    origin_lower, origin_lower, like_pattern, like_pattern
+                ))
             else:
-                cur.execute("SELECT * FROM daily_flights ORDER BY departure_time")
-            return cur.fetchall()
+                cur.execute("""
+                    SELECT *
+                    FROM unique_origins
+                    ORDER BY origin_country, origin_city;
+                """)
+            results = cur.fetchall()
+            return [dict(zip([desc[0] for desc in cur.description], row)) for row in results]
     finally:
         conn.close()
 

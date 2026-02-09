@@ -31,20 +31,11 @@ function App() {
         Click on the Vite and React logos to learn more
       </p> */}
       <FlighCard
-        aita1="TKO"
-        city1="Tokyo"
-        aita2="NYC"
-        city2="New York City"
-      />
-      <br/>
-      <FlighCard
-        aita1="TOR"
+        aita1="YYZ"
         city1="Toronto"
-        aita2="LON"
-        city2="London"
+        aita2="HND"
+        city2="Tokyo"
       />
-      <br/><br/><br/>
-      {/* <FlighCardSelection></FlighCardSelection> */}
     </>
   )
 }
