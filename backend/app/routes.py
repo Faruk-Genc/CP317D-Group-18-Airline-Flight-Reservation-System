@@ -1,5 +1,5 @@
-from flask import Blueprint, jsonify, request
-from .flight_queries import get_unique_origins 
+from flask import Blueprint, request, jsonify
+from .flight_queries import get_unique_origins
 
 api = Blueprint("api", __name__)
 

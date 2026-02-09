@@ -107,44 +107,29 @@ def get_all_flights_from_origin(origin):
 
 def get_unique_origins(origin=None):
     """
-    Fetch unique origins from the unique_origins table.
-    Performs a search if origin string is provided (3+ chars).
-    Prioritizes exact matches first.
+    Fetch real rows from unique_origins.
     """
     conn = get_connection()
     try:
         with conn.cursor() as cur:
-            if origin and len(origin) >= 3:
-                origin_lower = origin.lower()
-                like_pattern = f"%{origin_lower}%"
+            if origin and len(origin.strip()) >= 3:
+                pattern = f"%{origin.strip().lower()}%"
                 cur.execute("""
-                    SELECT *
+                    SELECT origin_iata, origin_city, origin_country, origin_country_code
                     FROM unique_origins
                     WHERE LOWER(origin_iata) LIKE %s
                        OR LOWER(origin_city) LIKE %s
                        OR LOWER(origin_country) LIKE %s
                        OR LOWER(origin_country_code) LIKE %s
-                    ORDER BY
-                      CASE 
-                        WHEN LOWER(origin_iata) = %s THEN 1
-                        WHEN LOWER(origin_country_code) = %s THEN 2
-                        WHEN LOWER(origin_city) LIKE %s THEN 3
-                        WHEN LOWER(origin_country) LIKE %s THEN 4
-                        ELSE 5
-                      END,
-                      origin_country, origin_city;
-                """, (
-                    like_pattern, like_pattern, like_pattern, like_pattern,
-                    origin_lower, origin_lower, like_pattern, like_pattern
-                ))
+                    ORDER BY origin_country, origin_city
+                """, (pattern, pattern, pattern, pattern))
             else:
                 cur.execute("""
-                    SELECT *
+                    SELECT origin_iata, origin_city, origin_country, origin_country_code
                     FROM unique_origins
-                    ORDER BY origin_country, origin_city;
+                    ORDER BY origin_country, origin_city
                 """)
-            results = cur.fetchall()
-            return [dict(zip([desc[0] for desc in cur.description], row)) for row in results]
+            return [dict(row) for row in cur.fetchall()]
     finally:
         conn.close()
 
