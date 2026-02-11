@@ -5,10 +5,9 @@ export default function FlightCardSelection({ onSelect }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [showNoResults, setShowNoResults] = useState(false);
-  const [active, setActive] = useState(false); // controls dropdown visibility
+  const [active, setActive] = useState(false); 
   const inputRef = useRef(null);
 
-  // Fetch results with debounce
   useEffect(() => {
     if (!query.trim()) {
       setResults([]);
@@ -20,7 +19,6 @@ export default function FlightCardSelection({ onSelect }) {
       fetch(`http://localhost:5000/api/flights?origin=${encodeURIComponent(query)}`)
         .then((res) => res.json())
         .then((data) => {
-          // Deduplicate by IATA + city + country
           const seen = new Set();
           const unique = data.filter((origin) => {
             const key = `${origin.origin_iata}-${origin.origin_city}-${origin.origin_country}`;
@@ -42,7 +40,6 @@ export default function FlightCardSelection({ onSelect }) {
     return () => clearTimeout(timeoutId);
   }, [query]);
 
-  // Clicking outside closes dropdown
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!e.target.closest(".selection-card")) {
@@ -53,7 +50,6 @@ export default function FlightCardSelection({ onSelect }) {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // Clicking card focuses input and opens dropdown
   const handleCardClick = () => {
     setActive(true);
     inputRef.current?.focus();
@@ -79,8 +75,8 @@ export default function FlightCardSelection({ onSelect }) {
               key={`${origin.origin_iata}-${origin.origin_city}-${origin.origin_country}`}
               onClick={() => {
                 onSelect(origin);
-                setQuery(""); // optional: clear query after selection
-                setActive(false); // close dropdown
+                setQuery(""); 
+                setActive(false); 
               }}
             >
               <strong>{origin.origin_city}</strong> ({origin.origin_iata}) – {origin.origin_country}

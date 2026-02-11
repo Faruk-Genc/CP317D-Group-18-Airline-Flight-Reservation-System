@@ -1,0 +1,60 @@
+.nav {
+    margin: 0;
+    padding: 0 10px;
+    width: 100vw;
+    background-color: #111;
+
+    display: flex;
+    align-items: center;
+    height: 80px;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-logo {
+    width: 60px;
+}
+
+.nav-title {
+    font-size: 26px;
+    font-weight: bold;
+    font-family: "Palatino Linotype", Palatino;
+    font-weight: 100;
+}
+
+#user-authentication {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.select-language {
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+    border-radius: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.user-icon {
+    display: none;
+    border-radius: 50%;
+}
+
+.sign-in-button {
+    background-color: #eee;
+    padding: 10px 20px;
+    border-radius: 20px;
+    color: black;
+    font-weight: 600;
+}

@@ -1,92 +1,82 @@
 .flight-container {
-    display: flex;
-    position: relative;
-    gap: 1rem; 
+  position: relative;
+  display: inline-block;
 }
 
-.flight-card {
-    position: relative;
-    height: 150px;
-    width: 300px;
-    background-color: gray;
-    border-radius: 8px;
-  
-    display: flex;
-    flex-direction: column;
-    align-items: center;      
-    justify-content: center;  
-}
-
-.flight-card:hover {
-    outline: 1px solid var(--highlight-color);
-    border-radius: 8px;
-    color: #ddd;
-}
-.switch-card {
-    position: absolute;
-
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    height: 70px;
-    width: 70px;
-    border-radius: 50%;
-    background-color: var(--background-color); 
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
+.cards-wrapper {
+  display: flex;
+  gap: 1rem;
 }
 
 .flight-card {
   position: relative;
-  cursor: pointer; /* indicates clickable */
+  height: 150px;
+  width: 300px;
+  background-color: #fff;
+  color: #380875;
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  border: solid 1px #f8b500 ;
+}
+
+.flight-card h1.iata,
+.flight-card p.city {
+  margin: 0;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.flight-card:hover {
+  color: #180055;
 }
 
 .selection-overlay {
   position: absolute;
-  top: 100%; /* appear below card, or 0 if over card */
-  left: 0;
-  width: 100%;
+  inset: 0;
+  transform: translateY(80px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+
+  border-radius: 8px;
   z-index: 10;
 }
 
-.rotated {
-    transform: rotate(180deg);
-    transition: transform 0.5s ease;
+.flight-card:hover .selection-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.switch-card {
+  position: absolute;
+
+  height: 70px;
+  width: 70px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: solid 1px;
+  color: #f8b500;
+
+  left: calc(50% - 35px);
+  top: 35px;
+  z-index: 5;
 }
 
 .switch-card svg {
-    transition: transform 0.5s ease;
+  transition: transform 0.5s ease;
 }
 
-h1, p {
-    margin: 0;
-}
-
-
-.selection-overlay {
-    position: absolute;
-    inset: 0; 
-
-    transform: translateY(80px);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.15s ease;
-
-    border-radius: 8px;
-    z-index: 10;
-}
-
-.flight-card:hover .selection-overlay {
-    opacity: 1;
-    pointer-events: auto;
+.rotated {
+  transform: rotate(180deg);
 }
