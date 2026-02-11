@@ -52,13 +52,8 @@ DB_PASSWORD=npg_WIoOsj86URTn
 </details>
 
 ### Neon Dashboard
-<details>
-  <summary>Neon PostgreSQL serverless dashboard</summary>
-
+Neon PostgreSQL serverless dashboard
 https://console.neon.tech/app/projects/wandering-resonance-86050727
-</details>
-
-
 
 ## Docs
 - `docs/architecture.md`
