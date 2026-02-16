@@ -1,0 +1,47 @@
+.trip-options {
+  margin-top: 12px;
+
+
+  background-color: #fff;
+  border-radius: 8px;
+  border: solid 1px #f8b500;
+
+  padding: 12px 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  color: #380875;
+}
+
+/* Toggle section */
+.trip-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Date inputs */
+.date-inputs {
+  display: flex;
+  gap: 8px;
+}
+
+.trip-options input[type="date"],
+.trip-options input[type="number"] {
+  border: solid 1px #f8b500;
+  border-radius: 6px;
+  padding: 4px 8px;
+
+  color: #380875;
+  font-size: 14px;
+}
+
+/* Passenger section */
+.passenger-count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

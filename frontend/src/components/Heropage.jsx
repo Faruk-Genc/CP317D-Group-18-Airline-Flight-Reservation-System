@@ -1,5 +1,7 @@
 import "./Heropage.css";
 import FlightCard from './FlightCard';
+import TripOptions from './TripOptions';
+
 
 const heroImages = import.meta.glob('../assets/heropage/*.{jpg,jpeg,png,svg}', { eager: true });
 
@@ -18,6 +20,8 @@ export default function Heropage() {
                     iata2="HND"
                     city2="Tokyo"
                 />
+
+                <TripOptions />
             </div>
             <img className="hero-splash radial" src={randomImage} alt="Hero" />
             <img className="hero-splash" src={randomImage} alt="Hero" />

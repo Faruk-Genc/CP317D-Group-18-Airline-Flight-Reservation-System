@@ -20,13 +20,11 @@ export default function FlightCard({ iata1, city1, iata2, city2 }) {
         <Card
           iata={from.iata}
           city={from.city}
-          onSelect={(o) => setFrom({ iata: o.origin_iata, city: o.origin_city })}
-        />
+          onSelect={(o) => setFrom({ iata: o.origin_iata, city: o.origin_city })} />
         <Card
           iata={to.iata}
           city={to.city}
-          onSelect={(o) => setTo({ iata: o.origin_iata, city: o.origin_city })}
-        />
+          onSelect={(o) => setTo({ iata: o.origin_iata, city: o.origin_city })} />
       </div>
 
       <button className="switch-card" onClick={swapCards}>
