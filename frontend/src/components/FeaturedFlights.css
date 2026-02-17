@@ -1,0 +1,17 @@
+.featured-flights-container {
+  padding: 40px;
+  background-color: white;
+}
+
+.featured-flights-container h2 {
+  color: #380875;
+  margin-bottom: 20px;
+}
+
+/* EVEN GRID LAYOUT */
+.featured-flights-row {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
