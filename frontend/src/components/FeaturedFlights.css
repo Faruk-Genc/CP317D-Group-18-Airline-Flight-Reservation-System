@@ -1,17 +1,66 @@
 .featured-flights-container {
-  padding: 40px;
-  background-color: white;
+  margin-top: 40px;
 }
 
-.featured-flights-container h2 {
-  color: #380875;
-  margin-bottom: 20px;
+.featured-flights-heading {
+  color: black;
+  font-weight: 600;
+  width: 80%;
+  padding-bottom: 20px;
+  margin: 0 auto;
 }
-
-/* EVEN GRID LAYOUT */
 .featured-flights-row {
-  display: grid;
+  display: flex;
+  gap: 16px;
+  width: 80%;
 
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  margin: 0 auto;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+
+  padding-bottom: 8px;
+}
+
+
+.featured-flight-card {
+  flex: 0 0 calc((100% - 32px) / 3);
+
+  position: relative;
+  height: 160px;
+
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+
+  border: solid 1px #f8b500;
+
+  scroll-snap-align: start;
+}
+
+.featured-flight-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  filter: brightness(0.7);
+  transition: transform 0.3s ease;
+}
+
+.featured-flight-card:hover img {
+  transform: scale(1.05);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  font-size: 18px;
 }

@@ -7,11 +7,13 @@ export default function FeaturedFlights() {
     { from: "New York", to: "Paris" },
     { from: "London", to: "Dubai" },
     { from: "Sydney", to: "Los Angeles" },
+    { from: "Bangkok", to: "Singapore" },
+    { from: "Seoul", to: "Osaka" }
   ];
 
   return (
     <section className="featured-flights-container">
-      <h2>Popular Flights</h2>
+      <h2 className="featured-flights-heading">Popular Flights</h2>
 
       <div className="featured-flights-row">
         {popularFlights.map((flight, index) => (

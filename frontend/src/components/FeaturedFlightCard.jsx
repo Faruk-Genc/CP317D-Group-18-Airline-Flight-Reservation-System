@@ -16,7 +16,9 @@ export default function FeaturedFlightCard({ from, to }) {
       <img src={randomImage} alt="flight" />
 
       <div className="overlay">
-        <h3>{from} → {to}</h3>
+        <h3>
+          {from} → {to}
+        </h3>
       </div>
     </div>
   );
