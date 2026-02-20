@@ -3,8 +3,9 @@
 }
 
 .featured-flights-heading {
-  color: black;
-  font-weight: 600;
+  color: #fff;
+  text-decoration:overline #f8b500;
+
   width: 80%;
   padding-bottom: 20px;
   margin: 0 auto;

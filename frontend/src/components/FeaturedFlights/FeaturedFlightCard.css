@@ -34,13 +34,11 @@
   clip-path: polygon(100% 0, 100% 100%, 0 100%);
 }
 
-/* Optional hover zoom effect */
 .featured-flight-card:hover .image-diagonal::before,
 .featured-flight-card:hover .image-diagonal::after {
   transform: scale(1.05);
 }
 
-/* Overlay text on top */
 .overlay {
   position: absolute;
   inset: 0;
