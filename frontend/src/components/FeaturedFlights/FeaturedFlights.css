@@ -33,8 +33,6 @@
   overflow: hidden;
   cursor: pointer;
 
-  border: solid 1px #f8b500;
-
   scroll-snap-align: start;
 }
 
