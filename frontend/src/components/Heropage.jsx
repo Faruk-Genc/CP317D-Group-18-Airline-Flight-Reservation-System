@@ -1,7 +1,7 @@
 import "./Heropage.css";
-import FlightCard from './FlightCard';
-import TripOptions from './TripOptions';
-import FeaturedFlights from "./FeaturedFlights";
+import FlightCard from './FlightCard/FlightCard';
+import TripOptions from './FlightCard/TripOptions';
+import FeaturedFlights from "./FeaturedFlights/FeaturedFlights";
 
 
 

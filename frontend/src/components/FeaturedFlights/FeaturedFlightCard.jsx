@@ -1,7 +1,7 @@
 import "./FeaturedFlightCard.css";
 
 const images = import.meta.glob(
-  "../assets/featured/*.{jpg,jpeg,png,svg}",
+  "../../assets/featured/*.{jpg,jpeg,png,svg}",
   { eager: true }
 );
 
