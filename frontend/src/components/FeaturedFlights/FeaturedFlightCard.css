@@ -8,7 +8,6 @@
   border: solid 1px #f8b500;
 }
 
-/* Diagonal split using pseudo-elements */
 .image-diagonal {
   position: absolute;
   inset: 0;

@@ -1,14 +1,12 @@
 import "./FeaturedFlightCard.css";
 
-// Import all images from the featured folder
 const images = import.meta.glob(
   "../../assets/featured/*.{jpg,jpeg,png,svg,webp}",
   { eager: true }
 );
 
-// Map filenames to lowercase, space-free keys
 const imageMap = Object.keys(images).reduce((acc, path) => {
-  const filename = path.split("/").pop(); // e.g., "newyork.jpg"
+  const filename = path.split("/").pop(); 
   const key = filename.split(".")[0].toLowerCase().replace(/\s+/g, "");
   acc[key] = images[path].default;
   return acc;
