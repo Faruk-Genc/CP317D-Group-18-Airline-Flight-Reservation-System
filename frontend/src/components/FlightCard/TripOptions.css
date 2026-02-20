@@ -34,6 +34,8 @@
 
 .trip-options-label div:nth-child(3) {
   margin-left: -25px;
+  transition: color 0.3s ease;
+  pointer-events: none;
 }
 
 .trip-options-label div:nth-child(4) {

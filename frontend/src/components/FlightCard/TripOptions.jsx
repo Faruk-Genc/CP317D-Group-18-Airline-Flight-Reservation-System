@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./TripOptions.css";
 
 export default function TripOptions() {
@@ -6,11 +6,25 @@ export default function TripOptions() {
   const [passengers, setPassengers] = useState(1);
   const [departureDate, setDepartureDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
+  const labelRef = useRef(null);
+
+  useEffect(() => {
+    if (labelRef.current) {
+      const arrivalLabel = labelRef.current.children[2];
+      if (travelType === "round") {
+        arrivalLabel.style.color = "";
+        arrivalLabel.style.userSelect = "";
+      } else {
+        arrivalLabel.style.color = "transparent";
+        arrivalLabel.style.userSelect = "none";
+      }
+    }
+  }, [travelType]);
 
   return (
     <div className="trip-options">
-      <div className="trip-options-label">
-        <div>Trip </div>
+      <div className="trip-options-label" ref={labelRef}>
+        <div>Trip</div>
         <div>Depature</div>
         <div>Arrival</div>
         <div>Passengers</div>
@@ -34,7 +48,6 @@ export default function TripOptions() {
           value={departureDate}
           onChange={(e) => setDepartureDate(e.target.value)}
         />
-
         {travelType === "round" && (
           <input
             type="date"
