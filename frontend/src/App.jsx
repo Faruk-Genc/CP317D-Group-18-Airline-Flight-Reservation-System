@@ -11,6 +11,7 @@ function App() {
     <>
       <Navbar />
       <Heropage />
+      <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
     </>
   );
 }
