@@ -48,10 +48,9 @@ run(f"{venv_python} -m pip install --upgrade pip")
 run(f"{venv_python} -m pip install -r requirements.txt")
 
 backend_process = subprocess.Popen(
-    f"{venv_python} -m flask --app app.main run",
+    f"{venv_python} -m flask --app app.main:create_app run",
     shell=True
 )
-
 os.chdir("../frontend")
 
 run("npm install")

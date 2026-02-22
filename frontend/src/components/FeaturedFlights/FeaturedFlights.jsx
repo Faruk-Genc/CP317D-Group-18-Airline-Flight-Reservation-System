@@ -1,5 +1,6 @@
 import FeaturedFlightCard from "./FeaturedFlightCard";
 import "./FeaturedFlights.css";
+import heroImage from "../../assets/svg-art/world-map.svg";
 
 export default function FeaturedFlights() {
   const popularFlights = [

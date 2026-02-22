@@ -2,6 +2,7 @@ import "./Heropage.css";
 import FlightCard from './FlightCard/FlightCard';
 import TripOptions from './FlightCard/TripOptions';
 import FeaturedFlights from "./FeaturedFlights/FeaturedFlights";
+import HeroMessage from "./HeroComponents/HeroMessage";
 
 
 
@@ -29,7 +30,7 @@ export default function Heropage() {
             <img className="hero-splash" src={randomImage} alt="Hero" />
         </section>
         <FeaturedFlights />
-
+        <HeroMessage />
     </section>
 
 
