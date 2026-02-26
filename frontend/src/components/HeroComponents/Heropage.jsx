@@ -1,12 +1,12 @@
 import "./Heropage.css";
-import FlightCard from './FlightCard/FlightCard';
-import TripOptions from './FlightCard/TripOptions';
-import FeaturedFlights from "./FeaturedFlights/FeaturedFlights";
-import HeroMessage from "./HeroComponents/HeroMessage";
+import FlightCard from '../FlightCard/FlightCard';
+import TripOptions from '../FlightCard/TripOptions';
+import FeaturedFlights from "../FeaturedFlights/FeaturedFlights";
+import HeroMessage from "./HeroMessage";
 
 
 
-const heroImages = import.meta.glob('../assets/heropage/*.{jpg,jpeg,png,svg}', { eager: true });
+const heroImages = import.meta.glob('../../assets/heropage/*.{jpg,jpeg,png,svg}', { eager: true });
 
 export default function Heropage() {
   const imagesArray = Object.values(heroImages).map(module => module.default);
@@ -30,6 +30,7 @@ export default function Heropage() {
             <img className="hero-splash" src={randomImage} alt="Hero" />
         </section>
         <FeaturedFlights />
+        <hr style={{border: "none", height: "2px", backgroundColor: "#ddd", width: "80%", margin: "60px auto -60px"}}/>
         <HeroMessage />
     </section>
 

@@ -11,7 +11,8 @@
 .image-diagonal {
   position: absolute;
   inset: 0;
-  filter: opacity(60%) blur(1px);
+  filter: contrast(70%) blur(1px);
+
   transition: filter ease-in 0.3s;
 }
 .image-diagonal:hover{

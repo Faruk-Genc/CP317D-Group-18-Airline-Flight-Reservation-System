@@ -20,12 +20,15 @@ def ensure_env():
 
     db_password = getpass.getpass("Enter DB password: ")
 
+    DATABASE_URL = f"postgresql://{DB_USER}:{db_password}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
     with open(".env", "w") as f:
         f.write(f"DB_NAME={DB_NAME}\n")
         f.write(f"DB_USER={DB_USER}\n")
         f.write(f"DB_PASSWORD={db_password}\n")
         f.write(f"DB_HOST={DB_HOST}\n")
         f.write(f"DB_PORT={DB_PORT}\n")
+        f.write(f"DATABASE_URL={DATABASE_URL}\n")
 
 system = platform.system()
 

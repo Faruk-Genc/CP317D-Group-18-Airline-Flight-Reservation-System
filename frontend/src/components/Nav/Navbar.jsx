@@ -1,5 +1,5 @@
 import "./Navbar.css";
-import logo from "../assets/logo/airline-logo.svg";
+import logo from "../../assets/logo/airline-logo.svg";
 
 export default function Navbar() {
     return(
@@ -14,9 +14,9 @@ export default function Navbar() {
             </section>
 
             <section id="user-authentication">
-                <section className="select-language">
+                <button className="select-language">
                     FR
-                </section>
+                </button>
 
                 <img
                     className="user-icon"
@@ -24,7 +24,7 @@ export default function Navbar() {
                     alt="placeholder"
                 />
 
-                <div className="sign-in-button">Sign in</div>
+                <button className="sign-in-button">Sign in</button>
             </section>
         </nav>
 

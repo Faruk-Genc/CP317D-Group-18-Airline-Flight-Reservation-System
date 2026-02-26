@@ -3,8 +3,8 @@
 }
 
 .featured-flights-heading {
-  color: #fff;
-  text-decoration:overline #f8b500;
+  color: #380875;
+  text-decoration:overline 4px #f8b500;
 
   width: 80%;
   padding-bottom: 20px;
@@ -17,10 +17,66 @@
 
   margin: 0 auto;
   overflow-x: auto;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
 
   padding-bottom: 8px;
+}
+
+.carousel-wrapper {
+  position: relative;
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.featured-flights-row {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #380875;
+  z-index: 2;
+}
+
+.arrow.left {
+  left: -32px;
+}
+
+.arrow.right {
+  right: -32px;
+}
+
+.arrow:hover {
+  opacity: 0.6;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  color: #000;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #380875;
+  opacity: 30%;
+  transition: background-color ease-out 0.1s;
+}
+
+.dot.active {
+  opacity: 100%
 }
 
 .featured-flight-card {
@@ -30,7 +86,6 @@
   height: 160px;
 
   border-radius: 10px;
-  overflow: hidden;
   cursor: pointer;
 
   scroll-snap-align: start;
@@ -61,4 +116,17 @@
   font-weight: bold;
   text-align: center;
   font-size: 18px;
+}
+
+@media (min-width: 1920px) {
+  .featured-flight-card {
+    flex: 0 0 calc((100% - 48px) / 4);
+  }
+}
+
+
+@media (min-width: 2500px) {
+  .featured-flight-card {
+    flex: 0 0 calc((100% - 64px) / 5);
+  }
 }

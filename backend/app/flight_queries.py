@@ -181,3 +181,70 @@ if __name__ == "__main__":
     from pprint import pprint
     flights = get_flights_on_date("2026-03-08")
     pprint(flights[:5])  
+
+
+def _serialize_flight(row):
+    """Convert a flight row dict so datetime/date fields are JSON-serializable."""
+    if not row:
+        return row
+    out = dict(row)
+    for key in ("departure_time", "arrival_time"):
+        if key in out and out[key] is not None:
+            v = out[key]
+            if isinstance(v, (datetime, date)):
+                out[key] = v.isoformat()
+    return out
+
+
+def search_flights(origin_iata, destination_iata, departure_date, return_date=None, passengers=1):
+    """
+    Search flights by origin, destination, and date(s).
+    For one-way: only outbound flights on departure_date.
+    For round-trip: outbound on departure_date, return (destination → origin) on return_date.
+
+    Args:
+        origin_iata (str): IATA code of departure airport.
+        destination_iata (str): IATA code of arrival airport.
+        departure_date (str): Outbound date in 'YYYY-MM-DD' format.
+        return_date (str | None): Return date in 'YYYY-MM-DD' for round-trip; None for one-way.
+        passengers (int): Number of passengers (accepted for API; capacity check not yet implemented).
+
+    Returns:
+        dict: {"outbound": [flight, ...], "return": [flight, ...] | None}
+              Each flight is a dict from daily_flights. "return" is None for one-way.
+    """
+    if not origin_iata or not destination_iata or not departure_date:
+        return {"outbound": [], "return": None}
+
+    origin_iata = origin_iata.strip().upper()
+    destination_iata = destination_iata.strip().upper()
+
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT *
+                FROM daily_flights
+                WHERE origin_iata = %s
+                  AND destination_iata = %s
+                  AND departure_time::date = %s
+                ORDER BY departure_time
+            """, (origin_iata, destination_iata, departure_date))
+            outbound = [_serialize_flight(dict(row)) for row in cur.fetchall()]
+
+            if return_date and return_date.strip():
+                cur.execute("""
+                    SELECT *
+                    FROM daily_flights
+                    WHERE origin_iata = %s
+                      AND destination_iata = %s
+                      AND departure_time::date = %s
+                    ORDER BY departure_time
+                """, (destination_iata, origin_iata, return_date.strip()))
+                return_flights = [_serialize_flight(dict(row)) for row in cur.fetchall()]
+            else:
+                return_flights = None
+
+        return {"outbound": outbound, "return": return_flights}
+    finally:
+        conn.close()

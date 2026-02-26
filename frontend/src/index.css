@@ -5,7 +5,7 @@
 
   color-scheme: light;
   color: rgba(255, 255, 255, 0.87);
-  --background-color: #111;
+  --background-color: #eee;
   --highlight-color: #380875;
   background-color: var(--background-color);
 
@@ -27,6 +27,7 @@ a:hover {
 
 body {
   margin: 0;
+  overflow-x: hidden;
 }
 
 h1 {
