@@ -64,3 +64,16 @@
     color: black;
     font-weight: 600;
 }
+
+@media (max-width: 450px) {
+    .nav-logo {
+        width: 40px;
+        margin-left: -10px;
+    }
+    .nav-title {
+        font-size: 18px;
+        margin-left: -10px;
+    }
+
+  
+}

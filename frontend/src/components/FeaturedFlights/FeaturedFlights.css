@@ -118,15 +118,23 @@
   font-size: 18px;
 }
 
+
+@media (max-width: 1200px) {
+  .featured-flight-card {
+    flex: 0 0 calc((100% - 16px) / 2);
+  }
+}
+
+
 @media (min-width: 1920px) {
   .featured-flight-card {
-    flex: 0 0 calc((100% - 48px) / 4);
+    flex: 0 0 calc((100% - 48px) / 3);
   }
 }
 
 
 @media (min-width: 2500px) {
   .featured-flight-card {
-    flex: 0 0 calc((100% - 64px) / 5);
+    flex: 0 0 calc((100% - 64px) / 4);
   }
 }
