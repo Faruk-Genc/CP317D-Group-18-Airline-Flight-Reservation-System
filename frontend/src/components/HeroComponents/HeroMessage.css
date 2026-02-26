@@ -17,7 +17,7 @@
   white-space: nowrap;  
   overflow: visible; 
   transition: all 0.5s ease;
-  filter: brightness(0.9);
+  color: #111;
 }
 .hero-art {
   width: 60vw;
@@ -51,7 +51,7 @@
   background-color: #f8b500;
   margin-left: 115px;
   font-size: 14px;
-  font-weight: 600z;
+  font-weight: 600;
   transition: all 0.5s ease;
 }
 
