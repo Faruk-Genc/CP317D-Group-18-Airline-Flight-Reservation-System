@@ -50,7 +50,6 @@ export default function FeaturedFlights() {
 
       const count = Math.floor(containerWidth / cardWidth) || 1;
 
-      // keep the current firstVisible card in view
       const scrollLeft = row.scrollLeft;
       const first = Math.round(scrollLeft / cardWidth);
 
@@ -58,12 +57,10 @@ export default function FeaturedFlights() {
       setFirstVisible(first);
     };
 
-    // Initial update
     update();
 
     const handleResize = () => {
       update();
-      // ensure the first visible card stays aligned
       scrollToIndex(firstVisible, "auto");
     };
 
