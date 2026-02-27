@@ -5,8 +5,8 @@ import "./FeaturedFlights.css";
 
 export default function FeaturedFlights() {
   const rowRef = useRef(null);
-  const [visibleRange, setVisibleRange] = useState([0, 0]);
-  const scrollingRef = useRef(false); // track smooth scroll
+  const [firstVisible, setFirstVisible] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(1);
 
   const popularFlights = [
     { from: "Toronto", to: "Tokyo" },
@@ -19,133 +19,74 @@ export default function FeaturedFlights() {
     { from: "Osaka", to: "Tokyo" },
   ];
 
-  // Smooth scroll function
-  const smoothScrollTo = (element, target, duration = 300, callback) => {
-    scrollingRef.current = true;
-    const start = element.scrollLeft;
-    const change = target - start;
-    const startTime = performance.now();
+  const scrollToIndex = (index, behavior = "smooth") => {
+    const row = rowRef.current;
+    if (!row) return;
+    const card = row.children[index];
+    if (!card) return;
 
-    const easeInOutQuad = (t) =>
-      t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    row.scrollTo({
+      left: card.offsetLeft,
+      behavior,
+    });
+  };
 
-    const animate = (currentTime) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      element.scrollLeft = start + change * easeInOutQuad(progress);
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        scrollingRef.current = false;
-        if (callback) callback();
-      }
+  const scrollByOne = (direction) => {
+    const newIndex =
+      direction === "left"
+        ? Math.max(0, firstVisible - 1)
+        : Math.min(popularFlights.length - visibleCount, firstVisible + 1);
+
+    scrollToIndex(newIndex);
+  };
+
+  useEffect(() => {
+    const row = rowRef.current;
+    if (!row || row.children.length === 0) return;
+
+    const update = () => {
+      const cardWidth = row.children[0].offsetWidth;
+      const containerWidth = row.offsetWidth;
+
+      const count = Math.floor(containerWidth / cardWidth) || 1;
+
+      // keep the current firstVisible card in view
+      const scrollLeft = row.scrollLeft;
+      const first = Math.round(scrollLeft / cardWidth);
+
+      setVisibleCount(count);
+      setFirstVisible(first);
     };
 
-    requestAnimationFrame(animate);
-  };
+    // Initial update
+    update();
 
-  // Update visible range
-  const updateVisibleCards = () => {
-    const row = rowRef.current;
-    if (!row) return;
-    const cards = row.querySelectorAll(".featured-flight-card");
-    if (!cards.length) return;
-
-    let startIndex = 0;
-    for (let i = 0; i < cards.length; i++) {
-      if (cards[i].offsetLeft + cards[i].offsetWidth > row.scrollLeft) {
-        startIndex = i;
-        break;
-      }
-    }
-
-    let endIndex = startIndex;
-    const rowRight = row.scrollLeft + row.clientWidth;
-    for (let i = startIndex; i < cards.length; i++) {
-      if (cards[i].offsetLeft < rowRight) {
-        endIndex = i;
-      } else break;
-    }
-
-    setVisibleRange([startIndex, endIndex]);
-  };
-
-  // Scroll one card left/right
-  const scrollByOneCard = (direction) => {
-    const row = rowRef.current;
-    if (!row) return;
-    const cards = row.querySelectorAll(".featured-flight-card");
-    if (!cards.length) return;
-
-    const gap = 16;
-    const cardWidth = cards[0].offsetWidth + gap;
-    const currentIndex = visibleRange[0];
-    let newIndex =
-      direction === "left" ? currentIndex - 1 : currentIndex + 1;
-    newIndex = Math.max(0, Math.min(newIndex, cards.length - 1));
-
-    const targetScrollLeft = newIndex * cardWidth;
-    smoothScrollTo(row, targetScrollLeft, 300, updateVisibleCards);
-  };
-
-  // IntersectionObserver for manual scroll
-  useEffect(() => {
-    const row = rowRef.current;
-    if (!row) return;
-    const cards = row.querySelectorAll(".featured-flight-card");
-    if (!cards.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (scrollingRef.current) return; // ignore while scrolling
-        const visibleIndexes = [];
-        entries.forEach((entry, idx) => {
-          if (entry.isIntersecting) visibleIndexes.push(idx);
-        });
-        if (visibleIndexes.length) {
-          setVisibleRange([
-            Math.min(...visibleIndexes),
-            Math.max(...visibleIndexes),
-          ]);
-        }
-      },
-      { root: row, threshold: 0.5 }
-    );
-
-    cards.forEach((card) => observer.observe(card));
-
-    return () => cards.forEach((card) => observer.unobserve(card));
-  }, []);
-
-  // Handle resize to snap cards correctly
-  useEffect(() => {
     const handleResize = () => {
-      updateVisibleCards();
-      const row = rowRef.current;
-      if (!row) return;
-      const cards = row.querySelectorAll(".featured-flight-card");
-      if (!cards.length) return;
-
-      const gap = 16;
-      const cardWidth = cards[0].offsetWidth + gap;
-      const targetScrollLeft = visibleRange[0] * cardWidth;
-      smoothScrollTo(row, targetScrollLeft, 200); // snap after resize
+      update();
+      // ensure the first visible card stays aligned
+      scrollToIndex(firstVisible, "auto");
     };
 
+    row.addEventListener("scroll", update);
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [visibleRange]);
 
-  const leftDisabled = visibleRange[0] === 0;
-  const rightDisabled = visibleRange[1] >= popularFlights.length - 1;
+    return () => {
+      row.removeEventListener("scroll", update);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [firstVisible, popularFlights.length]);
+
+  const leftDisabled = firstVisible === 0;
+  const rightDisabled = firstVisible + visibleCount >= popularFlights.length;
 
   return (
     <section className="featured-flights-container">
       <h2 className="featured-flights-heading">Popular Flights</h2>
+
       <div className="carousel-wrapper">
         <button
           className="arrow left"
-          onClick={() => scrollByOneCard("left")}
+          onClick={() => scrollByOne("left")}
           style={{
             opacity: leftDisabled ? 0.3 : 1,
             pointerEvents: leftDisabled ? "none" : "auto",
@@ -154,19 +95,19 @@ export default function FeaturedFlights() {
           <ChevronLeft size={24} />
         </button>
 
-        <div ref={rowRef} className="featured-flights-row">
-          {popularFlights.map((flight, index) => (
-            <FeaturedFlightCard
-              key={index}
-              from={flight.from}
-              to={flight.to}
-            />
+        <div
+          ref={rowRef}
+          className="featured-flights-row"
+          style={{ scrollBehavior: "smooth" }}
+        >
+          {popularFlights.map((flight, idx) => (
+            <FeaturedFlightCard key={idx} from={flight.from} to={flight.to} />
           ))}
         </div>
 
         <button
           className="arrow right"
-          onClick={() => scrollByOneCard("right")}
+          onClick={() => scrollByOne("right")}
           style={{
             opacity: rightDisabled ? 0.3 : 1,
             pointerEvents: rightDisabled ? "none" : "auto",
@@ -177,15 +118,9 @@ export default function FeaturedFlights() {
       </div>
 
       <div className="carousel-dots">
-        {popularFlights.map((_, index) => {
-          const isVisible =
-            index >= visibleRange[0] && index <= visibleRange[1];
-          return (
-            <div
-              key={index}
-              className={`dot ${isVisible ? "active" : ""}`}
-            />
-          );
+        {popularFlights.map((_, idx) => {
+          const active = idx >= firstVisible && idx < firstVisible + visibleCount;
+          return <div key={idx} className={`dot ${active ? "active" : ""}`} />;
         })}
       </div>
     </section>
