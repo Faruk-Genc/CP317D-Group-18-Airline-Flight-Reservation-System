@@ -1,70 +1,76 @@
 import "./Footer.css";
 import logo from "../../assets/logo/airline-logo.svg";
 import { ExternalLink } from "lucide-react";
+import { useLang } from "../../context/LangContext";
 
 export default function Footer() {
-    return(
-        <section className="footer">
-            <div className="footer-content">          
-                <div className="footer-logo">
-                    <img src={logo} alt="Airline Logo" style={{ width: "50px" }}/> AIR LAURIER
-                </div>
-                <br/>
-                <hr style={{ color: "#333" }}/>
-                <br/>
-                <nav className="footer-column">
-                    <div className="column">
-                        <h4>About Air Laurier</h4>
-                        <ul>
-                        <li>About us</li>
-                        <li>Careers</li>
-                        <li>News Hub <ExternalLink size={14}/></li>
-                        <li>Investor Relations <ExternalLink size={14}/></li>
-                        <li>Business Travel <ExternalLink size={14}/></li>
-                        <li>Travel Agents <ExternalLink size={14}/></li>
-                        <li>Mobile App</li>
-                        </ul>
-                    </div>
-                    
-                    <div className="column">
-                        <h4>Customer Service</h4>
-                        <ul>
-                        <li>Help Center</li>
-                        <li>Message Us</li>
-                        <li>Comment/Complaint</li>
-                        </ul>
-                    </div>
-                    
-                    <div className="column">
-                        <h4>Site Support</h4>
-                        <ul>
-                        <li>Login help</li>
-                        <li>Site Map </li>
-                        <li>Browser Compatibility </li>
-                        <li>Accessibility </li>
-                        <li>Booking Information </li>
-                        <li>Tracking Preferences</li>
-                        </ul>
-                    </div>
-                    <div className="column">
-                        <h4>Company</h4>
-                        <ul>
-                        <li>Customer Commitment</li>
-                        <li>Tarmac Delay Plan </li>
-                        <li>Legal </li>
-                        <li>Sustainability </li>
-                        <li>Contract of Carriage </li>
-                        <li>Privacy & Security </li>
-                        </ul>
-                    </div>
-                </nav>
-                <div className="copyright">
-                    <span>© 2026 Air Laurier, Inc</span>
-                    <span>Privacy Policy</span>
-                    <span>Terms of Service</span>
-                </div>
-                <br/><br/>
-            </div>
-        </section>
-    )
+  const { en } = useLang();
+
+  return (
+    <section className="footer">
+      <div className="footer-content">
+        <div className="footer-logo">
+          <img src={logo} alt="Airline Logo" style={{ width: "50px" }}/> AIR LAURIER
+        </div>
+        <br/>
+        <hr style={{ color: "#333" }}/>
+        <br/>
+
+        <nav className="footer-column">
+          <div className="column">
+            <h4>{en ? "About Air Laurier" : "À propos d'Air Laurier"}</h4>
+            <ul>
+              <li>{en ? "About us" : "À propos de nous"}</li>
+              <li>{en ? "Careers" : "Carrières"}</li>
+              <li>{en ? "News Hub" : "Actualités"} <ExternalLink size={14}/></li>
+              <li>{en ? "Investor Relations" : "Relations investisseurs"} <ExternalLink size={14}/></li>
+              <li>{en ? "Business Travel" : "Voyages d'affaires"} <ExternalLink size={14}/></li>
+              <li>{en ? "Travel Agents" : "Agences de voyage"} <ExternalLink size={14}/></li>
+              <li>{en ? "Mobile App" : "Application mobile"}</li>
+            </ul>
+          </div>
+
+          <div className="column">
+            <h4>{en ? "Customer Service" : "Service client"}</h4>
+            <ul>
+              <li>{en ? "Help Center" : "Centre d'aide"}</li>
+              <li>{en ? "Message Us" : "Envoyez-nous un message"}</li>
+              <li>{en ? "Comment/Complaint" : "Commentaire/Plainte"}</li>
+            </ul>
+          </div>
+
+          <div className="column">
+            <h4>{en ? "Site Support" : "Assistance du site"}</h4>
+            <ul>
+              <li>{en ? "Login help" : "Aide à la connexion"}</li>
+              <li>{en ? "Site Map" : "Plan du site"}</li>
+              <li>{en ? "Browser Compatibility" : "Compatibilité des navigateurs"}</li>
+              <li>{en ? "Accessibility" : "Accessibilité"}</li>
+              <li>{en ? "Booking Information" : "Informations sur les réservations"}</li>
+              <li>{en ? "Tracking Preferences" : "Préférences de suivi"}</li>
+            </ul>
+          </div>
+
+          <div className="column">
+            <h4>{en ? "Company" : "Entreprise"}</h4>
+            <ul>
+              <li>{en ? "Customer Commitment" : "Engagement client"}</li>
+              <li>{en ? "Tarmac Delay Plan" : "Plan de retard sur le tarmac"}</li>
+              <li>{en ? "Legal" : "Mentions légales"}</li>
+              <li>{en ? "Sustainability" : "Durabilité"}</li>
+              <li>{en ? "Contract of Carriage" : "Contrat de transport"}</li>
+              <li>{en ? "Privacy & Security" : "Confidentialité et sécurité"}</li>
+            </ul>
+          </div>
+        </nav>
+
+        <div className="copyright">
+          <span>© 2026 Air Laurier, Inc</span>
+          <span>{en ? "Privacy Policy" : "Politique de confidentialité"}</span>
+          <span>{en ? "Terms of Service" : "Conditions d'utilisation"}</span>
+        </div>
+        <br/><br/>
+      </div>
+    </section>
+  );
 }

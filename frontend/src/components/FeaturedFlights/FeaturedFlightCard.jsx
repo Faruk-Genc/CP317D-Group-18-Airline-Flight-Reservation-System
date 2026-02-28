@@ -12,7 +12,7 @@ const imageMap = Object.keys(images).reduce((acc, path) => {
   return acc;
 }, {});
 
-export default function FeaturedFlightCard({ from, to }) {
+export default function FeaturedFlightCard({ from, to, displayFrom, displayTo }) {
   const fromKey = from.toLowerCase().replace(/\s+/g, "");
   const toKey = to.toLowerCase().replace(/\s+/g, "");
 
@@ -29,8 +29,8 @@ export default function FeaturedFlightCard({ from, to }) {
         }}
       />
       <div className="overlay">
-        <h3>
-          {from} → {to}
+        <h3 style={{ fontWeight: "400" }}>
+          {displayFrom ?? from} → {displayTo ?? to}
         </h3>
       </div>
     </div>

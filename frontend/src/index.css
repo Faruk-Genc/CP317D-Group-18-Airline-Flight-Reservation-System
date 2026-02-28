@@ -5,7 +5,7 @@
 
   color-scheme: light;
   color: rgba(255, 255, 255, 0.87);
-  --background-color: #eee;
+  --background-color: #fff;
   --highlight-color: #380875;
   background-color: var(--background-color);
 
@@ -23,6 +23,11 @@ a {
 }
 a:hover {
   color: var(--highlight-color);
+}
+
+::selection {
+  background: var(--highlight-color);
+  color: #fff;
 }
 
 body {

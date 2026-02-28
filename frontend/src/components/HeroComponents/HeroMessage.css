@@ -1,3 +1,7 @@
+
+.hero-message-wrapper {
+  background-color: #f2f2f2;
+}
 .hero-message {
   padding-top: 150px;
   width: 80%;
@@ -7,17 +11,24 @@
   align-items: center; 
   transition: all 0.5s ease;
   color: #380875;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .hero-call {
   font-weight: bolder;
   padding-bottom: 20px;
-  margin-left: -150px;
+  margin-left: -190px;
   font-size: 40px;
   white-space: nowrap;  
   overflow: visible; 
   transition: all 0.5s ease;
-  color: #111;
+  color: #474747;
+  text-shadow: none;
+}
+
+.hero-call.french {
+  text-align: right;
+  margin-right: 50px;
 }
 .hero-art {
   width: 60vw;

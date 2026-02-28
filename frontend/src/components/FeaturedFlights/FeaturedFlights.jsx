@@ -2,21 +2,23 @@ import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import FeaturedFlightCard from "./FeaturedFlightCard";
 import "./FeaturedFlights.css";
+import { useLang } from "../../context/LangContext";
 
 export default function FeaturedFlights() {
+  const { en } = useLang(); 
   const rowRef = useRef(null);
   const [firstVisible, setFirstVisible] = useState(0);
   const [visibleCount, setVisibleCount] = useState(1);
 
   const popularFlights = [
-    { from: "Toronto", to: "Tokyo" },
+    { from: "Toronto", to: "Tokyo" }, 
     { from: "New York", to: "Paris" },
-    { from: "London", to: "Dubai" },
-    { from: "Sydney", to: "Los Angeles" },
-    { from: "Bangkok", to: "Singapore" },
-    { from: "Seoul", to: "Osaka" },
-    { from: "Toronto", to: "New York" },
-    { from: "Osaka", to: "Tokyo" },
+    { from: "London", to: "Dubai", fromFr: "Londres", toFr: "Dubaï" },
+    { from: "Sydney", to: "Los Angeles" }, 
+    { from: "Bangkok", to: "Singapore", toFr: "Singapour" }, 
+    { from: "Seoul", to: "Osaka", fromFr: "Séoul" }, 
+    { from: "Toronto", to: "New York" }, 
+    { from: "Osaka", to: "Tokyo" }, 
   ];
 
   const scrollToIndex = (index, behavior = "smooth") => {
@@ -49,7 +51,6 @@ export default function FeaturedFlights() {
       const containerWidth = row.offsetWidth;
 
       const count = Math.floor(containerWidth / cardWidth) || 1;
-
       const scrollLeft = row.scrollLeft;
       const first = Math.round(scrollLeft / cardWidth);
 
@@ -78,7 +79,9 @@ export default function FeaturedFlights() {
 
   return (
     <section className="featured-flights-container">
-      <h2 className="featured-flights-heading">Popular Flights</h2>
+      <h2 className="featured-flights-heading">
+        {en ? "Popular Flights" : "Vols populaires"}
+      </h2>
 
       <div className="carousel-wrapper">
         <button
@@ -98,7 +101,13 @@ export default function FeaturedFlights() {
           style={{ scrollBehavior: "smooth" }}
         >
           {popularFlights.map((flight, idx) => (
-            <FeaturedFlightCard key={idx} from={flight.from} to={flight.to} />
+            <FeaturedFlightCard
+              key={idx}
+              from={flight.from}      
+              to={flight.to}          
+              displayFrom={en ? flight.from : flight.fromFr ?? flight.from}
+              displayTo={en ? flight.to : flight.toFr ?? flight.to}
+            />
           ))}
         </div>
 
@@ -120,6 +129,16 @@ export default function FeaturedFlights() {
           return <div key={idx} className={`dot ${active ? "active" : ""}`} />;
         })}
       </div>
+
+      <hr
+        style={{
+          border: "none",
+          height: "2px",
+          backgroundColor: "#f2f2f2",
+          width: "60%",
+          margin: "60px auto -60px",
+        }}
+      />
     </section>
   );
 }

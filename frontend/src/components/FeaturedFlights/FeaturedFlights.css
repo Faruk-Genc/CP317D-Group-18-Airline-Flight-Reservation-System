@@ -1,19 +1,19 @@
 .featured-flights-container {
-  margin-top: 40px;
+  padding: 40px 0 120px 0;
 }
 
 .featured-flights-heading {
-  color: #380875;
-  text-decoration:overline 4px #f8b500;
-
-  width: 80%;
+  color: #404040;
+  font-variant: small-caps;
+  text-transform: uppercase;
+  text-decoration:overline 2px #f8b500;
+  width: 60%;
   padding-bottom: 20px;
   margin: 0 auto;
 }
 .featured-flights-row {
   display: flex;
   gap: 17px;
-  width: 80%;
   margin: 0 auto;
   overflow-x: hidden;
   width: 100%;
@@ -22,7 +22,7 @@
 
 .carousel-wrapper {
   position: relative;
-  width: 80%;
+  width: 60%;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -36,8 +36,9 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  color: #380875;
+  color: #2a2a2a;
   z-index: 2;
+  transition: all ease 0.3s;
 }
 
 .arrow.left {
@@ -49,7 +50,7 @@
 }
 
 .arrow:hover {
-  opacity: 0.6;
+  color: #380875;
 }
 
 .carousel-dots {
@@ -57,19 +58,21 @@
   justify-content: center;
   gap: 8px;
   margin-top: 16px;
-  color: #000;
+  opacity: 80%;
 }
 
 .dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: #380875;
+  transition: all 0.3s ease;
+  width: 16px;
+  height: 2px;
+  border-radius: 30%;
+  background-color: #111;
   opacity: 30%;
-  transition: background-color ease-out 0.1s;
 }
 
 .dot.active {
+  transition: all 0.3s ease;
+  width: 24px;
   opacity: 100%
 }
 

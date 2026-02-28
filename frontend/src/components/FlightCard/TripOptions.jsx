@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from "react";
+import { useLang } from "../../context/LangContext";
 import "./TripOptions.css";
 
 export default function TripOptions() {
+  const { en } = useLang(); 
   const [travelType, setTravelType] = useState("round");
   const [passengers, setPassengers] = useState(1);
   const [departureDate, setDepartureDate] = useState("");
@@ -24,11 +26,11 @@ export default function TripOptions() {
   return (
     <div className="trip-options-wrapper">
       <div className="trip-options">
-        <div className="trip-options-label" ref={labelRef}>
-          <div>Trip</div>
-          <div>Depature</div>
-          <div>Arrival</div>
-          <div>Passengers</div>
+        <div className={`trip-options-label ${en ? "" : "french"}`} ref={labelRef}>
+          <div>{en ? "Trip" : "Voyage"}</div>
+          <div>{en ? "Departure" : "Départ"}</div>
+          <div>{en ? "Arrival" : "Arrivée"}</div>
+          <div>{en ? "Passengers" : "Passagers"}</div>
         </div>
 
         <div className="trip-toggle">
@@ -37,9 +39,9 @@ export default function TripOptions() {
             value={travelType}
             onChange={(e) => setTravelType(e.target.value)}
           >
-            <option value="round">Round Trip</option>
-            <option value="oneway">One Way</option>
-            <option value="multi">Multi-City</option>
+            <option value="round">{en ? "Round Trip" : "Aller-Retour"}</option>
+            <option value="oneway">{en ? "One Way" : "Aller Simple"}</option>
+            <option value="multi">{en ? "Multi-City" : "Multi-Villes"}</option>
           </select>
         </div>
 
@@ -59,7 +61,7 @@ export default function TripOptions() {
         </div>
 
         <div className="passenger-wrapper">
-          <label htmlFor="passengers">Adult:</label>
+          <label htmlFor="passengers">{en ? "Adult:" : "Adulte:"}</label>
           <input
             type="number"
             id="passengers"
@@ -69,7 +71,10 @@ export default function TripOptions() {
           />
         </div>
       </div>
-      <div className="trip-options-search">Search</div>
+
+      <div className="trip-options-search">
+        {en ? "Search" : "Rechercher"}
+      </div>
     </div>
   );
 }

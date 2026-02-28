@@ -1,5 +1,5 @@
 .nav {
-    margin: 0;
+     margin: 0;
     top: 0;
     padding: 0 10px;
     width: 100vw;
@@ -8,6 +8,7 @@
 
     display: flex;
     align-items: center;
+    justify-content: space-between; 
     height: 80px;
 
     z-index: 100;
@@ -29,6 +30,31 @@
     font-weight: bold;
     font-family: "Palatino Linotype", Palatino;
     font-weight: 100;
+}
+.nav-options {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); 
+}
+
+.nav-options ul {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    text-transform: uppercase;
+}
+
+.nav-item {
+    list-style: none; 
+    color: #eee;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    transition: border-bottom 0.3s ease-in;
+}
+
+.nav-item:hover {
+    border-bottom: 3px solid #f8b500;
 }
 
 #user-authentication {
@@ -61,6 +87,9 @@
     background-color: #eee;
     padding: 10px 20px;
     border-radius: 20px;
+}
+
+.sign-in-button a  {
     color: black;
     font-weight: 600;
 }
@@ -76,4 +105,24 @@
     }
 
   
+}
+
+@media (max-width: 900px) {
+    .nav-options {
+        position: relative;
+        display: inline-block;
+        left: 25%;
+    }
+}
+
+@media (max-width: 750px) {
+    .nav-options {
+        display: none;
+    }
+}
+
+@media (max-width: 875px) {
+    .nav-options.french {
+        display: none;
+    }
 }

@@ -29,17 +29,27 @@
 }
 
 .trip-options-label div:nth-child(2) {
-  margin-left: -42px;
+  margin-left: -44px;
 }
-
 .trip-options-label div:nth-child(3) {
-  margin-left: -25px;
+  margin-left: -24px;
   transition: color 0.3s ease;
   pointer-events: none;
 }
-
 .trip-options-label div:nth-child(4) {
-  margin-right: 49px;
+  margin-right: 57px;
+}
+
+.trip-options-label.french div:nth-child(2) {
+  margin-left: -48px;
+}
+.trip-options-label.french div:nth-child(3) {
+  margin-left: -8px;
+  transition: color 0.3s ease;
+  pointer-events: none;
+}
+.trip-options-label.french div:nth-child(4) {
+  margin-right: 70px;
 }
 
 .trip-toggle {
