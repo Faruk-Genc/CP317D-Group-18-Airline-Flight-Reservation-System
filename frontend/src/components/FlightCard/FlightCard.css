@@ -11,7 +11,7 @@
 .flight-card {
   position: relative;
   height: 150px;
-  width: 300px;
+  width: 303px;
   background-color: #fff;
   color: #380875;
   border-radius: 8px;
@@ -23,6 +23,7 @@
   cursor: pointer;
 
   border: solid 1px #f8b500 ;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .flight-card h1.iata,

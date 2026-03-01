@@ -30,7 +30,7 @@ export default function Heropage({ heroImage, onSearch }) {
   return (
     <section className="hero-wrapper">
       <section className="hero-splash-wrapper">
-        <div className="trip-search" style={{ marginTop: "200px" }}> 
+        <div className="trip-search" style={{ marginTop: "150px" }}> 
           <FlightCard
   iata1="YYZ"
   city1="Toronto"
