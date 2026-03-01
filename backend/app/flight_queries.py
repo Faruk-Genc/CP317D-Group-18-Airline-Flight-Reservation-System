@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, date
 from dotenv import load_dotenv
 import psycopg2
 from psycopg2.extras import RealDictCursor
