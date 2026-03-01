@@ -9,17 +9,20 @@ export default function TripOptions({
   departDate,
   returnDate,
   onChange,
-  onSearch
+  onSearch,
 }) {
   const { en } = useLang();
 
+  // 🔁 Sync normalized data upward (keeps your original behavior)
   useEffect(() => {
     onChange?.({
       passengers,
       tripType:
         travelType === "round" || travelType === "round-trip"
           ? "round-trip"
-          : "one-way",
+          : travelType === "oneway"
+          ? "one-way"
+          : travelType,
       cabinClass,
       departDate: departDate || null,
       returnDate:
@@ -33,66 +36,110 @@ export default function TripOptions({
     <div className="trip-options-wrapper">
       <div className="trip-options">
         <div className="top-row">
+
+          {/* TRIP TYPE */}
           <div className="field-group">
-            <label htmlFor="travelType">{en ? "Trip" : "Voyage"}</label>
+            <label htmlFor="travelType">
+              {en ? "Trip" : "Voyage"}
+            </label>
             <select
               id="travelType"
               value={travelType}
-              onChange={(e) => onChange({ tripType: e.target.value })}
+              onChange={(e) =>
+                onChange({ travelType: e.target.value })
+              }
             >
-              <option value="round">{en ? "Round Trip" : "Aller-Retour"}</option>
-              <option value="oneway">{en ? "One Way" : "Aller Simple"}</option>
-              <option value="multi">{en ? "Multi-City" : "Multi-Villes"}</option>
+              <option value="round">
+                {en ? "Round Trip" : "Aller-Retour"}
+              </option>
+              <option value="oneway">
+                {en ? "One Way" : "Aller Simple"}
+              </option>
+              <option value="multi">
+                {en ? "Multi-City" : "Multi-Villes"}
+              </option>
             </select>
           </div>
 
+          {/* PASSENGERS */}
           <div className="field-group">
-            <label htmlFor="passengers">{en ? "Adult" : "Adulte"}</label>
+            <label htmlFor="passengers">
+              {en ? "Adult" : "Adulte"}
+            </label>
             <input
               type="number"
               id="passengers"
               min="1"
               value={passengers}
-              onChange={(e) => onChange({ passengers: Number(e.target.value) })}
+              onChange={(e) =>
+                onChange({
+                  passengers: Number(e.target.value),
+                })
+              }
             />
           </div>
 
+          {/* CABIN CLASS */}
           <div className="field-group">
-            <label htmlFor="cabinClass">{en ? "Class" : "Classe"}</label>
+            <label htmlFor="cabinClass">
+              {en ? "Class" : "Classe"}
+            </label>
             <select
               id="cabinClass"
               value={cabinClass}
-              onChange={(e) => onChange({ cabinClass: e.target.value })}
+              onChange={(e) =>
+                onChange({ cabinClass: e.target.value })
+              }
             >
-              <option value="economy">{en ? "Economy" : "Économie"}</option>
-              <option value="business">{en ? "Business" : "Affaires"}</option>
+              <option value="economy">
+                {en ? "Economy" : "Économie"}
+              </option>
+              <option value="business">
+                {en ? "Business" : "Affaires"}
+              </option>
             </select>
           </div>
 
+          {/* DEPARTURE DATE */}
           <div className="field-group">
-            <label htmlFor="departureDate">{en ? "Departure" : "Départ"}</label>
+            <label htmlFor="departureDate">
+              {en ? "Departure" : "Départ"}
+            </label>
             <input
               type="date"
               id="departureDate"
               value={departDate || ""}
-              onChange={(e) => onChange({ departDate: e.target.value })}
+              onChange={(e) =>
+                onChange({
+                  departDate: e.target.value,
+                })
+              }
             />
           </div>
 
-          {(travelType === "round-trip" || travelType === "round") && (
+          {/* RETURN DATE (ONLY IF ROUND) */}
+          {(travelType === "round-trip" ||
+            travelType === "round") && (
             <div className="field-group">
-              <label htmlFor="returnDate">{en ? "Arrival" : "Arrivée"}</label>
+              <label htmlFor="returnDate">
+                {en ? "Arrival" : "Arrivée"}
+              </label>
               <input
                 type="date"
                 id="returnDate"
                 value={returnDate || ""}
-                onChange={(e) => onChange({ returnDate: e.target.value })}
+                onChange={(e) =>
+                  onChange({
+                    returnDate: e.target.value,
+                  })
+                }
               />
             </div>
           )}
         </div>
       </div>
 
+      {/* SEARCH BUTTON */}
       <button
         className="trip-options-search"
         type="button"

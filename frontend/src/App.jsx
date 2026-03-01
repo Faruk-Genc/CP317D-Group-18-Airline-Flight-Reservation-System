@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { LangProvider } from './context/LangContext';
-import Navbar from './components/Nav/Navbar';
-import Footer from './components/Nav/Footer';
-import Heropage from './components/HeroComponents/Heropage';
-import SignIn from './pages/SignIn';
+import { LangProvider } from "./context/LangContext";
+import Navbar from "./components/Nav/Navbar";
+import Footer from "./components/Nav/Footer";
+import Heropage from "./components/HeroComponents/Heropage";
+import SignIn from "./pages/SignIn";
 import FlightStatus from "./pages/FlightStatus";
 import CheckIn from "./pages/CheckIn";
 import MyFlights from "./pages/MyFlights";
@@ -11,14 +11,24 @@ import Results from "./pages/Results";
 import TripReview from "./pages/TripReview";
 import Confirmation from "./pages/Confirmation";
 
-import './App.css';
+import "./App.css";
 
-const heroImages = import.meta.glob('./assets/heropage/*.{jpg,jpeg,png,svg}', { eager: true });
-const imagesArray = Object.values(heroImages).map(module => module.default);
+const heroImages = import.meta.glob(
+  "./assets/heropage/*.{jpg,jpeg,png,svg}",
+  { eager: true }
+);
+
+const imagesArray = Object.values(heroImages).map(
+  (module) => module.default
+);
 
 function App() {
   const [page, setPage] = useState("home");
-  const [heroImage] = useState(() => imagesArray[Math.floor(Math.random() * imagesArray.length)]);
+
+  const [heroImage] = useState(
+    () =>
+      imagesArray[Math.floor(Math.random() * imagesArray.length)]
+  );
 
   const [booking, setBooking] = useState({
     search: {
@@ -45,13 +55,16 @@ function App() {
     },
   });
 
-  const goResults = (payload) => {
-    setBooking((prev) => ({
-      ...prev,
-      ...payload,
-    }));
-    setPage("results");
-  };
+const goResults = (payload) => {
+  console.log("🔎 SEARCH PAYLOAD:", payload);
+
+  setBooking((prev) => ({
+    ...prev,
+    ...payload,
+  }));
+
+  setPage("results");
+};
 
   const selectFlightAndReview = (flight) => {
     setBooking((prev) => ({
@@ -64,15 +77,19 @@ function App() {
         currency: "CAD",
       },
     }));
+
     setPage("trip-review");
   };
 
   const generateReference = () => {
-    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    const chars =
+      "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     let out = "";
+
     for (let i = 0; i < 6; i++) {
       out += chars[Math.floor(Math.random() * chars.length)];
     }
+
     return out;
   };
 
@@ -108,15 +125,29 @@ function App() {
             search={booking.search}
             tripOptions={booking.tripOptions}
             setSearch={(data) =>
-              setBooking((prev) => ({ ...prev, search: { ...prev.search, ...data } }))
+              setBooking((prev) => ({
+                ...prev,
+                search: {
+                  ...prev.search,
+                  ...data,
+                },
+              }))
             }
             setTripOptions={(data) =>
-              setBooking((prev) => ({ ...prev, tripOptions: { ...prev.tripOptions, ...data } }))
+              setBooking((prev) => ({
+                ...prev,
+                tripOptions: {
+                  ...prev.tripOptions,
+                  ...data,
+                },
+              }))
             }
           />
         )}
 
-        {page === "sign-in" && <SignIn onBack={() => setPage("home")} />}
+        {page === "sign-in" && (
+          <SignIn onBack={() => setPage("home")} />
+        )}
 
         {page === "results" && (
           <Results
@@ -141,9 +172,17 @@ function App() {
           />
         )}
 
-        {page === "flight-status" && <FlightStatus onBack={() => setPage("home")} />}
-        {page === "check-in" && <CheckIn onBack={() => setPage("home")} />}
-        {page === "my-flights" && <MyFlights onBack={() => setPage("home")} />}
+        {page === "flight-status" && (
+          <FlightStatus onBack={() => setPage("home")} />
+        )}
+
+        {page === "check-in" && (
+          <CheckIn onBack={() => setPage("home")} />
+        )}
+
+        {page === "my-flights" && (
+          <MyFlights onBack={() => setPage("home")} />
+        )}
       </div>
 
       <Footer />

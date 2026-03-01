@@ -1,10 +1,17 @@
-import FlightCard from '../FlightCard/FlightCard';
-import TripOptions from '../FlightCard/TripOptions';
+import FlightCard from "../FlightCard/FlightCard";
+import TripOptions from "../FlightCard/TripOptions";
 import FeaturedFlights from "../FeaturedFlights/FeaturedFlights";
 import HeroMessage from "./HeroMessage";
 import "./Heropage.css";
 
-export default function Heropage({ heroImage, onSearch, search, tripOptions, setSearch, setTripOptions }) {
+export default function Heropage({
+  heroImage,
+  onSearch,
+  search,
+  tripOptions,
+  setSearch,
+  setTripOptions,
+}) {
   const handleSearch = () => {
     onSearch?.({ search, tripOptions });
   };
@@ -12,13 +19,15 @@ export default function Heropage({ heroImage, onSearch, search, tripOptions, set
   return (
     <section className="hero-wrapper">
       <section className="hero-splash-wrapper">
-        <div className="trip-search" style={{ marginTop: "150px" }}> 
+        <div className="trip-search" style={{ marginTop: "150px" }}>
           <FlightCard
             iata1={search.from?.iata}
             city1={search.from?.city}
             iata2={search.to?.iata}
             city2={search.to?.city}
-            onChange={(data) => setSearch({ ...search, ...data })}
+            onChange={(data) =>
+              setSearch({ ...search, ...data })
+            }
           />
 
           <TripOptions
@@ -28,12 +37,11 @@ export default function Heropage({ heroImage, onSearch, search, tripOptions, set
             departDate={search.departDate}
             returnDate={search.returnDate}
             onChange={(data) => {
-              setTripOptions({ ...tripOptions, ...data });
-              setSearch({
-                ...search,
-                departDate: data.departDate ?? search.departDate,
-                returnDate: data.returnDate ?? search.returnDate,
-              });
+              if ("departDate" in data || "returnDate" in data) {
+                setSearch(data);
+              } else {
+                setTripOptions(data);
+              }
             }}
             onSearch={handleSearch}
           />

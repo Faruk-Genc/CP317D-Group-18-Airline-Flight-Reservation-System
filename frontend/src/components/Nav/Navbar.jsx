@@ -8,8 +8,8 @@ export default function Navbar({ onSignIn, onHome, onFlightStatus, onCheckIn, on
   return (
     <nav className="nav">
       <section className="nav-brand">
-        <img className="nav-logo" src={logo} alt="placeholder" />
-        <div className="nav-title">AIR LAURIER</div>
+        <img className="nav-logo" src={logo} alt="placeholder" onClick={onHome}/>
+        <div className="nav-title" onClick={onHome}>AIR LAURIER</div>
       </section>
 
       <section className={`nav-options ${en ? "" : "french"}`}>
