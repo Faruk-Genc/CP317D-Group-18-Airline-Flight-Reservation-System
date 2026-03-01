@@ -1,12 +1,19 @@
-import { useState, useRef } from "react";
-import { ArrowLeftRight } from "lucide-react";
+import { useState, useRef, useEffect } from "react";import { ArrowLeftRight } from "lucide-react";
 import FlightCardSelection from "./FlightCardSelection";
 import "./FlightCard.css";
 
-export default function FlightCard({ iata1, city1, iata2, city2 }) {
+export default function FlightCard({ iata1, city1, iata2, city2, onChange }) {
   const [from, setFrom] = useState({ iata: iata1, city: city1 });
   const [to, setTo] = useState({ iata: iata2, city: city2 });
   const [rotated, setRotated] = useState(false);
+
+  //notes**
+  useEffect(() => {
+    onChange?.({
+      from: { iata: from.iata, city: from.city },
+      to: { iata: to.iata, city: to.city },
+    });
+  }, [from, to]);
 
   const swapCards = () => {
     setRotated((prev) => !prev);

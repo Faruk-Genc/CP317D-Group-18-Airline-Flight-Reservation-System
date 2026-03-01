@@ -1,0 +1,147 @@
+.results-page {
+  padding: 24px;
+}
+
+.results-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.results-back {
+  border: 1px solid #ddd;
+  background: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.results-title h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.results-title span {
+  font-weight: 700;
+}
+
+.results-subtitle {
+  margin: 6px 0 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.results-filter {
+  border: 1px solid #ddd;
+  background: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.result-card {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #e6e6e6;
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: transform 0.05s ease;
+}
+
+.result-card:hover {
+  transform: translateY(-1px);
+}
+
+.result-card.lowest {
+  border: 2px solid #2c7;
+}
+
+.result-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.result-time .time {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.result-time .iata {
+  font-size: 14px;
+  color: #666;
+}
+
+.result-arrow {
+  font-size: 18px;
+  color: #888;
+  margin: 0 6px;
+}
+
+.result-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-left: 14px;
+}
+
+.seats {
+  font-size: 14px;
+  color: #444;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #e8fff4;
+  border: 1px solid #2c7;
+  width: fit-content;
+}
+
+.result-right {
+  text-align: right;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.per-person {
+  font-size: 12px;
+  color: #666;
+}
+
+.results-viewmore-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 18px 0 8px;
+}
+
+.results-viewmore {
+  border: 1px solid #ddd;
+  background: white;
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.results-featured {
+  margin-top: 24px;
+}

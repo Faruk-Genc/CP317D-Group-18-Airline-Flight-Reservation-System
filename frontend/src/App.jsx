@@ -7,6 +7,9 @@ import SignIn from './pages/SignIn';
 import FlightStatus from "./pages/FlightStatus";
 import CheckIn from "./pages/CheckIn";
 import MyFlights from "./pages/MyFlights";
+import Results from "./pages/Results";
+import TripReview from "./pages/TripReview";
+import Confirmation from "./pages/Confirmation";
 
 import './App.css';
 
@@ -17,8 +20,79 @@ function App() {
   const [en, setEn] = useState(true);
   const toggle = () => setEn(e => !e);
 
-  const [page, setPage] = useState("home"); // "home", "sign-in", "flight-status", "check-in", "my-flights"
+  const [page, setPage] = useState("home");
+  // "home", "sign-in", "flight-status", "check-in", "my-flights", "results", "trip-review", "confirmation"
   const [heroImage] = useState(() => imagesArray[Math.floor(Math.random() * imagesArray.length)]);
+
+  const [booking, setBooking] = useState({
+  search: {
+    from: null,
+    to: null,
+    departDate: null,
+    returnDate: null,
+  },
+  tripOptions: {
+    passengers: 1,
+    tripType: "round-trip",
+    cabinClass: "economy",
+  },
+  selectedFlight: null,
+  priceSummary: {
+    baseFare: 0,
+    taxesAndFees: 0,
+    total: 0,
+    currency: "CAD",
+  },
+  confirmation: {
+    reference: null,
+    confirmedAt: null,
+  },
+});
+
+  const goResults = (payload) => {
+    setBooking((prev) => ({
+      ...prev,
+      ...payload,
+    }));
+    setPage("results");
+  };
+
+  const selectFlightAndReview = (flight) => {
+    setBooking((prev) => ({
+      ...prev,
+      selectedFlight: flight,
+      priceSummary: {
+        baseFare: flight?.price ?? 0,
+        taxesAndFees: 50,
+        total: (flight?.price ?? 0) + 50,
+        currency: "CAD",
+      },
+    }));
+    setPage("trip-review");
+  };
+
+  const generateReference = () => {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let out = "";
+  for (let i = 0; i < 6; i++) {
+    out += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return out;
+};
+
+const confirmPurchase = () => {
+  const reference = generateReference();
+
+  setBooking((prev) => ({
+    ...prev,
+    confirmation: {
+      reference,
+      confirmedAt: new Date().toISOString(),
+    },
+  }));
+
+  setPage("confirmation");
+};
 
   return (
     <LangContext.Provider value={{ en, toggle }}>
@@ -31,8 +105,32 @@ function App() {
       />
 
       <div className="scrollable-content">
-        {page === "home" && <Heropage heroImage={heroImage} />}
+        {page === "home" && <Heropage heroImage={heroImage} onSearch={goResults} booking={booking} />}
         {page === "sign-in" && <SignIn onBack={() => setPage("home")} />}
+
+        {page === "results" && (
+          <Results
+            booking={booking}
+            onSelectFlight={selectFlightAndReview}
+            onBack={() => setPage("home")}
+          />
+        )}
+
+        {page === "trip-review" && (
+          <TripReview
+            booking={booking}
+            onConfirm={confirmPurchase}
+            onBack={() => setPage("results")}
+          />
+        )}
+
+        {page === "confirmation" && (
+          <Confirmation
+            booking={booking}
+            onBackHome={() => setPage("home")}
+          />
+        )}
+
         {page === "flight-status" && <FlightStatus onBack={() => setPage("home")} />}
         {page === "check-in" && <CheckIn onBack={() => setPage("home")} />}
         {page === "my-flights" && <MyFlights onBack={() => setPage("home")} />}

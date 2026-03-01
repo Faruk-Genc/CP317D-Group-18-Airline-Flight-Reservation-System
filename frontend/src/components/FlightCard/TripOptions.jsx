@@ -2,10 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { useLang } from "../../context/LangContext";
 import "./TripOptions.css";
 
-export default function TripOptions() {
-  const { en } = useLang(); 
+export default function TripOptions({ onChange, onSearch }) {
+  const { en } = useLang();
   const [travelType, setTravelType] = useState("round");
   const [passengers, setPassengers] = useState(1);
+  const [cabinClass, setCabinClass] = useState("economy");
   const [departureDate, setDepartureDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
   const labelRef = useRef(null);
@@ -22,6 +23,16 @@ export default function TripOptions() {
       }
     }
   }, [travelType]);
+
+  useEffect(() => {
+    onChange?.({
+      passengers: Number(passengers),
+      tripType: travelType === "round" ? "round-trip" : "one-way", // map to your flow
+      cabinClass,
+      departDate: departureDate || null,
+      returnDate: travelType === "round" ? (returnDate || null) : null,
+    });
+  }, [passengers, travelType, cabinClass, departureDate, returnDate, onChange]);
 
   return (
     <div className="trip-options-wrapper">
@@ -61,20 +72,40 @@ export default function TripOptions() {
         </div>
 
         <div className="passenger-wrapper">
-          <label htmlFor="passengers">{en ? "Adult:" : "Adulte:"}</label>
-          <input
-            type="number"
-            id="passengers"
-            min="1"
-            value={passengers}
-            onChange={(e) => setPassengers(e.target.value)}
-          />
+          <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+            <div>
+              <label htmlFor="passengers">{en ? "Adult:" : "Adulte:"}</label>
+              <input
+                type="number"
+                id="passengers"
+                min="1"
+                value={passengers}
+                onChange={(e) => setPassengers(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="cabinClass">{en ? "Class:" : "Classe:"}</label>
+              <select
+                id="cabinClass"
+                value={cabinClass}
+                onChange={(e) => setCabinClass(e.target.value)}
+              >
+                <option value="economy">{en ? "Economy" : "Économie"}</option>
+                <option value="business">{en ? "Business" : "Affaires"}</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="trip-options-search">
+      <button
+        className="trip-options-search"
+        type="button"
+        onClick={() => onSearch?.()}
+      >
         {en ? "Search" : "Rechercher"}
-      </div>
+      </button>
     </div>
   );
 }
