@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LangContext } from './context/LangContext';
+import { LangProvider } from './context/LangContext';
 import Navbar from './components/Nav/Navbar';
 import Footer from './components/Nav/Footer';
 import Heropage from './components/HeroComponents/Heropage';
@@ -17,37 +17,33 @@ const heroImages = import.meta.glob('./assets/heropage/*.{jpg,jpeg,png,svg}', { 
 const imagesArray = Object.values(heroImages).map(module => module.default);
 
 function App() {
-  const [en, setEn] = useState(true);
-  const toggle = () => setEn(e => !e);
-
   const [page, setPage] = useState("home");
-  // "home", "sign-in", "flight-status", "check-in", "my-flights", "results", "trip-review", "confirmation"
   const [heroImage] = useState(() => imagesArray[Math.floor(Math.random() * imagesArray.length)]);
 
   const [booking, setBooking] = useState({
-  search: {
-    from: null,
-    to: null,
-    departDate: null,
-    returnDate: null,
-  },
-  tripOptions: {
-    passengers: 1,
-    tripType: "round-trip",
-    cabinClass: "economy",
-  },
-  selectedFlight: null,
-  priceSummary: {
-    baseFare: 0,
-    taxesAndFees: 0,
-    total: 0,
-    currency: "CAD",
-  },
-  confirmation: {
-    reference: null,
-    confirmedAt: null,
-  },
-});
+    search: {
+      from: { iata: "YYZ", city: "Toronto" },
+      to: { iata: "HND", city: "Tokyo" },
+      departDate: null,
+      returnDate: null,
+    },
+    tripOptions: {
+      passengers: 1,
+      tripType: "round-trip",
+      cabinClass: "economy",
+    },
+    selectedFlight: null,
+    priceSummary: {
+      baseFare: 0,
+      taxesAndFees: 0,
+      total: 0,
+      currency: "CAD",
+    },
+    confirmation: {
+      reference: null,
+      confirmedAt: null,
+    },
+  });
 
   const goResults = (payload) => {
     setBooking((prev) => ({
@@ -72,30 +68,30 @@ function App() {
   };
 
   const generateReference = () => {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let out = "";
-  for (let i = 0; i < 6; i++) {
-    out += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return out;
-};
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let out = "";
+    for (let i = 0; i < 6; i++) {
+      out += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return out;
+  };
 
-const confirmPurchase = () => {
-  const reference = generateReference();
+  const confirmPurchase = () => {
+    const reference = generateReference();
 
-  setBooking((prev) => ({
-    ...prev,
-    confirmation: {
-      reference,
-      confirmedAt: new Date().toISOString(),
-    },
-  }));
+    setBooking((prev) => ({
+      ...prev,
+      confirmation: {
+        reference,
+        confirmedAt: new Date().toISOString(),
+      },
+    }));
 
-  setPage("confirmation");
-};
+    setPage("confirmation");
+  };
 
   return (
-    <LangContext.Provider value={{ en, toggle }}>
+    <LangProvider>
       <Navbar
         onSignIn={() => setPage("sign-in")}
         onHome={() => setPage("home")}
@@ -105,7 +101,21 @@ const confirmPurchase = () => {
       />
 
       <div className="scrollable-content">
-        {page === "home" && <Heropage heroImage={heroImage} onSearch={goResults} booking={booking} />}
+        {page === "home" && (
+          <Heropage
+            heroImage={heroImage}
+            onSearch={goResults}
+            search={booking.search}
+            tripOptions={booking.tripOptions}
+            setSearch={(data) =>
+              setBooking((prev) => ({ ...prev, search: { ...prev.search, ...data } }))
+            }
+            setTripOptions={(data) =>
+              setBooking((prev) => ({ ...prev, tripOptions: { ...prev.tripOptions, ...data } }))
+            }
+          />
+        )}
+
         {page === "sign-in" && <SignIn onBack={() => setPage("home")} />}
 
         {page === "results" && (
@@ -137,7 +147,7 @@ const confirmPurchase = () => {
       </div>
 
       <Footer />
-    </LangContext.Provider>
+    </LangProvider>
   );
 }
 

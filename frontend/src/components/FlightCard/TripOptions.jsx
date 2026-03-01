@@ -1,24 +1,33 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useLang } from "../../context/LangContext";
 import "./TripOptions.css";
 
-export default function TripOptions({ onChange, onSearch }) {
+export default function TripOptions({
+  passengers,
+  travelType,
+  cabinClass,
+  departDate,
+  returnDate,
+  onChange,
+  onSearch
+}) {
   const { en } = useLang();
-  const [travelType, setTravelType] = useState("round");
-  const [passengers, setPassengers] = useState(1);
-  const [cabinClass, setCabinClass] = useState("economy");
-  const [departureDate, setDepartureDate] = useState("");
-  const [returnDate, setReturnDate] = useState("");
 
   useEffect(() => {
     onChange?.({
-      passengers: Number(passengers),
-      tripType: travelType === "round" ? "round-trip" : "one-way",
+      passengers,
+      tripType:
+        travelType === "round" || travelType === "round-trip"
+          ? "round-trip"
+          : "one-way",
       cabinClass,
-      departDate: departureDate || null,
-      returnDate: travelType === "round" ? (returnDate || null) : null,
+      departDate: departDate || null,
+      returnDate:
+        travelType === "round-trip" || travelType === "round"
+          ? returnDate || null
+          : null,
     });
-  }, [passengers, travelType, cabinClass, departureDate, returnDate, onChange]);
+  }, [passengers, travelType, cabinClass, departDate, returnDate]);
 
   return (
     <div className="trip-options-wrapper">
@@ -29,7 +38,7 @@ export default function TripOptions({ onChange, onSearch }) {
             <select
               id="travelType"
               value={travelType}
-              onChange={(e) => setTravelType(e.target.value)}
+              onChange={(e) => onChange({ tripType: e.target.value })}
             >
               <option value="round">{en ? "Round Trip" : "Aller-Retour"}</option>
               <option value="oneway">{en ? "One Way" : "Aller Simple"}</option>
@@ -44,7 +53,7 @@ export default function TripOptions({ onChange, onSearch }) {
               id="passengers"
               min="1"
               value={passengers}
-              onChange={(e) => setPassengers(e.target.value)}
+              onChange={(e) => onChange({ passengers: Number(e.target.value) })}
             />
           </div>
 
@@ -53,7 +62,7 @@ export default function TripOptions({ onChange, onSearch }) {
             <select
               id="cabinClass"
               value={cabinClass}
-              onChange={(e) => setCabinClass(e.target.value)}
+              onChange={(e) => onChange({ cabinClass: e.target.value })}
             >
               <option value="economy">{en ? "Economy" : "Économie"}</option>
               <option value="business">{en ? "Business" : "Affaires"}</option>
@@ -65,19 +74,19 @@ export default function TripOptions({ onChange, onSearch }) {
             <input
               type="date"
               id="departureDate"
-              value={departureDate}
-              onChange={(e) => setDepartureDate(e.target.value)}
+              value={departDate || ""}
+              onChange={(e) => onChange({ departDate: e.target.value })}
             />
           </div>
 
-          {travelType === "round" && (
+          {(travelType === "round-trip" || travelType === "round") && (
             <div className="field-group">
               <label htmlFor="returnDate">{en ? "Arrival" : "Arrivée"}</label>
               <input
                 type="date"
                 id="returnDate"
-                value={returnDate}
-                onChange={(e) => setReturnDate(e.target.value)}
+                value={returnDate || ""}
+                onChange={(e) => onChange({ returnDate: e.target.value })}
               />
             </div>
           )}
@@ -87,7 +96,7 @@ export default function TripOptions({ onChange, onSearch }) {
       <button
         className="trip-options-search"
         type="button"
-        onClick={() => onSearch?.()}
+        onClick={onSearch}
       >
         {en ? "Search" : "Rechercher"}
       </button>

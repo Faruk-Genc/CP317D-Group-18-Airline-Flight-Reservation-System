@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from "react";import { ArrowLeftRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ArrowLeftRight } from "lucide-react";
 import FlightCardSelection from "./FlightCardSelection";
 import "./FlightCard.css";
 
@@ -7,13 +8,17 @@ export default function FlightCard({ iata1, city1, iata2, city2, onChange }) {
   const [to, setTo] = useState({ iata: iata2, city: city2 });
   const [rotated, setRotated] = useState(false);
 
-  //notes**
   useEffect(() => {
-    onChange?.({
-      from: { iata: from.iata, city: from.city },
-      to: { iata: to.iata, city: to.city },
-    });
+    onChange?.({ from, to });
   }, [from, to]);
+
+  useEffect(() => {
+    setFrom({ iata: iata1, city: city1 });
+  }, [iata1, city1]);
+
+  useEffect(() => {
+    setTo({ iata: iata2, city: city2 });
+  }, [iata2, city2]);
 
   const swapCards = () => {
     setRotated((prev) => !prev);
@@ -27,11 +32,13 @@ export default function FlightCard({ iata1, city1, iata2, city2, onChange }) {
         <Card
           iata={from.iata}
           city={from.city}
-          onSelect={(o) => setFrom({ iata: o.origin_iata, city: o.origin_city })} />
+          onSelect={(o) => setFrom({ iata: o.origin_iata, city: o.origin_city })}
+        />
         <Card
           iata={to.iata}
           city={to.city}
-          onSelect={(o) => setTo({ iata: o.origin_iata, city: o.origin_city })} />
+          onSelect={(o) => setTo({ iata: o.origin_iata, city: o.origin_city })}
+        />
       </div>
 
       <button className="switch-card" onClick={swapCards}>
@@ -43,12 +50,8 @@ export default function FlightCard({ iata1, city1, iata2, city2, onChange }) {
 
 function Card({ iata, city, onSelect }) {
   const [showDropdown, setShowDropdown] = useState(false);
-  const inputRef = useRef(null);
 
-  const openDropdown = () => {
-    setShowDropdown(true);
-    setTimeout(() => inputRef.current?.focus(), 0);
-  };
+  const openDropdown = () => setShowDropdown(true);
 
   const handleSelect = (origin) => {
     onSelect(origin);
@@ -62,7 +65,7 @@ function Card({ iata, city, onSelect }) {
 
       {showDropdown && (
         <div className="selection-overlay" onClick={(e) => e.stopPropagation()}>
-          <FlightCardSelection ref={inputRef} onSelect={handleSelect} />
+          <FlightCardSelection onSelect={handleSelect} />
         </div>
       )}
     </div>
