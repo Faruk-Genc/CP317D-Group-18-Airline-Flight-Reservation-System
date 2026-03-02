@@ -1,11 +1,14 @@
 import { useState, useEffect, useRef } from "react";
+import airportsData from "../../../../scripts/flightgenerator/data/airports.json";
+import countriesData from "../../../../scripts/flightgenerator/data/countries.json";
 import "./FlightCardSelection.css";
 
 export default function FlightCardSelection({ onSelect }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [showNoResults, setShowNoResults] = useState(false);
-  const [active, setActive] = useState(false); 
+  const [active, setActive] = useState(false);
+  const [selected, setSelected] = useState(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -15,36 +18,50 @@ export default function FlightCardSelection({ onSelect }) {
       return;
     }
 
-    const timeoutId = setTimeout(() => {
-      fetch(`http://localhost:5000/api/flights?origin=${encodeURIComponent(query)}`)
-        .then((res) => res.json())
-        .then((data) => {
-          const seen = new Set();
-          const unique = data.filter((origin) => {
-            const key = `${origin.origin_iata}-${origin.origin_city}-${origin.origin_country}`;
-            if (seen.has(key)) return false;
-            seen.add(key);
-            return true;
-          });
+    const lowerQuery = query.toLowerCase();
 
-          setResults(unique);
-          setShowNoResults(unique.length === 0);
-        })
-        .catch((err) => {
-          console.error("Search error:", err);
-          setResults([]);
-          setShowNoResults(true);
-        });
-    }, 300);
+    // Match countries
+    const matchedCountryEntries = Object.entries(countriesData).filter(
+      ([code, country]) => country.name.toLowerCase().includes(lowerQuery)
+    );
 
-    return () => clearTimeout(timeoutId);
+    // Country results
+    const countryResults = matchedCountryEntries.map(([code, country]) => ({
+      origin_iata: null,
+      origin_city: "",
+      origin_country: country.name,
+      isCountry: true,
+    }));
+
+    // Match airports
+    const filteredAirports = Object.entries(airportsData)
+      .filter(([iata, airport]) => {
+        const countryName = countriesData[airport.country]?.name || "";
+        if (matchedCountryEntries.some(([code]) => airport.country === code))
+          return true;
+
+        return (
+          iata.toLowerCase().includes(lowerQuery) ||
+          airport.city.toLowerCase().includes(lowerQuery) ||
+          airport.name.toLowerCase().includes(lowerQuery) ||
+          countryName.toLowerCase().includes(lowerQuery)
+        );
+      })
+      .map(([iata, airport]) => ({
+        origin_iata: iata,
+        origin_city: airport.city,
+        origin_country: countriesData[airport.country]?.name || airport.country,
+        isCountry: false,
+      }));
+
+    const allResults = [...countryResults, ...filteredAirports];
+    setResults(allResults);
+    setShowNoResults(allResults.length === 0);
   }, [query]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (!e.target.closest(".selection-card")) {
-        setActive(false);
-      }
+      if (!e.target.closest(".selection-card")) setActive(false);
     };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
@@ -62,8 +79,11 @@ export default function FlightCardSelection({ onSelect }) {
         className="search-input"
         type="text"
         placeholder="Search airport, city, or country"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        value={selected?.isCountry ? selected.origin_country : query}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setSelected(null);
+        }}
         autoComplete="off"
       />
 
@@ -72,14 +92,21 @@ export default function FlightCardSelection({ onSelect }) {
           {results.map((origin) => (
             <div
               className="query-result"
-              key={`${origin.origin_iata}-${origin.origin_city}-${origin.origin_country}`}
+              key={
+                origin.isCountry
+                  ? `country-${origin.origin_country}`
+                  : `${origin.origin_iata}-${origin.origin_city}-${origin.origin_country}`
+              }
               onClick={() => {
+                setSelected(origin);
                 onSelect(origin);
-                setQuery(""); 
-                setActive(false); 
+                setQuery("");
+                setActive(false);
               }}
             >
-              <strong>{origin.origin_city}</strong> ({origin.origin_iata}) – {origin.origin_country}
+              {origin.isCountry
+                ? origin.origin_country
+                : `${origin.origin_city} (${origin.origin_iata}) – ${origin.origin_country}`}
             </div>
           ))}
         </section>

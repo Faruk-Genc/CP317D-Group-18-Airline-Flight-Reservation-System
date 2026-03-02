@@ -13,27 +13,17 @@ import Confirmation from "./pages/Confirmation";
 
 import "./App.css";
 
-const heroImages = import.meta.glob(
-  "./assets/heropage/*.{jpg,jpeg,png,svg}",
-  { eager: true }
-);
-
-const imagesArray = Object.values(heroImages).map(
-  (module) => module.default
-);
+const heroImages = import.meta.glob("./assets/heropage/*.{jpg,jpeg,png,svg}", { eager: true });
+const imagesArray = Object.values(heroImages).map((module) => module.default);
 
 function App() {
   const [page, setPage] = useState("home");
-
-  const [heroImage] = useState(
-    () =>
-      imagesArray[Math.floor(Math.random() * imagesArray.length)]
-  );
+  const [heroImage] = useState(() => imagesArray[Math.floor(Math.random() * imagesArray.length)]);
 
   const [booking, setBooking] = useState({
     search: {
-      from: { iata: "YYZ", city: "Toronto" },
-      to: { iata: "HND", city: "Tokyo" },
+      from: { iata: "YYZ", city: "Toronto", isCountry: false, origin_country: "" },
+      to: { iata: "HND", city: "Tokyo", isCountry: false, origin_country: "" },
       departDate: null,
       returnDate: null,
     },
@@ -55,16 +45,10 @@ function App() {
     },
   });
 
-const goResults = (payload) => {
-  console.log("🔎 SEARCH PAYLOAD:", payload);
-
-  setBooking((prev) => ({
-    ...prev,
-    ...payload,
-  }));
-
-  setPage("results");
-};
+  const goResults = (payload) => {
+    setBooking((prev) => ({ ...prev, ...payload }));
+    setPage("results");
+  };
 
   const selectFlightAndReview = (flight) => {
     setBooking((prev) => ({
@@ -77,25 +61,18 @@ const goResults = (payload) => {
         currency: "CAD",
       },
     }));
-
     setPage("trip-review");
   };
 
   const generateReference = () => {
-    const chars =
-      "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     let out = "";
-
-    for (let i = 0; i < 6; i++) {
-      out += chars[Math.floor(Math.random() * chars.length)];
-    }
-
+    for (let i = 0; i < 6; i++) out += chars[Math.floor(Math.random() * chars.length)];
     return out;
   };
 
   const confirmPurchase = () => {
     const reference = generateReference();
-
     setBooking((prev) => ({
       ...prev,
       confirmation: {
@@ -103,7 +80,6 @@ const goResults = (payload) => {
         confirmedAt: new Date().toISOString(),
       },
     }));
-
     setPage("confirmation");
   };
 
@@ -118,7 +94,7 @@ const goResults = (payload) => {
       />
 
       <div className="scrollable-content">
-        {page === "home" && (
+        <div style={{ display: page === "home" ? "block" : "none" }}>
           <Heropage
             heroImage={heroImage}
             onSearch={goResults}
@@ -127,62 +103,45 @@ const goResults = (payload) => {
             setSearch={(data) =>
               setBooking((prev) => ({
                 ...prev,
-                search: {
-                  ...prev.search,
-                  ...data,
-                },
+                search: { ...prev.search, ...data },
               }))
             }
             setTripOptions={(data) =>
               setBooking((prev) => ({
                 ...prev,
-                tripOptions: {
-                  ...prev.tripOptions,
-                  ...data,
-                },
+                tripOptions: { ...prev.tripOptions, ...data },
               }))
             }
           />
-        )}
+        </div>
 
-        {page === "sign-in" && (
+        <div style={{ display: page === "sign-in" ? "block" : "none" }}>
           <SignIn onBack={() => setPage("home")} />
-        )}
+        </div>
 
-        {page === "results" && (
-          <Results
-            booking={booking}
-            onSelectFlight={selectFlightAndReview}
-            onBack={() => setPage("home")}
-          />
-        )}
+        <div style={{ display: page === "results" ? "block" : "none" }}>
+          <Results booking={booking} onSelectFlight={selectFlightAndReview} onBack={() => setPage("home")} />
+        </div>
 
-        {page === "trip-review" && (
-          <TripReview
-            booking={booking}
-            onConfirm={confirmPurchase}
-            onBack={() => setPage("results")}
-          />
-        )}
+        <div style={{ display: page === "trip-review" ? "block" : "none" }}>
+          <TripReview booking={booking} onConfirm={confirmPurchase} onBack={() => setPage("results")} />
+        </div>
 
-        {page === "confirmation" && (
-          <Confirmation
-            booking={booking}
-            onBackHome={() => setPage("home")}
-          />
-        )}
+        <div style={{ display: page === "confirmation" ? "block" : "none" }}>
+          <Confirmation booking={booking} onBackHome={() => setPage("home")} />
+        </div>
 
-        {page === "flight-status" && (
+        <div style={{ display: page === "flight-status" ? "block" : "none" }}>
           <FlightStatus onBack={() => setPage("home")} />
-        )}
+        </div>
 
-        {page === "check-in" && (
+        <div style={{ display: page === "check-in" ? "block" : "none" }}>
           <CheckIn onBack={() => setPage("home")} />
-        )}
+        </div>
 
-        {page === "my-flights" && (
+        <div style={{ display: page === "my-flights" ? "block" : "none" }}>
           <MyFlights onBack={() => setPage("home")} />
-        )}
+        </div>
       </div>
 
       <Footer />
