@@ -104,14 +104,14 @@ def reset_users_table() -> None:
         
 if __name__ == "__main__":
     test_user = {
-        "username": "saul7882",
-        "email": "saul7882@mylaurier.ca",
-        "password": "12345Password!",
-        "phone_number": "4162193454",
-        "forename": "Oscar",
-        "surname": "Saul",
-        "street": "123 King St N",
-        "city": "Waterloo",
+        "username": "john_doe",
+        "email": "john_doe@email.com",
+        "password": "password",
+        "phone_number": "1234567890",
+        "forename": "John",
+        "surname": "Doe",
+        "street": "123 Street St",
+        "city": "Toronto",
         "province": "ON",
         "postal_code": "ABC123",
         "country": "Canada"
