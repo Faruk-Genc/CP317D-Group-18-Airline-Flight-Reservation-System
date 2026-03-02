@@ -16,7 +16,7 @@ export default function Navbar({ onSignIn, onHome, onFlightStatus, onCheckIn, on
         <ul className="nav-list">
           <li className="nav-item">
             <div className="nav-link" onClick={onHome}>
-              {en ? "Book Flights" : "Statut des vols"}
+              {en ? "Book Flights" : "Réserver un vol"}
             </div>
           </li>
           <li className="nav-item">
