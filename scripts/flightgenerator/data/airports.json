@@ -1,262 +1,10 @@
 {
-  "BNE": {
-    "name": "Brisbane International Airport",
-    "city": "Brisbane",
-    "country": "AU",
-    "lat": -27.384199142456055,
-    "lon": 153.11700439453125
-  },
-  "DEN": {
-    "name": "Denver International Airport",
-    "city": "Denver",
-    "country": "US",
-    "lat": 39.860027,
-    "lon": -104.673792
-  },
-  "FRA": {
-    "name": "Frankfurt Airport",
-    "city": "Frankfurt am Main",
-    "country": "DE",
-    "lat": 50.030241,
-    "lon": 8.561096
-  },
-  "PVG": {
-    "name": "Shanghai Pudong International Airport",
-    "city": "Shanghai (Pudong)",
-    "country": "CN",
-    "lat": 31.1434,
-    "lon": 121.805
-  },
-  "GRU": {
-    "name": "S\u00e3o Paulo/Guarulhos\u2013Governor Andr\u00e9 Franco Montoro International Airport",
-    "city": "S\u00e3o Paulo",
-    "country": "BR",
-    "lat": -23.431274,
-    "lon": -46.469954
-  },
-  "SIN": {
-    "name": "Singapore Changi Airport",
-    "city": "Singapore",
-    "country": "SG",
-    "lat": 1.35019,
-    "lon": 103.994003
-  },
-  "JFK": {
-    "name": "John F. Kennedy International Airport",
-    "city": "New York",
-    "country": "US",
-    "lat": 40.639447,
-    "lon": -73.779317
-  },
-  "AGP": {
-    "name": "M\u00e1laga-Costa del Sol Airport",
-    "city": "M\u00e1laga",
-    "country": "ES",
-    "lat": 36.6749,
-    "lon": -4.49911
-  },
-  "MAD": {
-    "name": "Adolfo Su\u00e1rez Madrid\u2013Barajas Airport",
-    "city": "Madrid",
-    "country": "ES",
-    "lat": 40.471926,
-    "lon": -3.56264
-  },
-  "GDL": {
-    "name": "Guadalajara International Airport",
-    "city": "Guadalajara",
-    "country": "MX",
-    "lat": 20.523342,
-    "lon": -103.310108
-  },
-  "KIX": {
-    "name": "Kansai International Airport",
-    "city": "Osaka",
-    "country": "JP",
-    "lat": 34.427299,
-    "lon": 135.244003
-  },
-  "FCO": {
-    "name": "Rome\u2013Fiumicino Leonardo da Vinci International Airport",
-    "city": "Rome",
-    "country": "IT",
-    "lat": 41.804532,
-    "lon": 12.251998
-  },
-  "YVR": {
-    "name": "Vancouver International Airport",
-    "city": "Vancouver",
-    "country": "CA",
-    "lat": 49.193901,
-    "lon": -123.183998
-  },
-  "MXP": {
-    "name": "Milan Malpensa International Airport",
-    "city": "Ferno (VA)",
-    "country": "IT",
-    "lat": 45.6306,
-    "lon": 8.72811
-  },
-  "ORY": {
-    "name": "Paris-Orly Airport",
-    "city": "Paris (Orly, Val-de-Marne)",
-    "country": "FR",
-    "lat": 48.72333,
-    "lon": 2.37944
-  },
-  "AMS": {
-    "name": "Amsterdam Airport Schiphol",
-    "city": "Amsterdam",
-    "country": "NL",
-    "lat": 52.308601,
-    "lon": 4.76389
-  },
-  "LAS": {
-    "name": "Harry Reid International Airport",
-    "city": "Las Vegas",
-    "country": "US",
-    "lat": 36.083361,
-    "lon": -115.151817
-  },
-  "CUN": {
-    "name": "Canc\u00fan International Airport",
-    "city": "Canc\u00fan",
-    "country": "MX",
-    "lat": 21.040817,
-    "lon": -86.87347
-  },
-  "DXB": {
-    "name": "Dubai International Airport",
-    "city": "Dubai",
-    "country": "AE",
-    "lat": 25.2527999878,
-    "lon": 55.3643989563
-  },
-  "PEK": {
-    "name": "Beijing Capital International Airport",
-    "city": "Beijing",
-    "country": "CN",
-    "lat": 40.080101013183594,
-    "lon": 116.58499908447266
-  },
-  "DFW": {
-    "name": "Dallas Fort Worth International Airport",
-    "city": "Dallas-Fort Worth",
-    "country": "US",
-    "lat": 32.896801,
-    "lon": -97.038002
-  },
-  "YYC": {
-    "name": "Calgary International Airport",
-    "city": "Calgary",
-    "country": "CA",
-    "lat": 51.118822,
-    "lon": -114.009933
-  },
-  "MIA": {
-    "name": "Miami International Airport",
-    "city": "Miami",
-    "country": "US",
-    "lat": 25.7932,
-    "lon": -80.290604
-  },
-  "BER": {
-    "name": "Berlin Brandenburg Willy Brandt Airport",
-    "city": "Berlin",
-    "country": "DE",
-    "lat": 52.361738,
-    "lon": 13.502341
-  },
-  "BLR": {
-    "name": "Kempegowda International Airport Bengaluru",
-    "city": "Bangaluru",
-    "country": "IN",
-    "lat": 13.1979,
-    "lon": 77.706299
-  },
   "ATL": {
     "name": "Hartsfield Jackson Atlanta International Airport",
     "city": "Atlanta",
     "country": "US",
     "lat": 33.6367,
     "lon": -84.428101
-  },
-  "GIG": {
-    "name": "Rio Gale\u00e3o \u2013 Tom Jobim International Airport",
-    "city": "Rio De Janeiro",
-    "country": "BR",
-    "lat": -22.809999,
-    "lon": -43.250557
-  },
-  "SFO": {
-    "name": "San Francisco International Airport",
-    "city": "San Francisco",
-    "country": "US",
-    "lat": 37.619806,
-    "lon": -122.374821
-  },
-  "BOM": {
-    "name": "Chhatrapati Shivaji Maharaj International Airport",
-    "city": "Mumbai",
-    "country": "IN",
-    "lat": 19.088699,
-    "lon": 72.867897
-  },
-  "LGW": {
-    "name": "London Gatwick Airport",
-    "city": "London",
-    "country": "GB",
-    "lat": 51.148744,
-    "lon": -0.185739
-  },
-  "YUL": {
-    "name": "Montreal / Pierre Elliott Trudeau International Airport",
-    "city": "Montr\u00e9al",
-    "country": "CA",
-    "lat": 45.467837,
-    "lon": -73.742294
-  },
-  "BCN": {
-    "name": "Josep Tarradellas Barcelona-El Prat Airport",
-    "city": "Barcelona",
-    "country": "ES",
-    "lat": 41.2971,
-    "lon": 2.07846
-  },
-  "SZX": {
-    "name": "Shenzhen Bao'an International Airport",
-    "city": "Shenzhen",
-    "country": "CN",
-    "lat": 22.639474,
-    "lon": 113.803262
-  },
-  "SYD": {
-    "name": "Sydney Kingsford Smith International Airport",
-    "city": "Sydney (Mascot)",
-    "country": "AU",
-    "lat": -33.946098,
-    "lon": 151.177002
-  },
-  "CAN": {
-    "name": "Guangzhou Baiyun International Airport",
-    "city": "Guangzhou (Huadu)",
-    "country": "CN",
-    "lat": 23.392401,
-    "lon": 113.299004
-  },
-  "NCE": {
-    "name": "Nice-C\u00f4te d'Azur Airport",
-    "city": "Nice, Alpes-Maritimes",
-    "country": "FR",
-    "lat": 43.658401,
-    "lon": 7.21587
-  },
-  "DEL": {
-    "name": "Indira Gandhi International Airport",
-    "city": "New Delhi",
-    "country": "IN",
-    "lat": 28.55563,
-    "lon": 77.09519
   },
   "LAX": {
     "name": "Los Angeles International Airport",
@@ -265,34 +13,6 @@
     "lat": 33.942501,
     "lon": -118.407997
   },
-  "YYZ": {
-    "name": "Toronto Pearson International Airport",
-    "city": "Toronto",
-    "country": "CA",
-    "lat": 43.675935,
-    "lon": -79.629421
-  },
-  "VCE": {
-    "name": "Venice Marco Polo Airport",
-    "city": "Venezia (VE)",
-    "country": "IT",
-    "lat": 45.505299,
-    "lon": 12.3519
-  },
-  "ICN": {
-    "name": "Incheon International Airport",
-    "city": "Seoul",
-    "country": "KR",
-    "lat": 37.469101,
-    "lon": 126.450996
-  },
-  "NRT": {
-    "name": "Narita International Airport",
-    "city": "Narita",
-    "country": "JP",
-    "lat": 35.76858,
-    "lon": 140.388714
-  },
   "ORD": {
     "name": "Chicago O'Hare International Airport",
     "city": "Chicago",
@@ -300,33 +20,33 @@
     "lat": 41.9786,
     "lon": -87.9048
   },
-  "AUH": {
-    "name": "Zayed International Airport",
-    "city": "Abu Dhabi",
-    "country": "AE",
-    "lat": 24.440966,
-    "lon": 54.649237
+  "DFW": {
+    "name": "Dallas Fort Worth International Airport",
+    "city": "Dallas-Fort Worth",
+    "country": "US",
+    "lat": 32.896801,
+    "lon": -97.038002
   },
-  "HND": {
-    "name": "Tokyo Haneda International Airport",
-    "city": "Tokyo",
-    "country": "JP",
-    "lat": 35.549678,
-    "lon": 139.786958
+  "DEN": {
+    "name": "Denver International Airport",
+    "city": "Denver",
+    "country": "US",
+    "lat": 39.860027,
+    "lon": -104.673792
   },
-  "DOH": {
-    "name": "Hamad International Airport",
-    "city": "Doha",
-    "country": "QA",
-    "lat": 25.273056,
-    "lon": 51.608056
+  "JFK": {
+    "name": "John F. Kennedy International Airport",
+    "city": "New York",
+    "country": "US",
+    "lat": 40.639447,
+    "lon": -73.779317
   },
-  "MEL": {
-    "name": "Melbourne Airport",
-    "city": "Melbourne",
-    "country": "AU",
-    "lat": -37.670732,
-    "lon": 144.837898
+  "SFO": {
+    "name": "San Francisco International Airport",
+    "city": "San Francisco",
+    "country": "US",
+    "lat": 37.619806,
+    "lon": -122.374821
   },
   "SEA": {
     "name": "Seattle\u2013Tacoma International Airport",
@@ -335,19 +55,47 @@
     "lat": 47.447943,
     "lon": -122.310276
   },
-  "MAN": {
-    "name": "Manchester Airport",
-    "city": "Manchester, Greater Manchester",
-    "country": "GB",
-    "lat": 53.349375,
-    "lon": -2.279521
+  "MIA": {
+    "name": "Miami International Airport",
+    "city": "Miami",
+    "country": "US",
+    "lat": 25.7932,
+    "lon": -80.290604
   },
-  "LHR": {
-    "name": "London Heathrow Airport",
-    "city": "London",
-    "country": "GB",
-    "lat": 51.470748,
-    "lon": -0.459909
+  "LAS": {
+    "name": "Harry Reid International Airport",
+    "city": "Las Vegas",
+    "country": "US",
+    "lat": 36.083361,
+    "lon": -115.151817
+  },
+  "YYZ": {
+    "name": "Toronto Pearson International Airport",
+    "city": "Toronto",
+    "country": "CA",
+    "lat": 43.675935,
+    "lon": -79.629421
+  },
+  "YVR": {
+    "name": "Vancouver International Airport",
+    "city": "Vancouver",
+    "country": "CA",
+    "lat": 49.193901,
+    "lon": -123.183998
+  },
+  "YUL": {
+    "name": "Montreal / Pierre Elliott Trudeau International Airport",
+    "city": "Montr\u00e9al",
+    "country": "CA",
+    "lat": 45.467837,
+    "lon": -73.742294
+  },
+  "YYC": {
+    "name": "Calgary International Airport",
+    "city": "Calgary",
+    "country": "CA",
+    "lat": 51.118822,
+    "lon": -114.009933
   },
   "MEX": {
     "name": "Benito Ju\u00e1rez International Airport",
@@ -356,12 +104,47 @@
     "lat": 19.435137,
     "lon": -99.071328
   },
-  "MUC": {
-    "name": "Munich Airport",
-    "city": "Munich",
-    "country": "DE",
-    "lat": 48.353802,
-    "lon": 11.7861
+  "CUN": {
+    "name": "Canc\u00fan International Airport",
+    "city": "Canc\u00fan",
+    "country": "MX",
+    "lat": 21.040817,
+    "lon": -86.87347
+  },
+  "GDL": {
+    "name": "Guadalajara International Airport",
+    "city": "Guadalajara",
+    "country": "MX",
+    "lat": 20.523342,
+    "lon": -103.310108
+  },
+  "LHR": {
+    "name": "London Heathrow Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.470748,
+    "lon": -0.459909
+  },
+  "LGW": {
+    "name": "London Gatwick Airport",
+    "city": "London",
+    "country": "GB",
+    "lat": 51.148744,
+    "lon": -0.185739
+  },
+  "MAN": {
+    "name": "Manchester Airport",
+    "city": "Manchester, Greater Manchester",
+    "country": "GB",
+    "lat": 53.349375,
+    "lon": -2.279521
+  },
+  "DUB": {
+    "name": "Dublin Airport",
+    "city": "Dublin",
+    "country": "IE",
+    "lat": 53.428713,
+    "lon": -6.262121
   },
   "CDG": {
     "name": "Charles de Gaulle International Airport",
@@ -369,5 +152,922 @@
     "country": "FR",
     "lat": 49.00896,
     "lon": 2.554117
+  },
+  "ORY": {
+    "name": "Paris-Orly Airport",
+    "city": "Paris (Orly, Val-de-Marne)",
+    "country": "FR",
+    "lat": 48.72333,
+    "lon": 2.37944
+  },
+  "NCE": {
+    "name": "Nice-C\u00f4te d'Azur Airport",
+    "city": "Nice, Alpes-Maritimes",
+    "country": "FR",
+    "lat": 43.658401,
+    "lon": 7.21587
+  },
+  "FRA": {
+    "name": "Frankfurt Airport",
+    "city": "Frankfurt am Main",
+    "country": "DE",
+    "lat": 50.030241,
+    "lon": 8.561096
+  },
+  "MUC": {
+    "name": "Munich Airport",
+    "city": "Munich",
+    "country": "DE",
+    "lat": 48.353802,
+    "lon": 11.7861
+  },
+  "BER": {
+    "name": "Berlin Brandenburg Willy Brandt Airport",
+    "city": "Berlin",
+    "country": "DE",
+    "lat": 52.361738,
+    "lon": 13.502341
+  },
+  "AMS": {
+    "name": "Amsterdam Airport Schiphol",
+    "city": "Amsterdam",
+    "country": "NL",
+    "lat": 52.308601,
+    "lon": 4.76389
+  },
+  "BRU": {
+    "name": "Brussels Airport",
+    "city": "Zaventem",
+    "country": "BE",
+    "lat": 50.901402,
+    "lon": 4.48444
+  },
+  "MAD": {
+    "name": "Adolfo Su\u00e1rez Madrid\u2013Barajas Airport",
+    "city": "Madrid",
+    "country": "ES",
+    "lat": 40.471926,
+    "lon": -3.56264
+  },
+  "BCN": {
+    "name": "Josep Tarradellas Barcelona-El Prat Airport",
+    "city": "Barcelona",
+    "country": "ES",
+    "lat": 41.2971,
+    "lon": 2.07846
+  },
+  "AGP": {
+    "name": "M\u00e1laga-Costa del Sol Airport",
+    "city": "M\u00e1laga",
+    "country": "ES",
+    "lat": 36.6749,
+    "lon": -4.49911
+  },
+  "LIS": {
+    "name": "Lisbon Humberto Delgado Airport",
+    "city": "Lisbon",
+    "country": "PT",
+    "lat": 38.7813,
+    "lon": -9.13592
+  },
+  "OPO": {
+    "name": "Francisco de S\u00e1 Carneiro Airport",
+    "city": "Porto",
+    "country": "PT",
+    "lat": 41.2481002808,
+    "lon": -8.68138980865
+  },
+  "FAO": {
+    "name": "Faro - Gago Coutinho International Airport",
+    "city": "Faro",
+    "country": "PT",
+    "lat": 37.015909,
+    "lon": -7.970939
+  },
+  "FCO": {
+    "name": "Rome\u2013Fiumicino Leonardo da Vinci International Airport",
+    "city": "Rome",
+    "country": "IT",
+    "lat": 41.804532,
+    "lon": 12.251998
+  },
+  "MXP": {
+    "name": "Milan Malpensa International Airport",
+    "city": "Ferno (VA)",
+    "country": "IT",
+    "lat": 45.6306,
+    "lon": 8.72811
+  },
+  "VCE": {
+    "name": "Venice Marco Polo Airport",
+    "city": "Venezia (VE)",
+    "country": "IT",
+    "lat": 45.505299,
+    "lon": 12.3519
+  },
+  "ZRH": {
+    "name": "Z\u00fcrich Airport",
+    "city": "Zurich",
+    "country": "CH",
+    "lat": 47.458056,
+    "lon": 8.548056
+  },
+  "GVA": {
+    "name": "Geneva Cointrin International Airport",
+    "city": "Geneva",
+    "country": "CH",
+    "lat": 46.238098,
+    "lon": 6.10895
+  },
+  "VIE": {
+    "name": "Vienna International Airport",
+    "city": "Vienna",
+    "country": "AT",
+    "lat": 48.110298,
+    "lon": 16.5697
+  },
+  "ARN": {
+    "name": "Stockholm-Arlanda Airport",
+    "city": "Stockholm",
+    "country": "SE",
+    "lat": 59.64849,
+    "lon": 17.928829
+  },
+  "GOT": {
+    "name": "G\u00f6teborg Landvetter Airport",
+    "city": "G\u00f6teborg",
+    "country": "SE",
+    "lat": 57.6628,
+    "lon": 12.2798
+  },
+  "MMX": {
+    "name": "Malm\u00f6 Sturup Airport",
+    "city": "Malm\u00f6",
+    "country": "SE",
+    "lat": 55.535564,
+    "lon": 13.376327
+  },
+  "OSL": {
+    "name": "Oslo-Gardermoen International Airport",
+    "city": "Oslo (Gardermoen)",
+    "country": "NO",
+    "lat": 60.193901,
+    "lon": 11.1004
+  },
+  "BGO": {
+    "name": "Bergen Airport, Flesland",
+    "city": "Bergen",
+    "country": "NO",
+    "lat": 60.2934,
+    "lon": 5.21814
+  },
+  "TRD": {
+    "name": "Trondheim Airport, V\u00e6rnes",
+    "city": "Trondheim",
+    "country": "NO",
+    "lat": 63.457802,
+    "lon": 10.924
+  },
+  "CPH": {
+    "name": "Copenhagen Kastrup Airport",
+    "city": "Copenhagen",
+    "country": "DK",
+    "lat": 55.617900848389,
+    "lon": 12.656000137329
+  },
+  "BLL": {
+    "name": "Billund Airport",
+    "city": "Billund",
+    "country": "DK",
+    "lat": 55.740335,
+    "lon": 9.157019
+  },
+  "AAR": {
+    "name": "Aarhus Airport",
+    "city": "Aarhus",
+    "country": "DK",
+    "lat": 56.303331,
+    "lon": 10.618286
+  },
+  "HEL": {
+    "name": "Helsinki Vantaa Airport",
+    "city": "Helsinki (Vantaa)",
+    "country": "FI",
+    "lat": 60.318363,
+    "lon": 24.963341
+  },
+  "TMP": {
+    "name": "Tampere-Pirkkala Airport",
+    "city": "Tampere / Pirkkala",
+    "country": "FI",
+    "lat": 61.414101,
+    "lon": 23.604401
+  },
+  "KTT": {
+    "name": "Kittil\u00e4 International Airport",
+    "city": "Kittil\u00e4",
+    "country": "FI",
+    "lat": 67.700996,
+    "lon": 24.8468
+  },
+  "WAW": {
+    "name": "Warsaw Chopin Airport",
+    "city": "Warsaw",
+    "country": "PL",
+    "lat": 52.165699,
+    "lon": 20.9671
+  },
+  "KRK": {
+    "name": "Krak\u00f3w John Paul II International Airport",
+    "city": "Balice",
+    "country": "PL",
+    "lat": 50.077702,
+    "lon": 19.7848
+  },
+  "KTW": {
+    "name": "Katowice Wojciech Korfanty International Airport",
+    "city": "Katowice",
+    "country": "PL",
+    "lat": 50.476015,
+    "lon": 19.080705
+  },
+  "PRG": {
+    "name": "V\u00e1clav Havel Airport Prague",
+    "city": "Prague",
+    "country": "CZ",
+    "lat": 50.100874,
+    "lon": 14.259911
+  },
+  "BUD": {
+    "name": "Budapest Liszt Ferenc International Airport",
+    "city": "Budapest",
+    "country": "HU",
+    "lat": 47.43018,
+    "lon": 19.262393
+  },
+  "OTP": {
+    "name": "Bucharest Henri Coand\u0103 International Airport",
+    "city": "Otopeni",
+    "country": "RO",
+    "lat": 44.571792,
+    "lon": 26.103285
+  },
+  "CLJ": {
+    "name": "Avram Iancu Cluj International Airport",
+    "city": "Cluj-Napoca",
+    "country": "RO",
+    "lat": 46.786042,
+    "lon": 23.685733
+  },
+  "IAS": {
+    "name": "Ia\u015fi International Airport",
+    "city": "Ia\u015fi",
+    "country": "RO",
+    "lat": 47.179633,
+    "lon": 27.621431
+  },
+  "ATH": {
+    "name": "Athens Eleftherios Venizelos International Airport",
+    "city": "Spata-Artemida",
+    "country": "GR",
+    "lat": 37.936401,
+    "lon": 23.9445
+  },
+  "HER": {
+    "name": "Heraklion International Nikos Kazantzakis Airport",
+    "city": "Heraklion",
+    "country": "GR",
+    "lat": 35.339699,
+    "lon": 25.1803
+  },
+  "CFU": {
+    "name": "Corfu Ioannis Kapodistrias International Airport",
+    "city": "Kerkyra (Corfu)",
+    "country": "GR",
+    "lat": 39.60145,
+    "lon": 19.912179
+  },
+  "IST": {
+    "name": "\u0130stanbul Airport",
+    "city": "Arnavutk\u00f6y, Istanbul",
+    "country": "TR",
+    "lat": 41.261297,
+    "lon": 28.741951
+  },
+  "SAW": {
+    "name": "Istanbul Sabiha G\u00f6k\u00e7en International Airport",
+    "city": "Pendik, Istanbul",
+    "country": "TR",
+    "lat": 40.898602,
+    "lon": 29.3092
+  },
+  "AYT": {
+    "name": "Antalya International Airport",
+    "city": "Antalya",
+    "country": "TR",
+    "lat": 36.898701,
+    "lon": 30.800501
+  },
+  "NRT": {
+    "name": "Narita International Airport",
+    "city": "Narita",
+    "country": "JP",
+    "lat": 35.76858,
+    "lon": 140.388714
+  },
+  "HND": {
+    "name": "Tokyo Haneda International Airport",
+    "city": "Tokyo",
+    "country": "JP",
+    "lat": 35.549678,
+    "lon": 139.786958
+  },
+  "KIX": {
+    "name": "Kansai International Airport",
+    "city": "Osaka",
+    "country": "JP",
+    "lat": 34.427299,
+    "lon": 135.244003
+  },
+  "ICN": {
+    "name": "Incheon International Airport",
+    "city": "Seoul",
+    "country": "KR",
+    "lat": 37.469101,
+    "lon": 126.450996
+  },
+  "PUS": {
+    "name": "Gimhae International Airport",
+    "city": "Busan",
+    "country": "KR",
+    "lat": 35.179501,
+    "lon": 128.938004
+  },
+  "PEK": {
+    "name": "Beijing Capital International Airport",
+    "city": "Beijing",
+    "country": "CN",
+    "lat": 40.080101013183594,
+    "lon": 116.58499908447266
+  },
+  "PVG": {
+    "name": "Shanghai Pudong International Airport",
+    "city": "Shanghai (Pudong)",
+    "country": "CN",
+    "lat": 31.1434,
+    "lon": 121.805
+  },
+  "CAN": {
+    "name": "Guangzhou Baiyun International Airport",
+    "city": "Guangzhou (Huadu)",
+    "country": "CN",
+    "lat": 23.392401,
+    "lon": 113.299004
+  },
+  "SZX": {
+    "name": "Shenzhen Bao'an International Airport",
+    "city": "Shenzhen",
+    "country": "CN",
+    "lat": 22.639474,
+    "lon": 113.803262
+  },
+  "HKG": {
+    "name": "Hong Kong International Airport",
+    "city": "Hong Kong",
+    "country": "HK",
+    "lat": 22.31184,
+    "lon": 113.914862
+  },
+  "TPE": {
+    "name": "Taiwan Taoyuan International Airport",
+    "city": "Taoyuan",
+    "country": "TW",
+    "lat": 25.0777,
+    "lon": 121.233002
+  },
+  "TSA": {
+    "name": "Taipei Songshan International Airport",
+    "city": "Taipei (Songshan)",
+    "country": "TW",
+    "lat": 25.067244,
+    "lon": 121.552822
+  },
+  "KHH": {
+    "name": "Kaohsiung International Airport",
+    "city": "Kaohsiung (Xiaogang)",
+    "country": "TW",
+    "lat": 22.577101,
+    "lon": 120.349998
+  },
+  "SIN": {
+    "name": "Singapore Changi Airport",
+    "city": "Singapore",
+    "country": "SG",
+    "lat": 1.35019,
+    "lon": 103.994003
+  },
+  "BKK": {
+    "name": "Suvarnabhumi Airport",
+    "city": "Bangkok",
+    "country": "TH",
+    "lat": 13.6811,
+    "lon": 100.747002
+  },
+  "CNX": {
+    "name": "Chiang Mai International Airport",
+    "city": "Chiang Mai",
+    "country": "TH",
+    "lat": 18.766799926799997,
+    "lon": 98.962600708
+  },
+  "USM": {
+    "name": "Samui International Airport",
+    "city": "Na Thon (Ko Samui Island)",
+    "country": "TH",
+    "lat": 9.54779,
+    "lon": 100.061996
+  },
+  "HAN": {
+    "name": "Noi Bai International Airport",
+    "city": "Hanoi (Soc Son)",
+    "country": "VN",
+    "lat": 21.221201,
+    "lon": 105.806999
+  },
+  "SGN": {
+    "name": "Tan Son Nhat International Airport",
+    "city": "Ho Chi Minh City",
+    "country": "VN",
+    "lat": 10.8188,
+    "lon": 106.652
+  },
+  "DAD": {
+    "name": "Da Nang International Airport",
+    "city": "Da Nang",
+    "country": "VN",
+    "lat": 16.0439,
+    "lon": 108.198997
+  },
+  "KUL": {
+    "name": "Kuala Lumpur International Airport",
+    "city": "Sepang",
+    "country": "MY",
+    "lat": 2.74558,
+    "lon": 101.709999
+  },
+  "PEN": {
+    "name": "Penang International Airport",
+    "city": "Penang",
+    "country": "MY",
+    "lat": 5.296303,
+    "lon": 100.276185
+  },
+  "KCH": {
+    "name": "Kuching International Airport",
+    "city": "Kuching",
+    "country": "MY",
+    "lat": 1.487364,
+    "lon": 110.352859
+  },
+  "MNL": {
+    "name": "Ninoy Aquino International Airport",
+    "city": "Manila (Pasay)",
+    "country": "PH",
+    "lat": 14.5086,
+    "lon": 121.019997
+  },
+  "CEB": {
+    "name": "Mactan Cebu International Airport",
+    "city": "Cebu City/Lapu-Lapu City",
+    "country": "PH",
+    "lat": 10.309261,
+    "lon": 123.97974
+  },
+  "CRK": {
+    "name": "Clark International Airport / Clark Air Base",
+    "city": "Mabalacat",
+    "country": "PH",
+    "lat": 15.186,
+    "lon": 120.559998
+  },
+  "CGK": {
+    "name": "Soekarno-Hatta International Airport",
+    "city": "Jakarta",
+    "country": "ID",
+    "lat": -6.12557,
+    "lon": 106.655998
+  },
+  "DPS": {
+    "name": "Denpasar I Gusti Ngurah Rai International Airport",
+    "city": "Kuta, Badung",
+    "country": "ID",
+    "lat": -8.748409,
+    "lon": 115.167123
+  },
+  "SUB": {
+    "name": "Juanda International Airport",
+    "city": "Surabaya",
+    "country": "ID",
+    "lat": -7.37983,
+    "lon": 112.787003
+  },
+  "DEL": {
+    "name": "Indira Gandhi International Airport",
+    "city": "New Delhi",
+    "country": "IN",
+    "lat": 28.55563,
+    "lon": 77.09519
+  },
+  "BOM": {
+    "name": "Chhatrapati Shivaji Maharaj International Airport",
+    "city": "Mumbai",
+    "country": "IN",
+    "lat": 19.088699,
+    "lon": 72.867897
+  },
+  "BLR": {
+    "name": "Kempegowda International Airport Bengaluru",
+    "city": "Bangaluru",
+    "country": "IN",
+    "lat": 13.1979,
+    "lon": 77.706299
+  },
+  "ISB": {
+    "name": "Islamabad International Airport",
+    "city": "Attock",
+    "country": "PK",
+    "lat": 33.549,
+    "lon": 72.82566
+  },
+  "KHI": {
+    "name": "Jinnah International Airport",
+    "city": "Karachi",
+    "country": "PK",
+    "lat": 24.9065,
+    "lon": 67.160797
+  },
+  "LHE": {
+    "name": "Allama Iqbal International Airport",
+    "city": "Lahore",
+    "country": "PK",
+    "lat": 31.521601,
+    "lon": 74.403603
+  },
+  "DAC": {
+    "name": "Hazrat Shahjalal International Airport",
+    "city": "Dhaka",
+    "country": "BD",
+    "lat": 23.843347,
+    "lon": 90.397783
+  },
+  "CGP": {
+    "name": "Shah Amanat International Airport",
+    "city": "Chattogram (Chittagong)",
+    "country": "BD",
+    "lat": 22.249599,
+    "lon": 91.813301
+  },
+  "DXB": {
+    "name": "Dubai International Airport",
+    "city": "Dubai",
+    "country": "AE",
+    "lat": 25.2527999878,
+    "lon": 55.3643989563
+  },
+  "AUH": {
+    "name": "Zayed International Airport",
+    "city": "Abu Dhabi",
+    "country": "AE",
+    "lat": 24.440966,
+    "lon": 54.649237
+  },
+  "DOH": {
+    "name": "Hamad International Airport",
+    "city": "Doha",
+    "country": "QA",
+    "lat": 25.273056,
+    "lon": 51.608056
+  },
+  "JED": {
+    "name": "King Abdulaziz International Airport",
+    "city": "Jeddah",
+    "country": "SA",
+    "lat": 21.6796,
+    "lon": 39.156502
+  },
+  "RUH": {
+    "name": "King Khalid International Airport",
+    "city": "Riyadh",
+    "country": "SA",
+    "lat": 24.9576,
+    "lon": 46.698799
+  },
+  "MED": {
+    "name": "Prince Mohammad Bin Abdulaziz Airport",
+    "city": "Medina",
+    "country": "SA",
+    "lat": 24.5534,
+    "lon": 39.705101
+  },
+  "TLV": {
+    "name": "Ben Gurion International Airport",
+    "city": "Tel Aviv",
+    "country": "IL",
+    "lat": 32.011398,
+    "lon": 34.8867
+  },
+  "AMM": {
+    "name": "Queen Alia International Airport",
+    "city": "Amman",
+    "country": "JO",
+    "lat": 31.7226009369,
+    "lon": 35.9931983948
+  },
+  "KWI": {
+    "name": "Kuwait International Airport",
+    "city": "Kuwait City",
+    "country": "KW",
+    "lat": 29.224487,
+    "lon": 47.969813
+  },
+  "MCT": {
+    "name": "Muscat International Airport",
+    "city": "Muscat/Seeb",
+    "country": "OM",
+    "lat": 23.600218,
+    "lon": 58.285268
+  },
+  "SYD": {
+    "name": "Sydney Kingsford Smith International Airport",
+    "city": "Sydney (Mascot)",
+    "country": "AU",
+    "lat": -33.946098,
+    "lon": 151.177002
+  },
+  "MEL": {
+    "name": "Melbourne Airport",
+    "city": "Melbourne",
+    "country": "AU",
+    "lat": -37.670732,
+    "lon": 144.837898
+  },
+  "BNE": {
+    "name": "Brisbane International Airport",
+    "city": "Brisbane",
+    "country": "AU",
+    "lat": -27.384199142456055,
+    "lon": 153.11700439453125
+  },
+  "AKL": {
+    "name": "Auckland International Airport",
+    "city": "Auckland",
+    "country": "NZ",
+    "lat": -37.01199,
+    "lon": 174.786331
+  },
+  "WLG": {
+    "name": "Wellington International Airport",
+    "city": "Wellington",
+    "country": "NZ",
+    "lat": -41.327202,
+    "lon": 174.804993
+  },
+  "CHC": {
+    "name": "Christchurch International Airport",
+    "city": "Christchurch",
+    "country": "NZ",
+    "lat": -43.489029,
+    "lon": 172.532065
+  },
+  "JNB": {
+    "name": "O.R. Tambo International Airport",
+    "city": "Johannesburg",
+    "country": "ZA",
+    "lat": -26.1392,
+    "lon": 28.246
+  },
+  "CPT": {
+    "name": "Cape Town International Airport",
+    "city": "Cape Town",
+    "country": "ZA",
+    "lat": -33.9648017883,
+    "lon": 18.6016998291
+  },
+  "DUR": {
+    "name": "King Shaka International Airport",
+    "city": "Durban",
+    "country": "ZA",
+    "lat": -29.6144444444,
+    "lon": 31.1197222222
+  },
+  "CAI": {
+    "name": "Cairo International Airport",
+    "city": "Cairo",
+    "country": "EG",
+    "lat": 30.111534,
+    "lon": 31.396694
+  },
+  "HBE": {
+    "name": "Alexandria International Airport",
+    "city": "Alexandria",
+    "country": "EG",
+    "lat": 30.93249,
+    "lon": 29.696437
+  },
+  "HRG": {
+    "name": "Hurghada International Airport",
+    "city": "Hurghada",
+    "country": "EG",
+    "lat": 27.176776,
+    "lon": 33.796692
+  },
+  "CMN": {
+    "name": "Mohammed V International Airport",
+    "city": "Casablanca",
+    "country": "MA",
+    "lat": 33.3675,
+    "lon": -7.58997
+  },
+  "RAK": {
+    "name": "Marrakesh Menara Airport",
+    "city": "Marrakesh",
+    "country": "MA",
+    "lat": 31.604807,
+    "lon": -8.035788
+  },
+  "FEZ": {
+    "name": "Fes Sa\u00efss International Airport",
+    "city": "Sa\u00efss",
+    "country": "MA",
+    "lat": 33.927299,
+    "lon": -4.97796
+  },
+  "NBO": {
+    "name": "Jomo Kenyatta International Airport",
+    "city": "Nairobi",
+    "country": "KE",
+    "lat": -1.31923997402,
+    "lon": 36.9277992249
+  },
+  "MBA": {
+    "name": "Moi International Airport",
+    "city": "Mombasa",
+    "country": "KE",
+    "lat": -4.03483,
+    "lon": 39.5942
+  },
+  "EDL": {
+    "name": "Eldoret International Airport",
+    "city": "Eldoret",
+    "country": "KE",
+    "lat": 0.404458,
+    "lon": 35.238899
+  },
+  "LOS": {
+    "name": "Murtala Muhammed International Airport",
+    "city": "Lagos",
+    "country": "NG",
+    "lat": 6.57737,
+    "lon": 3.32116
+  },
+  "ABV": {
+    "name": "Nnamdi Azikiwe International Airport",
+    "city": "Abuja",
+    "country": "NG",
+    "lat": 9.00679,
+    "lon": 7.26317
+  },
+  "KAN": {
+    "name": "Mallam Aminu Kano International Airport",
+    "city": "Kano",
+    "country": "NG",
+    "lat": 12.045613,
+    "lon": 8.523566
+  },
+  "ADD": {
+    "name": "Addis Ababa Bole International Airport",
+    "city": "Addis Ababa",
+    "country": "ET",
+    "lat": 8.97789,
+    "lon": 38.799301
+  },
+  "DIR": {
+    "name": "Aba Tenna Dejazmach Yilma International Airport",
+    "city": "Dire Dawa",
+    "country": "ET",
+    "lat": 9.623549,
+    "lon": 41.855027
+  },
+  "JIJ": {
+    "name": "Gerad Wilwal International Airport",
+    "city": "Jijiga",
+    "country": "ET",
+    "lat": 9.331907,
+    "lon": 42.911811
+  },
+  "GRU": {
+    "name": "S\u00e3o Paulo/Guarulhos\u2013Governor Andr\u00e9 Franco Montoro International Airport",
+    "city": "S\u00e3o Paulo",
+    "country": "BR",
+    "lat": -23.431274,
+    "lon": -46.469954
+  },
+  "GIG": {
+    "name": "Rio Gale\u00e3o \u2013 Tom Jobim International Airport",
+    "city": "Rio De Janeiro",
+    "country": "BR",
+    "lat": -22.809999,
+    "lon": -43.250557
+  },
+  "BSB": {
+    "name": "Presidente Juscelino Kubitschek International Airport",
+    "city": "Bras\u00edlia",
+    "country": "BR",
+    "lat": -15.869167,
+    "lon": -47.920834
+  },
+  "EZE": {
+    "name": "Ezeiza International Airport - Ministro Pistarini",
+    "city": "Buenos Aires (Ezeiza)",
+    "country": "AR",
+    "lat": -34.8222,
+    "lon": -58.5358
+  },
+  "AEP": {
+    "name": "Aeroparque Jorge Newbery",
+    "city": "Buenos Aires",
+    "country": "AR",
+    "lat": -34.559419,
+    "lon": -58.415536
+  },
+  "COR": {
+    "name": "Ingeniero Aeron\u00e1utico Ambrosio L.V. Taravella International Airport",
+    "city": "Cordoba",
+    "country": "AR",
+    "lat": -31.312346,
+    "lon": -64.208329
+  },
+  "SCL": {
+    "name": "Comodoro Arturo Merino Ben\u00edtez International Airport",
+    "city": "Santiago",
+    "country": "CL",
+    "lat": -33.393001556396484,
+    "lon": -70.78579711914062
+  },
+  "PUQ": {
+    "name": "President Carlos Ib\u00e1\u00f1ez International Airport",
+    "city": "Punta Arenas",
+    "country": "CL",
+    "lat": -53.002602,
+    "lon": -70.854599
+  },
+  "ANF": {
+    "name": "Andr\u00e9s Sabella G\u00e1lvez International Airport",
+    "city": "Antofagasta",
+    "country": "CL",
+    "lat": -23.445274,
+    "lon": -70.445232
+  },
+  "BOG": {
+    "name": "El Dorado International Airport",
+    "city": "Bogota",
+    "country": "CO",
+    "lat": 4.70159,
+    "lon": -74.1469
+  },
+  "CTG": {
+    "name": "Rafael Nu\u00f1ez International Airport",
+    "city": "Cartagena",
+    "country": "CO",
+    "lat": 10.4424,
+    "lon": -75.513
+  },
+  "MDE": {
+    "name": "Jose Maria C\u00f3rdova International Airport",
+    "city": "Medell\u00edn",
+    "country": "CO",
+    "lat": 6.16454,
+    "lon": -75.4231
+  },
+  "LIM": {
+    "name": "Jorge Ch\u00e1vez International Airport",
+    "city": "Lima",
+    "country": "PE",
+    "lat": -12.0219,
+    "lon": -77.114305
+  },
+  "CIX": {
+    "name": "Capit\u00e1n FAP Jos\u00e9 A. Qui\u00f1ones Gonz\u00e1lez International Airport",
+    "city": "Chiclayo",
+    "country": "PE",
+    "lat": -6.789223,
+    "lon": -79.828254
+  },
+  "AQP": {
+    "name": "Rodr\u00edguez Ball\u00f3n International Airport",
+    "city": "Arequipa",
+    "country": "PE",
+    "lat": -16.340786,
+    "lon": -71.569485
   }
 }

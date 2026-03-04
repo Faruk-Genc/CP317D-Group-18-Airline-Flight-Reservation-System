@@ -39,6 +39,14 @@ AIRPORT_INFO = {code: (
     info["lat"], info["lon"], info["name"], info["city"], info["country"]
 ) for code, info in AIRPORTS.items()}
 
+HUBS = []
+seen_countries = set()
+for code, info in AIRPORTS.items():
+    country = info["country"]
+    if country not in seen_countries:
+        HUBS.append(code)
+        seen_countries.add(country)
+
 def distance_km(lat1, lon1, lat2, lon2):
     r = 6371
     lat1, lat2 = math.radians(lat1), math.radians(lat2)
@@ -55,13 +63,9 @@ def generate_daily_flights(date_obj, n_flights):
     random.seed(date_obj.year * 10000 + date_obj.month * 100 + date_obj.day)
     flights = []
     assigned = set()
-    pairs = [(o,d) for o in AIRPORT_CODES for d in AIRPORT_CODES if o!=d]
-    repeats = n_flights // len(pairs)
-    extras = n_flights % len(pairs)
-    all_pairs = pairs * repeats + random.sample(pairs, extras)
-    random.shuffle(all_pairs)
 
-    for origin, destination in all_pairs:
+    hub_pairs = [(o, d) for o in HUBS for d in HUBS if o != d]
+    for origin, destination in hub_pairs:
         lat_o, lon_o, name_o, city_o, country_o = AIRPORT_INFO[origin]
         lat_d, lon_d, name_d, city_d, country_d = AIRPORT_INFO[destination]
 
@@ -100,6 +104,51 @@ def generate_daily_flights(date_obj, n_flights):
             dist_km,
             base_cost
         ))
+
+    remaining = n_flights - len(flights)
+    if remaining > 0:
+        all_pairs = [(o, d) for o in AIRPORT_CODES for d in AIRPORT_CODES if o != d]
+        for origin, destination in random.sample(all_pairs, remaining):
+            lat_o, lon_o, name_o, city_o, country_o = AIRPORT_INFO[origin]
+            lat_d, lon_d, name_d, city_d, country_d = AIRPORT_INFO[destination]
+
+            flight_no = f"{IATA}{random.randint(100,9999)}-{date_obj:%y%m%d}"
+            while flight_no in assigned:
+                flight_no = f"{IATA}{random.randint(100,9999)}-{date_obj:%y%m%d}"
+            assigned.add(flight_no)
+
+            dist_km = distance_km(lat_o, lon_o, lat_d, lon_d)
+            departure = round_to_5_min(datetime(
+                date_obj.year, date_obj.month, date_obj.day,
+                random.randint(0, 23), random.randint(0, 59),
+                tzinfo=tz.utc
+            ))
+            arrival = round_to_5_min(departure + timedelta(hours=dist_km / 900))
+
+            aircraft = random.choice(AIRCRAFT_NAMES)
+            base_cost = max(round(dist_km * BASE_COST_PER_KM, 2), 50.0)
+
+            flights.append((
+                flight_no,
+                departure,
+                arrival,
+                origin,
+                name_o,
+                city_o,
+                country_o,
+                country_o,
+                destination,
+                name_d,
+                city_d,
+                country_d,
+                country_d,
+                aircraft,
+                AIRLINE_NAME,
+                dist_km,
+                base_cost
+            ))
+
+    random.shuffle(flights)
     return flights
 
 def get_connection():
