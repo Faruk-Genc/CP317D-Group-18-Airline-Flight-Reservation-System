@@ -13,7 +13,6 @@ export default function TripOptions({
 }) {
   const { en } = useLang();
 
-  // 🔁 Sync normalized data upward (keeps your original behavior)
   useEffect(() => {
     onChange?.({
       passengers,
@@ -37,7 +36,6 @@ export default function TripOptions({
       <div className="trip-options">
         <div className="top-row">
 
-          {/* TRIP TYPE */}
           <div className="field-group">
             <label htmlFor="travelType">
               {en ? "Trip" : "Voyage"}
@@ -61,7 +59,6 @@ export default function TripOptions({
             </select>
           </div>
 
-          {/* PASSENGERS */}
           <div className="field-group">
             <label htmlFor="passengers">
               {en ? "Adult" : "Adulte"}
@@ -79,7 +76,6 @@ export default function TripOptions({
             />
           </div>
 
-          {/* CABIN CLASS */}
           <div className="field-group">
             <label htmlFor="cabinClass">
               {en ? "Class" : "Classe"}
@@ -100,7 +96,6 @@ export default function TripOptions({
             </select>
           </div>
 
-          {/* DEPARTURE DATE */}
           <div className="field-group">
             <label htmlFor="departureDate">
               {en ? "Departure" : "Départ"}
@@ -117,7 +112,6 @@ export default function TripOptions({
             />
           </div>
 
-          {/* RETURN DATE (ONLY IF ROUND) */}
           {(travelType === "round-trip" ||
             travelType === "round") && (
             <div className="field-group">
@@ -139,7 +133,6 @@ export default function TripOptions({
         </div>
       </div>
 
-      {/* SEARCH BUTTON */}
       <button
         className="trip-options-search"
         type="button"

@@ -25,7 +25,7 @@ export default function HeroMessage() {
               </div>
             </div>
             <div className="hero-heading">
-              790+
+              130+
               <div className="hero-subheading">
                 {en ? "destinations" : "destinations"}
               </div>

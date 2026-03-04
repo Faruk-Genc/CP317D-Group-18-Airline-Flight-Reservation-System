@@ -18,7 +18,6 @@ DB_CONFIG = {
 }
 
 BASE_DIR = os.path.join(os.path.dirname(__file__), "data")
-
 with open(os.path.join(BASE_DIR, "airports.json"), "r", encoding="utf-8") as f:
     AIRPORTS = json.load(f)
 
@@ -193,8 +192,18 @@ def update_schedule():
             """, (today, today + timedelta(days=DAYS_AHEAD)))
             conn.commit()
 
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT DISTINCT departure_time::date FROM daily_flights
+                WHERE departure_time::date >= %s
+                  AND departure_time::date <= %s
+            """, (today, today + timedelta(days=DAYS_AHEAD)))
+            existing_dates = {row[0] for row in cur.fetchall()}
+
         for day_offset in range(DAYS_AHEAD):
             schedule_date = today + timedelta(days=day_offset)
+            if schedule_date in existing_dates:
+                continue
             flights = generate_daily_flights(schedule_date, FLIGHTS_PER_DAY)
             with conn.cursor() as cur:
                 execute_batch(cur, """

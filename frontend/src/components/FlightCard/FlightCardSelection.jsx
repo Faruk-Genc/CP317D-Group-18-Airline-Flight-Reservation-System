@@ -20,26 +20,22 @@ export default function FlightCardSelection({ onSelect }) {
 
     const lowerQuery = query.toLowerCase();
 
-    // Match countries
     const matchedCountryEntries = Object.entries(countriesData).filter(
-      ([code, country]) => country.name.toLowerCase().includes(lowerQuery)
+      ([code, countryName]) => countryName.toLowerCase().includes(lowerQuery)
     );
 
-    // Country results
-    const countryResults = matchedCountryEntries.map(([code, country]) => ({
+    const countryResults = matchedCountryEntries.map(([code, countryName]) => ({
       origin_iata: null,
       origin_city: "",
-      origin_country: country.name,
+      origin_country: countryName,
       isCountry: true,
     }));
 
-    // Match airports
     const filteredAirports = Object.entries(airportsData)
       .filter(([iata, airport]) => {
-        const countryName = countriesData[airport.country]?.name || "";
+        const countryName = countriesData[airport.country] || "";
         if (matchedCountryEntries.some(([code]) => airport.country === code))
           return true;
-
         return (
           iata.toLowerCase().includes(lowerQuery) ||
           airport.city.toLowerCase().includes(lowerQuery) ||
@@ -50,7 +46,7 @@ export default function FlightCardSelection({ onSelect }) {
       .map(([iata, airport]) => ({
         origin_iata: iata,
         origin_city: airport.city,
-        origin_country: countriesData[airport.country]?.name || airport.country,
+        origin_country: countriesData[airport.country] || airport.country,
         isCountry: false,
       }));
 
