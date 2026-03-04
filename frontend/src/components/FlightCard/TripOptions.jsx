@@ -36,7 +36,6 @@ export default function TripOptions({
       <div className={styles.tripOptions}>
         <div className={styles.topRow}>
 
-          {/* 1️⃣ Trip Type */}
           <div className={styles.fieldGroup}>
             <label htmlFor="travelType">{en ? "Trip" : "Voyage"}</label>
             <select
@@ -58,21 +57,6 @@ export default function TripOptions({
             </select>
           </div>
 
-          {/* 2️⃣ Adult / Passengers */}
-          <div className={styles.fieldGroup}>
-            <label htmlFor="passengers">{en ? "Adult" : "Adulte"}</label>
-            <input
-              type="number"
-              id="passengers"
-              min="1"
-              value={passengers}
-              onChange={(e) =>
-                onChange({ passengers: Number(e.target.value) })
-              }
-            />
-          </div>
-
-          {/* 3️⃣ Cabin Class */}
           <div className={styles.fieldGroup}>
             <label htmlFor="cabinClass">{en ? "Class" : "Classe"}</label>
             <select
@@ -87,7 +71,19 @@ export default function TripOptions({
             </select>
           </div>
 
-          {/* 4️⃣ Departure Date */}
+          <div className={styles.fieldGroup}>
+            <label htmlFor="passengers">{en ? "Adult" : "Adulte"}</label>
+            <input
+              type="number"
+              id="passengers"
+              min="1"
+              value={passengers}
+              onChange={(e) =>
+                onChange({ passengers: Number(e.target.value) })
+              }
+            />
+          </div>
+
           <div className={styles.fieldGroup}>
             <label htmlFor="departureDate">{en ? "Departure" : "Départ"}</label>
             <input
@@ -100,7 +96,6 @@ export default function TripOptions({
             />
           </div>
 
-          {/* 5️⃣ Return Date (conditional) */}
           {(travelType === "round-trip" || travelType === "round") && (
             <div className={styles.fieldGroup}>
               <label htmlFor="returnDate">{en ? "Arrival" : "Arrivée"}</label>

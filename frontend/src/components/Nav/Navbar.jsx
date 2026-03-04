@@ -37,7 +37,7 @@ export default function Navbar({ onSignIn, onHome, onFlightStatus, onCheckIn, on
         </ul>
       </section>
 
-      <section id="userAuthentication">
+      <section className={styles.userAuthentication}>
         <button className={styles.selectLanguage} onClick={toggle}>
           {en ? "FR" : "EN"}
         </button>

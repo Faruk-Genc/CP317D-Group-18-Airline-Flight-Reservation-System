@@ -15,40 +15,36 @@
     position: sticky;
 }
 
-.navBrand {
+.nav-brand {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.navLogo {
+.nav-logo {
     width: 60px;
 }
 
-.navTitle {
+.nav-title {
     font-size: 26px;
     font-weight: bold;
     font-family: "Palatino Linotype", Palatino;
     font-weight: 100;
 }
-.navOptions {
+.nav-options {
     position: absolute;
     left: 50%;
     transform: translateX(-50%); 
 }
 
-.navList {
+.nav-options ul {
     display: flex;
     gap: 20px;
     list-style: none;
     text-transform: uppercase;
 }
 
-.navLink {
-    cursor: pointer;
-}
-
-.navItem {
+.nav-item {
     list-style: none; 
     color: #eee;
     font-weight: 600;
@@ -57,18 +53,18 @@
     transition: border-bottom 0.3s ease-in;
 }
 
-.navItem:hover {
+.nav-item:hover {
     border-bottom: 3px solid #f8b500;
 }
 
-.userAuthentication {
+#user-authentication {
     margin-left: auto;
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.selectLanguage {
+.select-language {
     width: 40px;
     height: 40px;
     padding: 10px;
@@ -80,34 +76,30 @@
 
     border: 2px solid rgba(255, 255, 255, 0.4);
     color: #eee;
-    background: transparent;
-    cursor: pointer;
 }
 
-.userIcon {
+.user-icon {
     display: none;
     border-radius: 50%;
 }
 
-.signInButton {
+.sign-in-button {
     background-color: #eee;
     padding: 10px 20px;
     border-radius: 20px;
-    border: none;
-    cursor: pointer;
 }
 
-.signInButton a  {
+.sign-in-button a  {
     color: black;
     font-weight: 600;
 }
 
 @media (max-width: 450px) {
-    .navLogo {
+    .nav-logo {
         width: 40px;
         margin-left: -10px;
     }
-    .navTitle {
+    .nav-title {
         font-size: 18px;
         margin-left: -10px;
     }
@@ -116,7 +108,7 @@
 }
 
 @media (max-width: 900px) {
-    .navOptions {
+    .nav-options {
         position: relative;
         display: inline-block;
         left: 25%;
@@ -124,13 +116,13 @@
 }
 
 @media (max-width: 750px) {
-    .navOptions {
+    .nav-options {
         display: none;
     }
 }
 
 @media (max-width: 875px) {
-    .navOptions.french {
+    .nav-options.french {
         display: none;
     }
 }
