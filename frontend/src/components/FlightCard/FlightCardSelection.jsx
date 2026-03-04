@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import airportsData from "../../../../scripts/flightgenerator/data/airports.json";
 import countriesData from "../../../../scripts/flightgenerator/data/countries.json";
-import "./FlightCardSelection.css";
+import styles from "./FlightCardSelection.module.css";
 
 export default function FlightCardSelection({ onSelect }) {
   const [query, setQuery] = useState("");
@@ -57,7 +57,7 @@ export default function FlightCardSelection({ onSelect }) {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (!e.target.closest(".selection-card")) setActive(false);
+      if (!e.target.closest(`.${styles.selectionCard}`)) setActive(false);
     };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
@@ -69,10 +69,10 @@ export default function FlightCardSelection({ onSelect }) {
   };
 
   return (
-    <div className="selection-card" onClick={handleCardClick}>
+    <div className={styles.selectionCard} onClick={handleCardClick}>
       <input
         ref={inputRef}
-        className="search-input"
+        className={styles.searchInput}
         type="text"
         placeholder="Search airport, city, or country"
         value={selected?.isCountry ? selected.origin_country : query}
@@ -84,10 +84,10 @@ export default function FlightCardSelection({ onSelect }) {
       />
 
       {active && results.length > 0 && (
-        <section className="results">
+        <section className={styles.results}>
           {results.map((origin) => (
             <div
-              className="query-result"
+              className={styles.queryResult}
               key={
                 origin.isCountry
                   ? `country-${origin.origin_country}`
@@ -109,7 +109,7 @@ export default function FlightCardSelection({ onSelect }) {
       )}
 
       {active && query && showNoResults && (
-        <div className="no-results">No results found</div>
+        <div className={styles.noResults}>No results found</div>
       )}
     </div>
   );

@@ -1,8 +1,8 @@
-.review-page {
+.reviewPage {
   padding: 24px;
 }
 
-.review-topbar {
+.reviewTopbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -10,67 +10,67 @@
   margin-bottom: 18px;
 }
 
-.review-page {
+.reviewPage {
   color: #111;
 }
 
-.review-card {
+.reviewCard {
   color: #111;
 }
 
-.review-title h2 {
+.reviewTitle h2 {
   margin: 0;
   font-size: 22px;
 }
 
-.review-title p {
+.reviewTitle p {
   margin: 6px 0 0;
   color: #666;
   font-size: 14px;
 }
 
-.review-timer {
+.reviewTimer {
   text-align: right;
 }
 
-.timer-label {
+.timerLabel {
   font-size: 12px;
   color: #666;
 }
 
-.timer-value {
+.timerValue {
   font-size: 18px;
   font-weight: 800;
 }
 
-.timer-value.expired {
+.timerValue.expired {
   color: #c00;
 }
 
-.review-grid {
+.reviewGrid {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
   gap: 16px;
 }
 
 @media (max-width: 900px) {
-  .review-grid {
+  .reviewGrid {
     grid-template-columns: 1fr;
   }
 }
 
-.review-card {
+.reviewCard {
   background: white;
   border: 1px solid #e6e6e6;
   border-radius: 14px;
   padding: 16px;
 }
 
-.review-card h3 {
+.reviewCard h3 {
   margin: 0 0 14px;
 }
 
-.flight-row {
+.flightRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -80,31 +80,31 @@
   border-radius: 12px;
 }
 
-.flight-block {
+.flightBlock {
   min-width: 120px;
 }
 
-.flight-time {
+.flightTime {
   font-size: 20px;
   font-weight: 800;
 }
 
-.flight-iata {
+.flightIata {
   font-size: 14px;
   color: #666;
 }
 
-.flight-city {
+.flightCity {
   font-size: 12px;
   color: #888;
 }
 
-.flight-arrow {
+.flightArrow {
   font-size: 18px;
   color: #888;
 }
 
-.flight-meta {
+.flightMeta {
   margin-top: 14px;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -117,13 +117,13 @@
   margin-right: 6px;
 }
 
-.price-lines {
+.priceLines {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.price-line {
+.priceLine {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -136,12 +136,12 @@
   margin: 6px 0;
 }
 
-.price-line.total {
+.priceLine.total {
   font-size: 16px;
   font-weight: 800;
 }
 
-.review-btn {
+.reviewBtn {
   border-radius: 12px;
   padding: 10px 14px;
   cursor: pointer;
@@ -149,7 +149,7 @@
   background: white;
 }
 
-.review-btn.primary {
+.reviewBtn.primary {
   width: 100%;
   margin-top: 14px;
   border: none;
@@ -157,22 +157,22 @@
   color: white;
 }
 
-.review-btn.primary:disabled {
+.reviewBtn.primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.review-btn.secondary {
+.reviewBtn.secondary {
   background: white;
 }
 
-.expired-note {
+.expiredNote {
   margin-top: 10px;
   color: #c00;
   font-size: 13px;
 }
 
-.trip-options-box {
+.tripOptionsBox {
   margin-top: 14px;
   padding: 12px;
   border: 1px solid #eee;
@@ -180,12 +180,12 @@
   background: #fafafa;
 }
 
-.trip-options-title {
+.tripOptionsTitle {
   font-weight: 800;
   margin-bottom: 8px;
 }
 
-.trip-options-grid {
+.tripOptionsGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
@@ -193,7 +193,7 @@
 }
 
 @media (max-width: 900px) {
-  .trip-options-grid {
+  .tripOptionsGrid {
     grid-template-columns: 1fr;
   }
 }

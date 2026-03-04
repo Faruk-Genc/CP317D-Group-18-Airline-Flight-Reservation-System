@@ -1,4 +1,4 @@
-.trip-options {
+.tripOptions {
   margin-top: 12px;
   padding: 12px 16px;
 
@@ -17,7 +17,7 @@
   overflow: hidden;
 }
 
-.top-row {
+.topRow {
   display: flex;
   gap: 16px;
   flex-wrap: nowrap;  
@@ -25,13 +25,13 @@
   justify-content: flex-start; 
 }
 
-.field-group {
+.fieldGroup {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.field-group label {
+.fieldGroup label {
   text-align: left;
   font-size: 10px;
   text-transform: uppercase;
@@ -40,8 +40,8 @@
   white-space: nowrap;
 }
 
-.field-group select,
-.field-group input {
+.fieldGroup select,
+.fieldGroup input {
   border: solid 1px #f8b500;
   border-radius: 6px;
   padding: 6px 8px;
@@ -54,16 +54,16 @@
   width: 100%;
 }
 
-.field-group input#passengers {
+.fieldGroup input#passengers {
   width: 60px;
   flex: 0;
 }
 
-.trip-options-wrapper {
+.tripOptionsWrapper {
   text-align: center;
 }
 
-.trip-options-search {
+.tripOptionsSearch {
   display: inline-block;
   padding: 10px 20px;
   border-radius: 40px;
@@ -77,12 +77,12 @@
   transition: border 0.4s ease-out;
 }
 
-.trip-options-search:hover {
+.tripOptionsSearch:hover {
   border-color: #f8b500;
 }
 
 @media (max-width: 480px) {
-  .top-row {
+  .topRow {
     flex-direction: column;
     align-items: stretch;
   }

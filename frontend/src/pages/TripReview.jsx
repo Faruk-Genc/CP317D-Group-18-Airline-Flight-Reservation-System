@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import "./TripReview.css";
+import styles from "./TripReview.module.css";
 
 function formatMoney(amount, currency = "CAD") {
     const num = Number(amount || 0);
@@ -19,11 +19,11 @@ export default function TripReview({ booking, onConfirm, onBack }) {
     // Basic guard if user lands here without selecting a flight
     if (!flight) {
         return (
-            <div className="review-page">
-                <div className="review-card">
+            <div className={styles.reviewPage}>
+                <div className={styles.reviewCard}>
                     <h2>Trip Review</h2>
                     <p>No flight selected yet.</p>
-                    <button type="button" className="review-btn secondary" onClick={onBack}>
+                    <button type="button" className={`${styles.reviewBtn} ${styles.secondary}`} onClick={onBack}>
                         Back to results
                     </button>
                 </div>
@@ -58,57 +58,57 @@ export default function TripReview({ booking, onConfirm, onBack }) {
     const tripType = booking?.tripOptions?.tripType ?? "round-trip";
 
     return (
-        <div className="review-page">
-            <div className="review-topbar">
-                <button type="button" className="review-btn secondary" onClick={onBack}>
+        <div className={styles.reviewPage}>
+            <div className={styles.reviewTopbar}>
+                <button type="button" className={`${styles.reviewBtn} ${styles.secondary}`} onClick={onBack}>
                     ← Back
                 </button>
 
-                <div className="review-title">
+                <div className={styles.reviewTitle}>
                     <h2>Review your trip</h2>
                     <p>Confirm your selection before purchase.</p>
                 </div>
 
-                <div className="review-timer">
-                    <div className="timer-label">Time remaining</div>
-                    <div className={`timer-value ${secondsLeft === 0 ? "expired" : ""}`}>{countdown}</div>
+                <div className={styles.reviewTimer}>
+                    <div className={styles.timerLabel}>Time remaining</div>
+                    <div className={`${styles.timerValue} ${secondsLeft === 0 ? styles.expired : ""}`}>{countdown}</div>
                 </div>
             </div>
 
-            <div className="review-grid">
+            <div className={styles.reviewGrid}>
                 {/* Left: flight summary */}
-                <div className="review-card">
+                <div className={styles.reviewCard}>
                     <h3>Selected flight</h3>
 
-                    <div className="flight-row">
-                        <div className="flight-block">
-                            <div className="flight-time">{flight.departTime}</div>
-                            <div className="flight-iata">{flight.origin?.iata}</div>
-                            <div className="flight-city">{flight.origin?.city}</div>
+                    <div className={styles.flightRow}>
+                        <div className={styles.flightBlock}>
+                            <div className={styles.flightTime}>{flight.departTime}</div>
+                            <div className={styles.flightIata}>{flight.origin?.iata}</div>
+                            <div className={styles.flightCity}>{flight.origin?.city}</div>
                         </div>
 
-                        <div className="flight-arrow">→</div>
+                        <div className={styles.flightArrow}>→</div>
 
-                        <div className="flight-block">
-                            <div className="flight-time">{flight.arriveTime}</div>
-                            <div className="flight-iata">{flight.destination?.iata}</div>
-                            <div className="flight-city">{flight.destination?.city}</div>
+                        <div className={styles.flightBlock}>
+                            <div className={styles.flightTime}>{flight.arriveTime}</div>
+                            <div className={styles.flightIata}>{flight.destination?.iata}</div>
+                            <div className={styles.flightCity}>{flight.destination?.city}</div>
                         </div>
                     </div>
 
-                    <div className="flight-meta">
-                        <div><span className="label">Flight:</span> {flight.id}</div>
-                        <div><span className="label">Seats left:</span> {flight.seatsLeft}</div>
+                    <div className={styles.flightMeta}>
+                        <div><span className={styles.label}>Flight:</span> {flight.id}</div>
+                        <div><span className={styles.label}>Seats left:</span> {flight.seatsLeft}</div>
                     </div>
 
-                    <div className="trip-options-box">
-                        <div className="trip-options-title">Trip options</div>
-                        <div className="trip-options-grid">
-                            <div><span className="label">Trip type:</span> {tripType}</div>
-                            <div><span className="label">Cabin:</span> {cabinClass}</div>
-                            <div><span className="label">Passengers:</span> {passengers}</div>
+                    <div className={styles.tripOptionsBox}>
+                        <div className={styles.tripOptionsTitle}>Trip options</div>
+                        <div className={styles.tripOptionsGrid}>
+                            <div><span className={styles.label}>Trip type:</span> {tripType}</div>
+                            <div><span className={styles.label}>Cabin:</span> {cabinClass}</div>
+                            <div><span className={styles.label}>Passengers:</span> {passengers}</div>
                             <div>
-                                <span className="label">Dates:</span>{" "}
+                                <span className={styles.label}>Dates:</span>{" "}
                                 {booking?.search?.departDate ?? "—"}
                                 {tripType === "round-trip" ? ` → ${booking?.search?.returnDate ?? "—"}` : ""}
                             </div>
@@ -117,22 +117,22 @@ export default function TripReview({ booking, onConfirm, onBack }) {
                 </div>
 
                 {/* Right: pricing */}
-                <div className="review-card">
+                <div className={styles.reviewCard}>
                     <h3>Price summary</h3>
 
-                    <div className="price-lines">
-                        <div className="price-line">
+                    <div className={styles.priceLines}>
+                        <div className={styles.priceLine}>
                             <span>Base fare</span>
                             <span>{formatMoney(baseFare * passengers, currency)}</span>
                         </div>
-                        <div className="price-line">
+                        <div className={styles.priceLine}>
                             <span>Taxes & fees</span>
                             <span>{formatMoney(taxesAndFees * passengers, currency)}</span>
                         </div>
 
-                        <div className="divider" />
+                        <div className={styles.divider} />
 
-                        <div className="price-line total">
+                        <div className={`${styles.priceLine} ${styles.total}`}>
                             <span>Total</span>
                             <span>{formatMoney((baseFare + taxesAndFees) * passengers, currency)}</span>
                         </div>
@@ -140,7 +140,7 @@ export default function TripReview({ booking, onConfirm, onBack }) {
 
                     <button
                         type="button"
-                        className="review-btn primary"
+                        className={`${styles.reviewBtn} ${styles.primary}`}
                         onClick={onConfirm}
                         disabled={secondsLeft === 0}
                         title={secondsLeft === 0 ? "Session expired — go back to results" : ""}
@@ -149,7 +149,7 @@ export default function TripReview({ booking, onConfirm, onBack }) {
                     </button>
 
                     {secondsLeft === 0 && (
-                        <p className="expired-note">
+                        <p className={styles.expiredNote}>
                             Your session expired. Please go back and re-select a flight.
                         </p>
                     )}

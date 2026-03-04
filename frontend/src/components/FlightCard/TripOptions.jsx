@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLang } from "../../context/LangContext";
-import "./TripOptions.css";
+import styles from "./TripOptions.module.css";
 
 export default function TripOptions({
   passengers,
@@ -32,14 +32,13 @@ export default function TripOptions({
   }, [passengers, travelType, cabinClass, departDate, returnDate]);
 
   return (
-    <div className="trip-options-wrapper">
-      <div className="trip-options">
-        <div className="top-row">
+    <div className={styles.tripOptionsWrapper}>
+      <div className={styles.tripOptions}>
+        <div className={styles.topRow}>
 
-          <div className="field-group">
-            <label htmlFor="travelType">
-              {en ? "Trip" : "Voyage"}
-            </label>
+          {/* 1️⃣ Trip Type */}
+          <div className={styles.fieldGroup}>
+            <label htmlFor="travelType">{en ? "Trip" : "Voyage"}</label>
             <select
               id="travelType"
               value={travelType}
@@ -59,27 +58,23 @@ export default function TripOptions({
             </select>
           </div>
 
-          <div className="field-group">
-            <label htmlFor="passengers">
-              {en ? "Adult" : "Adulte"}
-            </label>
+          {/* 2️⃣ Adult / Passengers */}
+          <div className={styles.fieldGroup}>
+            <label htmlFor="passengers">{en ? "Adult" : "Adulte"}</label>
             <input
               type="number"
               id="passengers"
               min="1"
               value={passengers}
               onChange={(e) =>
-                onChange({
-                  passengers: Number(e.target.value),
-                })
+                onChange({ passengers: Number(e.target.value) })
               }
             />
           </div>
 
-          <div className="field-group">
-            <label htmlFor="cabinClass">
-              {en ? "Class" : "Classe"}
-            </label>
+          {/* 3️⃣ Cabin Class */}
+          <div className={styles.fieldGroup}>
+            <label htmlFor="cabinClass">{en ? "Class" : "Classe"}</label>
             <select
               id="cabinClass"
               value={cabinClass}
@@ -87,45 +82,34 @@ export default function TripOptions({
                 onChange({ cabinClass: e.target.value })
               }
             >
-              <option value="economy">
-                {en ? "Economy" : "Économie"}
-              </option>
-              <option value="business">
-                {en ? "Business" : "Affaires"}
-              </option>
+              <option value="economy">{en ? "Economy" : "Économie"}</option>
+              <option value="business">{en ? "Business" : "Affaires"}</option>
             </select>
           </div>
 
-          <div className="field-group">
-            <label htmlFor="departureDate">
-              {en ? "Departure" : "Départ"}
-            </label>
+          {/* 4️⃣ Departure Date */}
+          <div className={styles.fieldGroup}>
+            <label htmlFor="departureDate">{en ? "Departure" : "Départ"}</label>
             <input
               type="date"
               id="departureDate"
               value={departDate || ""}
               onChange={(e) =>
-                onChange({
-                  departDate: e.target.value,
-                })
+                onChange({ departDate: e.target.value })
               }
             />
           </div>
 
-          {(travelType === "round-trip" ||
-            travelType === "round") && (
-            <div className="field-group">
-              <label htmlFor="returnDate">
-                {en ? "Arrival" : "Arrivée"}
-              </label>
+          {/* 5️⃣ Return Date (conditional) */}
+          {(travelType === "round-trip" || travelType === "round") && (
+            <div className={styles.fieldGroup}>
+              <label htmlFor="returnDate">{en ? "Arrival" : "Arrivée"}</label>
               <input
                 type="date"
                 id="returnDate"
                 value={returnDate || ""}
                 onChange={(e) =>
-                  onChange({
-                    returnDate: e.target.value,
-                  })
+                  onChange({ returnDate: e.target.value })
                 }
               />
             </div>
@@ -134,7 +118,7 @@ export default function TripOptions({
       </div>
 
       <button
-        className="trip-options-search"
+        className={styles.tripOptionsSearch}
         type="button"
         onClick={onSearch}
       >

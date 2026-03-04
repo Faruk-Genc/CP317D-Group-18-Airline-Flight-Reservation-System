@@ -1,14 +1,15 @@
-.flight-container {
+/* FlightCard.module.css */
+.flightContainer {
   position: relative;
   display: inline-block;
 }
 
-.cards-wrapper {
+.cardsWrapper {
   display: flex;
   gap: 1rem;
 }
 
-.flight-card {
+.flightCard {
   position: relative;
   height: 150px;
   width: 300px;
@@ -26,18 +27,18 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.flight-card h1.iata,
-.flight-card p.city {
+.iata,
+.city {
   margin: 0;
   line-height: 1.2;
   text-align: center;
 }
 
-.flight-card:hover {
+.flightCard:hover {
   color: #180055;
 }
 
-.selection-overlay {
+.selectionOverlay {
   position: absolute;
   inset: 0;
   transform: translateY(80px);
@@ -54,12 +55,12 @@
   z-index: 10;
 }
 
-.flight-card:hover .selection-overlay {
+.flightCard:hover .selectionOverlay {
   opacity: 1;
   pointer-events: auto;
 }
 
-.switch-card {
+.switchCard {
   position: absolute;
 
   height: 70px;
@@ -74,7 +75,7 @@
   z-index: 5;
 }
 
-.switch-card svg {
+.switchCard svg {
   transition: transform 0.5s ease;
 }
 

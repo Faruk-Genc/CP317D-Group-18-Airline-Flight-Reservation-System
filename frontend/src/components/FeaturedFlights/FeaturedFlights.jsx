@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import FeaturedFlightCard from "./FeaturedFlightCard";
-import "./FeaturedFlights.css";
+import styles from "./FeaturedFlights.module.css";
 import { useLang } from "../../context/LangContext";
 
 export default function FeaturedFlights() {
@@ -78,14 +78,14 @@ export default function FeaturedFlights() {
   const rightDisabled = firstVisible + visibleCount >= popularFlights.length;
 
   return (
-    <section className="featured-flights-container">
-      <h2 className="featured-flights-heading">
+    <section className={styles.featuredFlightsContainer}>
+      <h2 className={styles.featuredFlightsHeading}>
         {en ? "Popular Flights" : "Vols populaires"}
       </h2>
 
-      <div className="carousel-wrapper">
+      <div className={styles.carouselWrapper}>
         <button
-          className="arrow left"
+          className={`${styles.arrow} ${styles.left}`}
           onClick={() => scrollByOne("left")}
           style={{
             opacity: leftDisabled ? 0.3 : 1,
@@ -97,7 +97,7 @@ export default function FeaturedFlights() {
 
         <div
           ref={rowRef}
-          className="featured-flights-row"
+          className={styles.featuredFlightsRow}
           style={{ scrollBehavior: "smooth" }}
         >
           {popularFlights.map((flight, idx) => (
@@ -112,7 +112,7 @@ export default function FeaturedFlights() {
         </div>
 
         <button
-          className="arrow right"
+          className={`${styles.arrow} ${styles.right}`}
           onClick={() => scrollByOne("right")}
           style={{
             opacity: rightDisabled ? 0.3 : 1,
@@ -123,10 +123,10 @@ export default function FeaturedFlights() {
         </button>
       </div>
 
-      <div className="carousel-dots">
+      <div className={styles.carouselDots}>
         {popularFlights.map((_, idx) => {
           const active = idx >= firstVisible && idx < firstVisible + visibleCount;
-          return <div key={idx} className={`dot ${active ? "active" : ""}`} />;
+          return <div key={idx} className={`${styles.dot} ${active ? styles.active : ""}`} />;
         })}
       </div>
 

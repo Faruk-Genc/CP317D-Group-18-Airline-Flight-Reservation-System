@@ -1,25 +1,27 @@
-.featured-flight-card {
+.featuredFlightCard {
+  flex: 0 0 calc((100% - 32px) / 3);
   position: relative;
   width: 100%;
   height: 160px;
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
+  scroll-snap-align: start;
 }
 
-.image-diagonal {
+.imageDiagonal {
   position: absolute;
   inset: 0;
   filter: contrast(70%) blur(1px);
 
   transition: filter ease-in 0.3s;
 }
-.image-diagonal:hover{
+.imageDiagonal:hover{
   filter: none;
 }
 
-.image-diagonal::before,
-.image-diagonal::after {
+.imageDiagonal::before,
+.imageDiagonal::after {
   content: "";
   position: absolute;
   width: 100%;
@@ -29,18 +31,18 @@
   transition: transform 0.3s ease;
 }
 
-.image-diagonal::before {
+.imageDiagonal::before {
   background-image: var(--from-image);
   clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 
-.image-diagonal::after {
+.imageDiagonal::after {
   background-image: var(--to-image);
   clip-path: polygon(100% 0, 100% 100%, 0 100%);
 }
 
-.featured-flight-card:hover .image-diagonal::before,
-.featured-flight-card:hover .image-diagonal::after {
+.featuredFlightCard:hover .imageDiagonal::before,
+.featuredFlightCard:hover .imageDiagonal::after {
   transform: scale(1.05);
 }
 
@@ -53,4 +55,22 @@
   text-align: center;
   pointer-events: none;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 1200px) {
+  .featuredFlightCard {
+    flex: 0 0 calc((100% - 16px) / 2);
+  }
+}
+
+@media (min-width: 1920px) {
+  .featuredFlightCard {
+    flex: 0 0 calc((100% - 48px) / 3);
+  }
+}
+
+@media (min-width: 2500px) {
+  .featuredFlightCard {
+    flex: 0 0 calc((100% - 64px) / 4);
+  }
 }

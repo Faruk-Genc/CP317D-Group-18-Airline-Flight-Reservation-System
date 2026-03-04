@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ArrowLeftRight } from "lucide-react";
 import FlightCardSelection from "./FlightCardSelection";
-import "./FlightCard.css";
+import styles from "./FlightCard.module.css";
 
 export default function FlightCard({ iata1, city1, iata2, city2, onChange }) {
   const [from, setFrom] = useState({
@@ -31,8 +31,8 @@ export default function FlightCard({ iata1, city1, iata2, city2, onChange }) {
   };
 
   return (
-    <div className="flight-container">
-      <div className="cards-wrapper">
+    <div className={styles.flightContainer}>
+      <div className={styles.cardsWrapper}>
         <Card
           iata={from.iata}
           city={from.city}
@@ -64,8 +64,8 @@ export default function FlightCard({ iata1, city1, iata2, city2, onChange }) {
         />
       </div>
 
-      <button className="switch-card" onClick={swapCards}>
-        <ArrowLeftRight size={24} className={rotated ? "rotated" : ""} />
+      <button className={styles.switchCard} onClick={swapCards}>
+        <ArrowLeftRight size={24} className={rotated ? styles.rotated : ""} />
       </button>
     </div>
   );
@@ -80,12 +80,12 @@ function Card({ iata, city, onSelect, isCountry, country }) {
   };
 
   return (
-    <div className="flight-card" onClick={() => setOpen(true)}>
-      <h1 className="iata">{isCountry ? country : iata || "Select"}</h1>
-      <p className="city">{isCountry ? "" : city || "City"}</p>
+    <div className={styles.flightCard} onClick={() => setOpen(true)}>
+      <h1 className={styles.iata}>{isCountry ? country : iata || "Select"}</h1>
+      <p className={styles.city}>{isCountry ? "" : city || "City"}</p>
 
       {open && (
-        <div className="selection-overlay" onClick={(e) => e.stopPropagation()}>
+        <div className={styles.selectionOverlay} onClick={(e) => e.stopPropagation()}>
           <FlightCardSelection onSelect={handleSelect} />
         </div>
       )}

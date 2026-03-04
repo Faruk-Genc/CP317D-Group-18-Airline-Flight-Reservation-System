@@ -1,4 +1,4 @@
-import "./FeaturedFlightCard.css";
+import styles from "./FeaturedFlightCard.module.css";
 
 const images = import.meta.glob(
   "../../assets/featured/*.{jpg,jpeg,png,svg,webp}",
@@ -20,15 +20,15 @@ export default function FeaturedFlightCard({ from, to, displayFrom, displayTo })
   const toImage = imageMap[toKey];
 
   return (
-    <div className="featured-flight-card">
+    <div className={styles.featuredFlightCard}>
       <div
-        className="image-diagonal"
+        className={styles.imageDiagonal}
         style={{
           "--from-image": `url("${fromImage}")`,
           "--to-image": `url("${toImage}")`,
         }}
       />
-      <div className="overlay">
+      <div className={styles.overlay}>
         <h3 style={{ fontWeight: "400" }}>
           {displayFrom ?? from} → {displayTo ?? to}
         </h3>
