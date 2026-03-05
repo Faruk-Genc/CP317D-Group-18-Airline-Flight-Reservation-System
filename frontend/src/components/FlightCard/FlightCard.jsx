@@ -31,8 +31,8 @@ export default function FlightCard({ iata1, city1, iata2, city2, onChange }) {
   };
 
   return (
-    <div className={styles.flightContainer}>
-      <div className={styles.cardsWrapper}>
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
         <Card
           iata={from.iata}
           city={from.city}
@@ -64,7 +64,7 @@ export default function FlightCard({ iata1, city1, iata2, city2, onChange }) {
         />
       </div>
 
-      <button className={styles.switchCard} onClick={swapCards}>
+      <button className={styles.switch} onClick={swapCards}>
         <ArrowLeftRight size={24} className={rotated ? styles.rotated : ""} />
       </button>
     </div>
@@ -80,12 +80,17 @@ function Card({ iata, city, onSelect, isCountry, country }) {
   };
 
   return (
-    <div className={styles.flightCard} onClick={() => setOpen(true)}>
-      <h1 className={styles.iata}>{isCountry ? country : iata || "Select"}</h1>
-      <p className={styles.city}>{isCountry ? "" : city || "City"}</p>
+    <div className={styles.card} onClick={() => setOpen(true)}>
+      <h1 className={styles.title} style={{ 
+        fontSize: isCountry ? "35px" : undefined, 
+        width: isCountry ? "80%" : "inherit"}}
+      >
+        {isCountry ? country : iata || "Select"}
+      </h1>
+      <p className={styles.subtitle}>{isCountry ? "" : city || "City"}</p>
 
       {open && (
-        <div className={styles.selectionOverlay} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.overlay} onClick={(e) => e.stopPropagation()}>
           <FlightCardSelection onSelect={handleSelect} />
         </div>
       )}

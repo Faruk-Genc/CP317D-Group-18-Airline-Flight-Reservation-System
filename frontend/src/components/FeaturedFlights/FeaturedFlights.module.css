@@ -1,17 +1,14 @@
-.featuredFlightsContainer {
+.container {
   padding: 40px 0 120px 0;
 }
 
-.featuredFlightsHeading {
-  color: #404040;
-  font-variant: small-caps;
-  text-transform: uppercase;
-  text-decoration:overline 2px #f8b500;
+.heading {
+  color: #474747;
   width: 60%;
-  padding-bottom: 20px;
+  padding-bottom: 1ch;
   margin: 0 auto;
 }
-.featuredFlightsRow {
+.row {
   display: flex;
   gap: 17px;
   margin: 0 auto;
@@ -20,7 +17,7 @@
   padding-bottom: 8px;
 }
 
-.carouselWrapper {
+.carousel {
   position: relative;
   width: 60%;
   margin: 0 auto;
@@ -53,7 +50,7 @@
   color: #380875;
 }
 
-.carouselDots {
+.dots {
   display: flex;
   justify-content: center;
   gap: 8px;
@@ -65,13 +62,12 @@
   transition: all 0.3s ease;
   width: 16px;
   height: 2px;
-  border-radius: 30%;
   background-color: #111;
   opacity: 30%;
 }
 
 .dot.active {
   transition: all 0.3s ease;
-  width: 24px;
+  width: 28px;
   opacity: 100%;
 }

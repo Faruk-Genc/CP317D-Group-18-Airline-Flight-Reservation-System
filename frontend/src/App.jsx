@@ -2,7 +2,9 @@ import { useState } from "react";
 import { LangProvider } from "./context/LangContext";
 import Navbar from "./components/Nav/Navbar";
 import Footer from "./components/Nav/Footer";
-import Heropage from "./components/HeroComponents/Heropage";
+import HeroSplash from "./components/HeroComponents/HeroSplash";
+import FeaturedFlights from "./components/FeaturedFlights/FeaturedFlights";
+import HeroMessage from "./components/HeroComponents/HeroMessage";
 import SignIn from "./pages/SignIn";
 import FlightStatus from "./pages/FlightStatus";
 import CheckIn from "./pages/CheckIn";
@@ -95,7 +97,7 @@ function App() {
 
       <div className="scrollable-content">
         <div style={{ display: page === "home" ? "block" : "none" }}>
-          <Heropage
+          <HeroSplash
             heroImage={heroImage}
             onSearch={goResults}
             search={booking.search}
@@ -143,7 +145,12 @@ function App() {
           <MyFlights onBack={() => setPage("home")} />
         </div>
       </div>
-
+      {page === "home" && (
+        <>
+          <FeaturedFlights />
+          <HeroMessage />
+        </>
+      )}
       <Footer />
     </LangProvider>
   );

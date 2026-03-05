@@ -78,12 +78,12 @@ export default function FeaturedFlights() {
   const rightDisabled = firstVisible + visibleCount >= popularFlights.length;
 
   return (
-    <section className={styles.featuredFlightsContainer}>
-      <h2 className={styles.featuredFlightsHeading}>
+    <section className={styles.container}>
+      <h2 className={styles.heading}>
         {en ? "Popular Flights" : "Vols populaires"}
       </h2>
 
-      <div className={styles.carouselWrapper}>
+      <div className={styles.carousel}>
         <button
           className={`${styles.arrow} ${styles.left}`}
           onClick={() => scrollByOne("left")}
@@ -97,7 +97,7 @@ export default function FeaturedFlights() {
 
         <div
           ref={rowRef}
-          className={styles.featuredFlightsRow}
+          className={styles.row}
           style={{ scrollBehavior: "smooth" }}
         >
           {popularFlights.map((flight, idx) => (
@@ -123,7 +123,7 @@ export default function FeaturedFlights() {
         </button>
       </div>
 
-      <div className={styles.carouselDots}>
+      <div className={styles.dots}>
         {popularFlights.map((_, idx) => {
           const active = idx >= firstVisible && idx < firstVisible + visibleCount;
           return <div key={idx} className={`${styles.dot} ${active ? styles.active : ""}`} />;

@@ -69,10 +69,10 @@ export default function FlightCardSelection({ onSelect }) {
   };
 
   return (
-    <div className={styles.selectionCard} onClick={handleCardClick}>
+    <div className={styles.card} onClick={handleCardClick}>
       <input
         ref={inputRef}
-        className={styles.searchInput}
+        className={styles.input}
         type="text"
         placeholder="Search airport, city, or country"
         value={selected?.isCountry ? selected.origin_country : query}
@@ -84,10 +84,10 @@ export default function FlightCardSelection({ onSelect }) {
       />
 
       {active && results.length > 0 && (
-        <section className={styles.results}>
+        <section className={styles.list}>
           {results.map((origin) => (
             <div
-              className={styles.queryResult}
+              className={styles.item}
               key={
                 origin.isCountry
                   ? `country-${origin.origin_country}`
@@ -99,6 +99,9 @@ export default function FlightCardSelection({ onSelect }) {
                 setQuery("");
                 setActive(false);
               }}
+              style={{
+                fontWeight: origin.isCountry ? "600" : "inherit",
+              }}
             >
               {origin.isCountry
                 ? origin.origin_country
@@ -109,7 +112,7 @@ export default function FlightCardSelection({ onSelect }) {
       )}
 
       {active && query && showNoResults && (
-        <div className={styles.noResults}>No results found</div>
+        <div className={styles.empty}>No results found</div>
       )}
     </div>
   );

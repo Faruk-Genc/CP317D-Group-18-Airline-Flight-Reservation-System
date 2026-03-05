@@ -1,10 +1,9 @@
+import { useEffect, useRef } from "react";
 import FlightCard from "../FlightCard/FlightCard";
 import TripOptions from "../FlightCard/TripOptions";
-import FeaturedFlights from "../FeaturedFlights/FeaturedFlights";
-import HeroMessage from "./HeroMessage";
-import styles from "./Heropage.module.css";
+import styles from "./HeroSplash.module.css";
 
-export default function Heropage({
+export default function HeroSplash({
   heroImage,
   onSearch,
   search,
@@ -12,22 +11,43 @@ export default function Heropage({
   setSearch,
   setTripOptions,
 }) {
+  const heroRef = useRef(null);
+
   const handleSearch = () => {
     onSearch?.({ search, tripOptions });
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!heroRef.current) return;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+      if (scrollTop > 0) {
+        heroRef.current.style.height = "600px";
+      } else {
+        heroRef.current.style.height = "100vh";
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <section className={styles.heroWrapper}>
-      <section className={styles.heroSplashWrapper}>
-        <div className={styles.tripSearch} style={{ marginTop: "150px" }}>
+      <section
+        ref={heroRef}
+        className={styles.heroSplashWrapper}
+        style={{ transition: "height 0.7s ease" }}
+      >
+        <div className={styles.tripSearch} style={{ marginTop: "25vh" }}>
           <FlightCard
             iata1={search.from?.iata}
             city1={search.from?.city}
             iata2={search.to?.iata}
             city2={search.to?.city}
-            onChange={(data) =>
-              setSearch({ ...search, ...data })
-            }
+            onChange={(data) => setSearch({ ...search, ...data })}
           />
 
           <TripOptions
@@ -47,12 +67,9 @@ export default function Heropage({
           />
         </div>
 
-        <img className={`${styles.heroSplash} ${styles.radial}`} src={heroImage} alt="Hero" />
-        <img className={styles.heroSplash} src={heroImage} alt="Hero" />
+        <img className={styles.radial} src={heroImage} alt="Hero Background" />
+        <img className={styles.heroSplash} src={heroImage} alt="Hero Foreground" />
       </section>
-
-      <FeaturedFlights />
-      <HeroMessage />
     </section>
   );
 }

@@ -20,15 +20,15 @@ export default function FeaturedFlightCard({ from, to, displayFrom, displayTo })
   const toImage = imageMap[toKey];
 
   return (
-    <div className={styles.featuredFlightCard}>
+    <div className={styles.card}>
       <div
-        className={styles.imageDiagonal}
+        className={styles.image}
         style={{
           "--from-image": `url("${fromImage}")`,
           "--to-image": `url("${toImage}")`,
         }}
       />
-      <div className={styles.overlay}>
+      <div className={styles.mask}>
         <h3 style={{ fontWeight: "400" }}>
           {displayFrom ?? from} → {displayTo ?? to}
         </h3>

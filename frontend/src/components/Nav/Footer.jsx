@@ -7,17 +7,17 @@ export default function Footer() {
   const { en } = useLang();
 
   return (
-    <section className={styles.footer}>
-      <div className={styles.footerContent}>
-        <div className={styles.footerLogo}>
+    <section className={styles.bar}>
+      <div className={styles.content}>
+        <div className={styles.logo}>
           <img src={logo} alt="Airline Logo" style={{ width: "50px" }}/> AIR LAURIER
         </div>
         <br/>
         <hr style={{ color: "#333" }}/>
         <br/>
 
-        <nav className={styles.footerColumn}>
-          <div className={styles.column}>
+        <nav className={styles.columns}>
+          <div className={styles.group}>
             <h4>{en ? "About Air Laurier" : "À propos d'Air Laurier"}</h4>
             <ul>
               <li>{en ? "About us" : "À propos de nous"}</li>
@@ -30,7 +30,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className={styles.column}>
+          <div className={styles.group}>
             <h4>{en ? "Customer Service" : "Service client"}</h4>
             <ul>
               <li>{en ? "Help Center" : "Centre d'aide"}</li>
@@ -39,7 +39,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className={styles.column}>
+          <div className={styles.group}>
             <h4>{en ? "Site Support" : "Assistance du site"}</h4>
             <ul>
               <li>{en ? "Login help" : "Aide à la connexion"}</li>
@@ -51,7 +51,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className={styles.column}>
+          <div className={styles.group}>
             <h4>{en ? "Company" : "Entreprise"}</h4>
             <ul>
               <li>{en ? "Customer Commitment" : "Engagement client"}</li>
@@ -64,7 +64,7 @@ export default function Footer() {
           </div>
         </nav>
 
-        <div className={styles.copyright}>
+        <div className={styles.info}>
           <span>© 2026 Air Laurier, Inc</span>
           <span>{en ? "Privacy Policy" : "Politique de confidentialité"}</span>
           <span>{en ? "Terms of Service" : "Conditions d'utilisation"}</span>

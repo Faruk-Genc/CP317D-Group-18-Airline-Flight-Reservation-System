@@ -1,8 +1,8 @@
 
-.heroMessageWrapper {
+.wrapper {
   background-color: #f2f2f2;
 }
-.heroMessage {
+.container {
   padding-top: 150px;
   width: 80%;
   margin: auto;
@@ -14,7 +14,7 @@
   text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
-.heroCall {
+.call {
   font-weight: bolder;
   padding-bottom: 20px;
   margin-left: -190px;
@@ -26,18 +26,18 @@
   text-shadow: none;
 }
 
-.heroCall.french {
+.call.french {
   text-align: right;
   margin-right: 50px;
 }
-.heroArt {
+.art {
   width: 60vw;
   min-width: 600px;
   margin-left: -100px;
   transition: all 0.5s ease;
 }
 
-.heroHeadingWrapper {
+.stats {
   display: flex;
   margin-right: 50px;
   gap: 60px;          
@@ -45,19 +45,19 @@
   transition: all 0.5s ease;
 }
 
-.heroHeading {
+.heading {
   font-weight: bold;
   font-size: 30px;
   transition: all 0.5s ease;
 }
 
-.heroSubheading {
+.sub {
   font-weight: normal;
   font-size: 14px;
   transition: all 0.5s ease;
 }
 
-.heroButton {
+.button {
   margin-top: 50px;
   background-color: #f8b500;
   margin-left: 115px;
@@ -67,32 +67,32 @@
 }
 
 @media (max-width: 1100px) {
-    .heroCall {
+    .call {
         margin-left: 0;
         margin-top: 30px;
         font-size: 35px;
         transition: all 0.5s ease;
     }
 
-    .heroMessage {
+    .container {
         flex-direction: column;    
         align-items: center;  
         transition: all 0.5s ease;       
     }
 
-    .heroArt {
+    .art {
         margin-left: 0;              
         width: 90%;     
         transition: all 0.5s ease;            
     }
 
-    .heroText {
+    .text {
         margin-right: 0;            
         text-align: center;      
         transition: all 0.5s ease;   
     }
 
-    .heroButton {
+    .button {
         margin-left: 0;              
         margin-top: 1.5rem;
         transition: all 0.5s ease;

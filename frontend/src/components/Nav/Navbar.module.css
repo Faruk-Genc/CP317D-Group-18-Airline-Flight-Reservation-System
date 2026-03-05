@@ -1,4 +1,4 @@
-.nav {
+.bar {
      margin: 0;
     top: 0;
     padding: 0 10px;
@@ -15,40 +15,40 @@
     position: sticky;
 }
 
-.navBrand {
+.brand {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.navLogo {
+.logo {
     width: 60px;
 }
 
-.navTitle {
+.title {
     font-size: 26px;
     font-weight: bold;
     font-family: "Palatino Linotype", Palatino;
     font-weight: 100;
 }
-.navOptions {
+.options {
     position: absolute;
     left: 50%;
     transform: translateX(-50%); 
 }
 
-.navList {
+.list {
     display: flex;
     gap: 20px;
     list-style: none;
     text-transform: uppercase;
 }
 
-.navLink {
+.link {
     cursor: pointer;
 }
 
-.navItem {
+.item {
     list-style: none; 
     color: #eee;
     font-weight: 600;
@@ -57,18 +57,18 @@
     transition: border-bottom 0.3s ease-in;
 }
 
-.navItem:hover {
+.item:hover {
     border-bottom: 3px solid #f8b500;
 }
 
-.userAuthentication {
+.auth {
     margin-left: auto;
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.selectLanguage {
+.language {
     width: 40px;
     height: 40px;
     padding: 10px;
@@ -89,7 +89,7 @@
     border-radius: 50%;
 }
 
-.signInButton {
+.signIn {
     background-color: #eee;
     padding: 10px 20px;
     border-radius: 20px;
@@ -97,17 +97,17 @@
     cursor: pointer;
 }
 
-.signInButton a  {
+.signIn a  {
     color: black;
     font-weight: 600;
 }
 
 @media (max-width: 450px) {
-    .navLogo {
+    .logo {
         width: 40px;
         margin-left: -10px;
     }
-    .navTitle {
+    .title {
         font-size: 18px;
         margin-left: -10px;
     }
@@ -116,7 +116,7 @@
 }
 
 @media (max-width: 900px) {
-    .navOptions {
+    .options {
         position: relative;
         display: inline-block;
         left: 25%;
@@ -124,13 +124,13 @@
 }
 
 @media (max-width: 750px) {
-    .navOptions {
+    .options {
         display: none;
     }
 }
 
 @media (max-width: 875px) {
-    .navOptions.french {
+    .options.french {
         display: none;
     }
 }
