@@ -17,7 +17,7 @@
 .call {
   font-weight: bolder;
   padding-bottom: 20px;
-  margin-left: -190px;
+  margin-left: -145px;
   font-size: 40px;
   white-space: nowrap;  
   overflow: visible; 
@@ -30,6 +30,12 @@
   text-align: right;
   margin-right: 50px;
 }
+
+.heading {
+  text-align: right;
+  white-space: nowrap;
+}
+
 .art {
   width: 60vw;
   min-width: 600px;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { LangProvider } from "./context/LangContext";
 import Navbar from "./components/Nav/Navbar";
 import Footer from "./components/Nav/Footer";
@@ -19,8 +19,25 @@ const heroImages = import.meta.glob("./assets/heropage/*.{jpg,jpeg,png,svg}", { 
 const imagesArray = Object.values(heroImages).map((module) => module.default);
 
 function App() {
-  const [page, setPage] = useState("home");
+  const validPages = [
+    "home",
+    "sign-in",
+    "results",
+    "trip-review",
+    "confirmation",
+    "flight-status",
+    "check-in",
+    "my-flights",
+  ];
+
+  const [page, setPage] = useState(() => {
+    const path = window.location.pathname.replace("/", "");
+    if (path && validPages.includes(path)) return path;
+    return localStorage.getItem("page") || "home";
+  });
+
   const [heroImage] = useState(() => imagesArray[Math.floor(Math.random() * imagesArray.length)]);
+  const isInitialMount = useRef(true);
 
   const [booking, setBooking] = useState({
     search: {
@@ -46,6 +63,29 @@ function App() {
       confirmedAt: null,
     },
   });
+
+  useEffect(() => {
+    localStorage.setItem("page", page);
+
+    if (isInitialMount.current) {
+      if (page === "home") window.history.replaceState(null, "", "/");
+      else window.history.replaceState(null, "", `/${page}`);
+      isInitialMount.current = false;
+    } else {
+      if (page === "home") window.history.pushState(null, "", "/");
+      else window.history.pushState(null, "", `/${page}`);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    const onPopState = () => {
+      const path = window.location.pathname.replace("/", "");
+      if (validPages.includes(path)) setPage(path);
+      else setPage("home");
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
 
   const goResults = (payload) => {
     setBooking((prev) => ({ ...prev, ...payload }));
@@ -145,12 +185,14 @@ function App() {
           <MyFlights onBack={() => setPage("home")} />
         </div>
       </div>
+
       {page === "home" && (
         <>
           <FeaturedFlights />
           <HeroMessage />
         </>
       )}
+
       <Footer />
     </LangProvider>
   );
