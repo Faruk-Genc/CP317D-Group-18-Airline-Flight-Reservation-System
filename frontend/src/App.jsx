@@ -48,7 +48,7 @@ function App() {
     },
     tripOptions: {
       passengers: 1,
-      tripType: "round-trip",
+      tripType: "one-way",
       cabinClass: "economy",
     },
     selectedFlight: null,

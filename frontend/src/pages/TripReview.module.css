@@ -149,7 +149,7 @@
   background: white;
 }
 
-.reviewBtn.primary {
+.primary {
   width: 100%;
   margin-top: 14px;
   border: none;
@@ -157,12 +157,12 @@
   color: white;
 }
 
-.reviewBtn.primary:disabled {
+.primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.reviewBtn.secondary {
+.secondary {
   background: white;
 }
 
