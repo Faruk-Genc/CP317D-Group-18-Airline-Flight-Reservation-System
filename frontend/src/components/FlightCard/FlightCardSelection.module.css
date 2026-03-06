@@ -1,4 +1,6 @@
-.selection-card {
+/* FlightCardSelection.module.css */
+
+.card {
   width: 300px;
   display: flex;
   flex-direction: column;
@@ -6,7 +8,7 @@
   box-sizing: border-box;
 }
 
-.search-input {
+.input {
   all: unset;
   box-sizing: border-box;
   height: 40px;
@@ -18,8 +20,7 @@
   cursor: text;
 }
 
-
-.results {
+.list {
   position: absolute;
   top: 40px;
   left: 0;
@@ -32,22 +33,23 @@
   border-radius: 0 0 6px 6px;
   z-index: 10;
 }
-.query-result {
-  border-bottom: 1px solid rgba(0,0,0,0.2);
+
+.item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   padding: 0.5rem;
   cursor: pointer;
 }
 
-.query-result:hover {
+.item:hover {
   background-color: #eee;
 }
 
-.no-results {
+.empty {
   position: absolute;
   top: 40px;
   left: 0;
-  width: 100%;          
-  box-sizing: border-box; 
+  width: 100%;
+  box-sizing: border-box;
   padding: 0.5rem;
   background: #f9f9f9;
   border-radius: 0 0 6px 6px;

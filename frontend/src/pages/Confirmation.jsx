@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import "./Confirmation.css";
+import styles from "./Confirmation.module.css";
 
 function formatMoney(amount, currency = "CAD") {
     const num = Number(amount || 0);
@@ -19,18 +19,18 @@ export default function Confirmation({ booking, onBackHome }) {
     // If user lands here without selecting, show a safe fallback
     if (!flight) {
         return (
-            <div className="confirm-page">
-                <div className="ticket">
-                    <div className="ticket-header">
+            <div className={styles.confirmPage}>
+                <div className={styles.ticket}>
+                    <div className={styles.ticketHeader}>
                         <div>
-                            <div className="status">⚠️ Missing selection</div>
-                            <h2 className="title">No booking found</h2>
+                            <div className={styles.status}>⚠️ Missing selection</div>
+                            <h2 className={styles.title}>No booking found</h2>
                         </div>
-                        <button type="button" className="btn secondary" onClick={onBackHome}>
+                        <button type="button" className={`${styles.btn} ${styles.secondary}`} onClick={onBackHome}>
                             Back to Home
                         </button>
                     </div>
-                    <p className="muted">Please start a new search and complete the booking flow.</p>
+                    <p className={styles.muted}>Please start a new search and complete the booking flow.</p>
                 </div>
             </div>
         );
@@ -49,122 +49,122 @@ export default function Confirmation({ booking, onBackHome }) {
     const total = (baseFare + taxesAndFees) * passengers;
 
     return (
-        <div className="confirm-page">
-            <div className="ticket">
-                <div className="ticket-header">
+        <div className={styles.confirmPage}>
+            <div className={styles.ticket}>
+                <div className={styles.ticketHeader}>
                     <div>
-                        <div className="status confirmed">✅ Confirmed</div>
-                        <h2 className="title">Your ticket is ready</h2>
-                        <div className="ref-row">
-                            <span className="ref-label">Booking reference:</span>
-                            <span className="ref">{reference ?? "—"}</span>
+                        <div className={`${styles.status} ${styles.confirmed}`}>✅ Confirmed</div>
+                        <h2 className={styles.title}>Your ticket is ready</h2>
+                        <div className={styles.refRow}>
+                            <span className={styles.refLabel}>Booking reference:</span>
+                            <span className={styles.ref}>{reference ?? "—"}</span>
                         </div>
                     </div>
 
-                    <div className="header-actions">
+                    <div className={styles.headerActions}>
                         <button
                             type="button"
-                            className="btn secondary"
+                            className={`${styles.btn} ${styles.secondary}`}
                             onClick={() => alert("Print/Download coming soon")}
                         >
                             Print / Download
                         </button>
-                        <button type="button" className="btn primary" onClick={onBackHome}>
+                        <button type="button" className={`${styles.btn} ${styles.primary}`} onClick={onBackHome}>
                             Back to Home
                         </button>
                     </div>
                 </div>
 
-                <div className="ticket-body">
-                    <div className="ticket-left">
-                        <div className="section">
+                <div className={styles.ticketBody}>
+                    <div className={styles.ticketLeft}>
+                        <div className={styles.section}>
                             <h3>Flight details</h3>
 
-                            <div className="route">
-                                <div className="stop">
-                                    <div className="time">{flight.departTime}</div>
-                                    <div className="iata">{flight.origin?.iata}</div>
-                                    <div className="city">{flight.origin?.city}</div>
+                            <div className={styles.route}>
+                                <div className={styles.stop}>
+                                    <div className={styles.time}>{flight.departTime}</div>
+                                    <div className={styles.iata}>{flight.origin?.iata}</div>
+                                    <div className={styles.city}>{flight.origin?.city}</div>
                                 </div>
 
-                                <div className="route-mid">
-                                    <div className="line" />
-                                    <div className="arrow">→</div>
+                                <div className={styles.routeMid}>
+                                    <div className={styles.line} />
+                                    <div className={styles.arrow}>→</div>
                                 </div>
 
-                                <div className="stop">
-                                    <div className="time">{flight.arriveTime}</div>
-                                    <div className="iata">{flight.destination?.iata}</div>
-                                    <div className="city">{flight.destination?.city}</div>
+                                <div className={styles.stop}>
+                                    <div className={styles.time}>{flight.arriveTime}</div>
+                                    <div className={styles.iata}>{flight.destination?.iata}</div>
+                                    <div className={styles.city}>{flight.destination?.city}</div>
                                 </div>
                             </div>
 
-                            <div className="kv-grid">
-                                <div className="kv">
-                                    <div className="k">Flight</div>
-                                    <div className="v">{flight.id}</div>
+                            <div className={styles.kvGrid}>
+                                <div className={styles.kv}>
+                                    <div className={styles.k}>Flight</div>
+                                    <div className={styles.v}>{flight.id}</div>
                                 </div>
-                                <div className="kv">
-                                    <div className="k">Seats left</div>
-                                    <div className="v">{flight.seatsLeft}</div>
+                                <div className={styles.kv}>
+                                    <div className={styles.k}>Seats left</div>
+                                    <div className={styles.v}>{flight.seatsLeft}</div>
                                 </div>
-                                <div className="kv">
-                                    <div className="k">Trip type</div>
-                                    <div className="v">{tripType}</div>
+                                <div className={styles.kv}>
+                                    <div className={styles.k}>Trip type</div>
+                                    <div className={styles.v}>{tripType}</div>
                                 </div>
-                                <div className="kv">
-                                    <div className="k">Cabin</div>
-                                    <div className="v">{cabinClass}</div>
+                                <div className={styles.kv}>
+                                    <div className={styles.k}>Cabin</div>
+                                    <div className={styles.v}>{cabinClass}</div>
                                 </div>
-                                <div className="kv">
-                                    <div className="k">Passengers</div>
-                                    <div className="v">{passengers}</div>
+                                <div className={styles.kv}>
+                                    <div className={styles.k}>Passengers</div>
+                                    <div className={styles.v}>{passengers}</div>
                                 </div>
-                                <div className="kv">
-                                    <div className="k">Total</div>
-                                    <div className="v strong">{formatMoney(total, currency)}</div>
+                                <div className={styles.kv}>
+                                    <div className={styles.k}>Total</div>
+                                    <div className={`${styles.v} ${styles.strong}`}>{formatMoney(total, currency)}</div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="section">
+                        <div className={styles.section}>
                             <h3>Price breakdown</h3>
-                            <div className="price-lines">
-                                <div className="price-line">
+                            <div className={styles.priceLines}>
+                                <div className={styles.priceLine}>
                                     <span>Base fare</span>
                                     <span>{formatMoney(baseFare * passengers, currency)}</span>
                                 </div>
-                                <div className="price-line">
+                                <div className={styles.priceLine}>
                                     <span>Taxes & fees</span>
                                     <span>{formatMoney(taxesAndFees * passengers, currency)}</span>
                                 </div>
-                                <div className="divider" />
-                                <div className="price-line total">
+                                <div className={styles.divider} />
+                                <div className={`${styles.priceLine} ${styles.total}`}>
                                     <span>Total</span>
                                     <span>{formatMoney(total, currency)}</span>
                                 </div>
                             </div>
-                            <p className="muted small">
+                            <p className={`${styles.muted} ${styles.small}`}>
                                 Demo note: passenger names and ticket numbers will be added later when the passenger
                                 details page is implemented.
                             </p>
                         </div>
                     </div>
 
-                    <div className="ticket-right">
-                        <div className="qr-card">
-                            <div className="qr-box" />
-                            <div className="qr-text">
-                                <div className="qr-title">Boarding pass</div>
-                                <div className="muted small">
+                    <div className={styles.ticketRight}>
+                        <div className={styles.qrCard}>
+                            <div className={styles.qrBox} />
+                            <div className={styles.qrText}>
+                                <div className={styles.qrTitle}>Boarding pass</div>
+                                <div className={`${styles.muted} ${styles.small}`}>
                                     QR code placeholder (will be generated later)
                                 </div>
                             </div>
                         </div>
 
-                        <div className="help-card">
-                            <div className="help-title">Need help?</div>
-                            <div className="muted small">
+                        <div className={styles.helpCard}>
+                            <div className={styles.helpTitle}>Need help?</div>
+                            <div className={`${styles.muted} ${styles.small}`}>
                                 This is a demo confirmation screen. Check-in and My Flights lookup will be wired
                                 later.
                             </div>
@@ -172,8 +172,8 @@ export default function Confirmation({ booking, onBackHome }) {
                     </div>
                 </div>
 
-                <div className="ticket-footer">
-                    <div className="muted small">
+                <div className={styles.ticketFooter}>
+                    <div className={`${styles.muted} ${styles.small}`}>
                         Placeholder Airlines • Privacy • Terms
                     </div>
                 </div>

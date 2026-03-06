@@ -1,0 +1,73 @@
+.container {
+  padding: 40px 0 120px 0;
+}
+
+.heading {
+  color: #474747;
+  width: 60%;
+  padding-bottom: 1ch;
+  margin: 0 auto;
+}
+.row {
+  display: flex;
+  gap: 17px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  width: 100%;
+  padding-bottom: 8px;
+}
+
+.carousel {
+  position: relative;
+  width: 60%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #2a2a2a;
+  z-index: 2;
+  transition: all ease 0.3s;
+}
+
+.left {
+  left: -32px;
+}
+
+.right {
+  right: -32px;
+}
+
+.arrow:hover {
+  color: #380875;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  opacity: 80%;
+}
+
+.dot {
+  transition: all 0.3s ease;
+  width: 16px;
+  height: 2px;
+  background-color: #111;
+  opacity: 30%;
+}
+
+.dot.active {
+  transition: all 0.3s ease;
+  width: 28px;
+  opacity: 100%;
+}

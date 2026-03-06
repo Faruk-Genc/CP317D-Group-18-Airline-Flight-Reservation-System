@@ -1,4 +1,4 @@
-.nav {
+.bar {
      margin: 0;
     top: 0;
     padding: 0 10px;
@@ -15,36 +15,40 @@
     position: sticky;
 }
 
-.nav-brand {
+.brand {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.nav-logo {
+.logo {
     width: 60px;
 }
 
-.nav-title {
+.title {
     font-size: 26px;
     font-weight: bold;
     font-family: "Palatino Linotype", Palatino;
     font-weight: 100;
 }
-.nav-options {
+.options {
     position: absolute;
     left: 50%;
     transform: translateX(-50%); 
 }
 
-.nav-options ul {
+.list {
     display: flex;
     gap: 20px;
     list-style: none;
     text-transform: uppercase;
 }
 
-.nav-item {
+.link {
+    cursor: pointer;
+}
+
+.item {
     list-style: none; 
     color: #eee;
     font-weight: 600;
@@ -53,18 +57,18 @@
     transition: border-bottom 0.3s ease-in;
 }
 
-.nav-item:hover {
+.item:hover {
     border-bottom: 3px solid #f8b500;
 }
 
-#user-authentication {
+.auth {
     margin-left: auto;
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.select-language {
+.language {
     width: 40px;
     height: 40px;
     padding: 10px;
@@ -76,30 +80,34 @@
 
     border: 2px solid rgba(255, 255, 255, 0.4);
     color: #eee;
+    background: transparent;
+    cursor: pointer;
 }
 
-.user-icon {
+.userIcon {
     display: none;
     border-radius: 50%;
 }
 
-.sign-in-button {
+.signIn {
     background-color: #eee;
     padding: 10px 20px;
     border-radius: 20px;
+    border: none;
+    cursor: pointer;
 }
 
-.sign-in-button a  {
+.signIn a  {
     color: black;
     font-weight: 600;
 }
 
 @media (max-width: 450px) {
-    .nav-logo {
+    .logo {
         width: 40px;
         margin-left: -10px;
     }
-    .nav-title {
+    .title {
         font-size: 18px;
         margin-left: -10px;
     }
@@ -108,7 +116,7 @@
 }
 
 @media (max-width: 900px) {
-    .nav-options {
+    .options {
         position: relative;
         display: inline-block;
         left: 25%;
@@ -116,13 +124,13 @@
 }
 
 @media (max-width: 750px) {
-    .nav-options {
+    .options {
         display: none;
     }
 }
 
 @media (max-width: 875px) {
-    .nav-options.french {
+    .options.french {
         display: none;
     }
 }

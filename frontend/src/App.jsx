@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { LangProvider } from './context/LangContext';
-import Navbar from './components/Nav/Navbar';
-import Footer from './components/Nav/Footer';
-import Heropage from './components/HeroComponents/Heropage';
-import SignIn from './pages/SignIn';
+import { useState, useEffect, useRef } from "react";
+import { LangProvider } from "./context/LangContext";
+import Navbar from "./components/Nav/Navbar";
+import Footer from "./components/Nav/Footer";
+import HeroSplash from "./components/HeroComponents/HeroSplash";
+import FeaturedFlights from "./components/FeaturedFlights/FeaturedFlights";
+import HeroMessage from "./components/HeroComponents/HeroMessage";
+import SignIn from "./pages/SignIn";
 import FlightStatus from "./pages/FlightStatus";
 import CheckIn from "./pages/CheckIn";
 import MyFlights from "./pages/MyFlights";
@@ -11,19 +13,36 @@ import Results from "./pages/Results";
 import TripReview from "./pages/TripReview";
 import Confirmation from "./pages/Confirmation";
 
-import './App.css';
+import "./App.css";
 
-const heroImages = import.meta.glob('./assets/heropage/*.{jpg,jpeg,png,svg}', { eager: true });
-const imagesArray = Object.values(heroImages).map(module => module.default);
+const heroImages = import.meta.glob("./assets/heropage/*.{jpg,jpeg,png,svg}", { eager: true });
+const imagesArray = Object.values(heroImages).map((module) => module.default);
 
 function App() {
-  const [page, setPage] = useState("home");
+  const validPages = [
+    "home",
+    "sign-in",
+    "results",
+    "trip-review",
+    "confirmation",
+    "flight-status",
+    "check-in",
+    "my-flights",
+  ];
+
+  const [page, setPage] = useState(() => {
+    const path = window.location.pathname.replace("/", "");
+    if (path && validPages.includes(path)) return path;
+    return localStorage.getItem("page") || "home";
+  });
+
   const [heroImage] = useState(() => imagesArray[Math.floor(Math.random() * imagesArray.length)]);
+  const isInitialMount = useRef(true);
 
   const [booking, setBooking] = useState({
     search: {
-      from: { iata: "YYZ", city: "Toronto" },
-      to: { iata: "HND", city: "Tokyo" },
+      from: { iata: "YYZ", city: "Toronto", isCountry: false, origin_country: "" },
+      to: { iata: "HND", city: "Tokyo", isCountry: false, origin_country: "" },
       departDate: null,
       returnDate: null,
     },
@@ -45,11 +64,31 @@ function App() {
     },
   });
 
+  useEffect(() => {
+    localStorage.setItem("page", page);
+
+    if (isInitialMount.current) {
+      if (page === "home") window.history.replaceState(null, "", "/");
+      else window.history.replaceState(null, "", `/${page}`);
+      isInitialMount.current = false;
+    } else {
+      if (page === "home") window.history.pushState(null, "", "/");
+      else window.history.pushState(null, "", `/${page}`);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    const onPopState = () => {
+      const path = window.location.pathname.replace("/", "");
+      if (validPages.includes(path)) setPage(path);
+      else setPage("home");
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
   const goResults = (payload) => {
-    setBooking((prev) => ({
-      ...prev,
-      ...payload,
-    }));
+    setBooking((prev) => ({ ...prev, ...payload }));
     setPage("results");
   };
 
@@ -70,15 +109,12 @@ function App() {
   const generateReference = () => {
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     let out = "";
-    for (let i = 0; i < 6; i++) {
-      out += chars[Math.floor(Math.random() * chars.length)];
-    }
+    for (let i = 0; i < 6; i++) out += chars[Math.floor(Math.random() * chars.length)];
     return out;
   };
 
   const confirmPurchase = () => {
     const reference = generateReference();
-
     setBooking((prev) => ({
       ...prev,
       confirmation: {
@@ -86,7 +122,6 @@ function App() {
         confirmedAt: new Date().toISOString(),
       },
     }));
-
     setPage("confirmation");
   };
 
@@ -101,50 +136,62 @@ function App() {
       />
 
       <div className="scrollable-content">
-        {page === "home" && (
-          <Heropage
+        <div style={{ display: page === "home" ? "block" : "none" }}>
+          <HeroSplash
             heroImage={heroImage}
             onSearch={goResults}
             search={booking.search}
             tripOptions={booking.tripOptions}
             setSearch={(data) =>
-              setBooking((prev) => ({ ...prev, search: { ...prev.search, ...data } }))
+              setBooking((prev) => ({
+                ...prev,
+                search: { ...prev.search, ...data },
+              }))
             }
             setTripOptions={(data) =>
-              setBooking((prev) => ({ ...prev, tripOptions: { ...prev.tripOptions, ...data } }))
+              setBooking((prev) => ({
+                ...prev,
+                tripOptions: { ...prev.tripOptions, ...data },
+              }))
             }
           />
-        )}
+        </div>
 
-        {page === "sign-in" && <SignIn onBack={() => setPage("home")} />}
+        <div style={{ display: page === "sign-in" ? "block" : "none" }}>
+          <SignIn onBack={() => setPage("home")} />
+        </div>
 
-        {page === "results" && (
-          <Results
-            booking={booking}
-            onSelectFlight={selectFlightAndReview}
-            onBack={() => setPage("home")}
-          />
-        )}
+        <div style={{ display: page === "results" ? "block" : "none" }}>
+          <Results booking={booking} onSelectFlight={selectFlightAndReview} onBack={() => setPage("home")} />
+        </div>
 
-        {page === "trip-review" && (
-          <TripReview
-            booking={booking}
-            onConfirm={confirmPurchase}
-            onBack={() => setPage("results")}
-          />
-        )}
+        <div style={{ display: page === "trip-review" ? "block" : "none" }}>
+          <TripReview booking={booking} onConfirm={confirmPurchase} onBack={() => setPage("results")} />
+        </div>
 
-        {page === "confirmation" && (
-          <Confirmation
-            booking={booking}
-            onBackHome={() => setPage("home")}
-          />
-        )}
+        <div style={{ display: page === "confirmation" ? "block" : "none" }}>
+          <Confirmation booking={booking} onBackHome={() => setPage("home")} />
+        </div>
 
-        {page === "flight-status" && <FlightStatus onBack={() => setPage("home")} />}
-        {page === "check-in" && <CheckIn onBack={() => setPage("home")} />}
-        {page === "my-flights" && <MyFlights onBack={() => setPage("home")} />}
+        <div style={{ display: page === "flight-status" ? "block" : "none" }}>
+          <FlightStatus onBack={() => setPage("home")} />
+        </div>
+
+        <div style={{ display: page === "check-in" ? "block" : "none" }}>
+          <CheckIn onBack={() => setPage("home")} />
+        </div>
+
+        <div style={{ display: page === "my-flights" ? "block" : "none" }}>
+          <MyFlights onBack={() => setPage("home")} />
+        </div>
       </div>
+
+      {page === "home" && (
+        <>
+          <FeaturedFlights />
+          <HeroMessage />
+        </>
+      )}
 
       <Footer />
     </LangProvider>

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { mockFlights } from "../data/mockFlights";
 import FeaturedFlights from "../components/FeaturedFlights/FeaturedFlights"; // adjust if your path differs
-import "./Results.css";
+import styles from "./Results.module.css";
 
 function getDisplay(location) {
   if (!location) return { iata: "—", city: "" };
@@ -26,29 +26,29 @@ export default function Results({ booking, onSelectFlight, onBack }) {
   }, [flights]);
 
   return (
-    <div className="results-page">
-      <div className="results-topbar">
-        <button className="results-back" type="button" onClick={onBack}>
+    <div className={styles.resultsPage}>
+      <div className={styles.resultsTopbar}>
+        <button className={styles.resultsBack} type="button" onClick={onBack}>
           ← Back
         </button>
 
-        <div className="results-title">
+        <div className={styles.resultsTitle}>
           <h2>
             Showing results from <span>{from.iata}</span> to <span>{to.iata}</span>
           </h2>
-          <p className="results-subtitle">
+          <p className={styles.resultsSubtitle}>
             {flights.length} flights • {booking?.tripOptions?.tripType ?? "round-trip"} •{" "}
             {booking?.tripOptions?.cabinClass ?? "economy"} •{" "}
             {booking?.tripOptions?.passengers ?? 1} passenger(s)
           </p>
         </div>
 
-        <button className="results-filter" type="button" onClick={() => alert("Filters coming soon")}>
+        <button className={styles.resultsFilter} type="button" onClick={() => alert("Filters coming soon")}>
           Filter
         </button>
       </div>
 
-      <div className="results-list">
+      <div className={styles.resultsList}>
         {flights.map((flight) => {
           const isLowest = lowestPrice != null && flight.price === lowestPrice;
 
@@ -56,50 +56,50 @@ export default function Results({ booking, onSelectFlight, onBack }) {
             <button
               key={flight.id}
               type="button"
-              className={`result-card ${isLowest ? "lowest" : ""}`}
+              className={`${styles.resultCard} ${isLowest ? styles.lowest : ""}`}
               onClick={() => onSelectFlight(flight)}
             >
-              <div className="result-left">
-                <div className="result-time">
-                  <div className="time">{flight.departTime}</div>
-                  <div className="iata">{flight.origin.iata}</div>
+              <div className={styles.resultLeft}>
+                <div className={styles.resultTime}>
+                  <div className={styles.time}>{flight.departTime}</div>
+                  <div className={styles.iata}>{flight.origin.iata}</div>
                 </div>
 
-                <div className="result-arrow">→</div>
+                <div className={styles.resultArrow}>→</div>
 
-                <div className="result-time">
-                  <div className="time">{flight.arriveTime}</div>
-                  <div className="iata">{flight.destination.iata}</div>
+                <div className={styles.resultTime}>
+                  <div className={styles.time}>{flight.arriveTime}</div>
+                  <div className={styles.iata}>{flight.destination.iata}</div>
                 </div>
 
-                <div className="result-meta">
-                  <div className="seats">{flight.seatsLeft} seats left</div>
-                  {isLowest && <div className="badge">Lowest price</div>}
+                <div className={styles.resultMeta}>
+                  <div className={styles.seats}>{flight.seatsLeft} seats left</div>
+                  {isLowest && <div className={styles.badge}>Lowest price</div>}
                 </div>
               </div>
 
-              <div className="result-right">
-                <div className="price">${flight.price}</div>
-                <div className="per-person">per person</div>
+              <div className={styles.resultRight}>
+                <div className={styles.price}>${flight.price}</div>
+                <div className={styles.perPerson}>per person</div>
               </div>
             </button>
           );
         })}
       </div>
 
-      <div className="results-viewmore-wrap">
+      <div className={styles.resultsViewmoreWrap}>
         <button
           type="button"
-          className="results-viewmore"
+          className={styles.resultsViewmore}
           onClick={() => alert("Pagination coming soon")}
         >
           View more
         </button>
       </div>
 
-      <div className="results-featured">
+      {/* <div className={styles.resultsFeatured}>
         <FeaturedFlights />
-      </div>
+      </div> */}
     </div>
   );
 }
