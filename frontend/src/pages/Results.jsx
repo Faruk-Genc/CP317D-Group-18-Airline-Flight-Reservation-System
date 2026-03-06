@@ -53,6 +53,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
       try {
         const res = await fetch(`/api/flights/search?${params}`);
         const data = await res.json();
+  
         setFlights(data.outbound ?? []);
       } catch (err) {
         console.error("Flight search failed", err);

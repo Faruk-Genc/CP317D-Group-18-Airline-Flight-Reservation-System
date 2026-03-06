@@ -93,18 +93,41 @@ function App() {
   };
 
   const selectFlightAndReview = (flight) => {
+      const departureTime = new Date(flight.departure_time).toLocaleString([], {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    const arrivalTime = new Date(flight.arrival_time).toLocaleString([], {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    const baseFare = flight?.base_cost_cad ?? 0;
+    const taxesAndFees = baseFare * 0.13;
+    const total = baseFare + taxesAndFees;
     setBooking((prev) => ({
       ...prev,
       selectedFlight: flight,
+      flightTimes: {
+        departureTime,
+        arrivalTime
+      },
       priceSummary: {
-        baseFare: flight?.price ?? 0,
-        taxesAndFees: 50,
-        total: (flight?.price ?? 0) + 50,
+        baseFare,
+        taxesAndFees,
+        total,
         currency: "CAD",
       },
     }));
     setPage("trip-review");
+    console.log("Booking:", booking);
   };
+  
 
   const generateReference = () => {
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";

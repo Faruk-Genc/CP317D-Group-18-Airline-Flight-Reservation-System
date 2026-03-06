@@ -17,6 +17,9 @@ function formatMoney(amount, currency = "CAD") {
 
 export default function TripReview({ booking, onConfirm, onBack }) {
   const flight = booking?.selectedFlight;
+  useEffect(() => {
+    console.log("Flight:", flight)
+  },[flight])
 
   const currency = booking?.priceSummary?.currency ?? "CAD";
 
@@ -24,8 +27,22 @@ export default function TripReview({ booking, onConfirm, onBack }) {
   const cabinClass = booking?.tripOptions?.cabinClass ?? "economy";
   const tripType = booking?.tripOptions?.tripType ?? "round-trip";
 
-  const baseFare = booking?.priceSummary?.baseFare ?? flight?.price ?? 0;
-  const taxesAndFees = booking?.priceSummary?.taxesAndFees ?? 50;
+  const baseFare = flight?.base_cost_cad ?? 0;
+  const taxesAndFees = baseFare * 0.13
+  
+  const departureTime = new Date(flight?.departure_time).toLocaleDateString([], {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  })
+
+  const arrivalTime = new Date(flight?.arrival_time).toLocaleDateString([], {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  })
 
   const total = (baseFare + taxesAndFees) * passengers;
 
@@ -75,11 +92,7 @@ export default function TripReview({ booking, onConfirm, onBack }) {
           ← Back
         </button>
 
-        <div className={styles.reviewTitle}>
-          <h2>Review your trip</h2>
-          <p>Confirm your selection before purchase.</p>
-        </div>
-
+        
         <div className={styles.reviewTimer}>
           <div className={styles.timerLabel}>Time remaining</div>
 
@@ -92,6 +105,10 @@ export default function TripReview({ booking, onConfirm, onBack }) {
           </div>
         </div>
       </div>
+      <div className={styles.reviewTitle}>
+                <h2>Review your trip</h2>
+                <p>Confirm your selection before purchase.</p>
+              </div>
 
       <div className={styles.reviewGrid}>
         {/* Flight summary */}
@@ -100,23 +117,23 @@ export default function TripReview({ booking, onConfirm, onBack }) {
 
           <div className={styles.flightRow}>
             <div className={styles.flightBlock}>
-              <div className={styles.flightTime}>{flight.departTime}</div>
-              <div className={styles.flightIata}>{flight.origin?.iata}</div>
-              <div className={styles.flightCity}>{flight.origin?.city}</div>
+              <div className={styles.flightTime}>{departureTime}</div>
+              <div className={styles.flightIata}>{flight.origin_iata}</div>
+              <div className={styles.flightCity}>{flight.origin_city}</div>
             </div>
 
             <div className={styles.flightArrow}>→</div>
 
             <div className={styles.flightBlock}>
-              <div className={styles.flightTime}>{flight.arriveTime}</div>
-              <div className={styles.flightIata}>{flight.destination?.iata}</div>
-              <div className={styles.flightCity}>{flight.destination?.city}</div>
+              <div className={styles.flightTime}>{arrivalTime}</div>
+              <div className={styles.flightIata}>{flight.destination_iata}</div>
+              <div className={styles.flightCity}>{flight.destination_city}</div>
             </div>
           </div>
 
           <div className={styles.flightMeta}>
             <div>
-              <span className={styles.label}>Flight:</span> {flight.id}
+              <span className={styles.label}>Flight:</span> {<b>{flight?.flight_no}</b>}
             </div>
 
             <div>
@@ -141,13 +158,7 @@ export default function TripReview({ booking, onConfirm, onBack }) {
                 <span className={styles.label}>Passengers:</span> {passengers}
               </div>
 
-              <div>
-                <span className={styles.label}>Dates:</span>{" "}
-                {booking?.search?.departDate ?? "—"}
-                {tripType === "round-trip"
-                  ? ` → ${booking?.search?.returnDate ?? "—"}`
-                  : ""}
-              </div>
+              
             </div>
           </div>
         </div>
