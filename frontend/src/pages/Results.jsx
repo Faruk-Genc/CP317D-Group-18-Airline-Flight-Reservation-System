@@ -1,14 +1,17 @@
-import { useMemo } from "react";
-import { mockFlights } from "../data/mockFlights";
-import FeaturedFlights from "../components/FeaturedFlights/FeaturedFlights"; // adjust if your path differs
+import { useMemo, useEffect, useState } from "react";
+import FeaturedFlights from "../components/FeaturedFlights/FeaturedFlights";
 import styles from "./Results.module.css";
 
 function getDisplay(location) {
   if (!location) return { iata: "—", city: "" };
-  if (typeof location === "string") return { iata: location, city: "" };
+
+  if (typeof location === "string") {
+    return { iata: location, city: "" };
+  }
+
   return {
     iata: location.iata ?? location.code ?? "—",
-    city: location.city ?? location.name ?? "",
+    city: location.city ?? location.name ?? ""
   };
 }
 
@@ -16,71 +19,158 @@ export default function Results({ booking, onSelectFlight, onBack }) {
   const from = getDisplay(booking?.search?.from);
   const to = getDisplay(booking?.search?.to);
 
-  // Currently shows mockFlights
-  // replace with API results filtered by booking.search + booking.tripOptions.
-  const flights = useMemo(() => mockFlights, []);
+  const [flights, setFlights] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const lowestPrice = useMemo(() => {
     if (!flights.length) return null;
-    return Math.min(...flights.map((f) => f.price));
+    return Math.min(...flights.map(f => f.price));
   }, [flights]);
+
+  useEffect(() => {
+    const origin = booking?.search?.from?.iata;
+    const destination = booking?.search?.to?.iata;
+    const departureDate = booking?.search?.departDate;
+
+    if (!origin || !destination || !departureDate) {
+      setFlights([]);
+      setLoading(false);
+      return;
+    }
+
+    const params = new URLSearchParams({
+      origin,
+      destination,
+      departure_date: departureDate,
+      passengers: booking?.tripOptions?.passengers ?? 1
+    });
+
+    if (booking?.search?.returnDate) {
+      params.append("return_date", booking.search.returnDate);
+    }
+
+    async function loadFlights() {
+      try {
+        const res = await fetch(`/api/flights/search?${params}`);
+        const data = await res.json();
+  
+        setFlights(data.outbound ?? []);
+      } catch (err) {
+        console.error("Flight search failed", err);
+        setFlights([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadFlights();
+  }, [booking]);
+
+  if (loading) {
+    return <div className={styles.resultsPage}>Loading...</div>;
+  }
 
   return (
     <div className={styles.resultsPage}>
       <div className={styles.resultsTopbar}>
-        <button className={styles.resultsBack} type="button" onClick={onBack}>
+        <button
+          className={styles.resultsBack}
+          type="button"
+          onClick={onBack}
+        >
           ← Back
         </button>
 
         <div className={styles.resultsTitle}>
           <h2>
-            Showing results from <span>{from.iata}</span> to <span>{to.iata}</span>
+            Showing results from <span>{from.iata}</span> to{" "}
+            <span>{to.iata}</span>
           </h2>
+
           <p className={styles.resultsSubtitle}>
-            {flights.length} flights • {booking?.tripOptions?.tripType ?? "round-trip"} •{" "}
+            {flights.length} flights •{" "}
+            {booking?.tripOptions?.tripType ?? "round-trip"} •{" "}
             {booking?.tripOptions?.cabinClass ?? "economy"} •{" "}
             {booking?.tripOptions?.passengers ?? 1} passenger(s)
           </p>
         </div>
 
-        <button className={styles.resultsFilter} type="button" onClick={() => alert("Filters coming soon")}>
+        <button
+          className={styles.resultsFilter}
+          type="button"
+          onClick={() => alert("Filters coming soon")}
+        >
           Filter
         </button>
       </div>
 
       <div className={styles.resultsList}>
-        {flights.map((flight) => {
-          const isLowest = lowestPrice != null && flight.price === lowestPrice;
+        {flights.map(flight => {
+          const isLowest =
+            lowestPrice !== null && flight.price === lowestPrice;
 
           return (
             <button
-              key={flight.id}
+              key={flight.flight_no}
               type="button"
-              className={`${styles.resultCard} ${isLowest ? styles.lowest : ""}`}
+              className={`${styles.resultCard} ${
+                isLowest ? styles.lowest : ""
+              }`}
               onClick={() => onSelectFlight(flight)}
             >
               <div className={styles.resultLeft}>
                 <div className={styles.resultTime}>
-                  <div className={styles.time}>{flight.departTime}</div>
-                  <div className={styles.iata}>{flight.origin.iata}</div>
+                  <div className={styles.time}>
+                    {new Date(
+                      flight.departure_time
+                    ).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit"
+                    })}
+                  </div>
+
+                  <div className={styles.iata}>
+                    {flight.origin_iata}
+                  </div>
                 </div>
 
                 <div className={styles.resultArrow}>→</div>
 
                 <div className={styles.resultTime}>
-                  <div className={styles.time}>{flight.arriveTime}</div>
-                  <div className={styles.iata}>{flight.destination.iata}</div>
+                  <div className={styles.time}>
+                    {new Date(
+                      flight.arrival_time
+                    ).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit"
+                    })}
+                  </div>
+
+                  <div className={styles.iata}>
+                    {flight.destination_iata}
+                  </div>
                 </div>
 
                 <div className={styles.resultMeta}>
-                  <div className={styles.seats}>{flight.seatsLeft} seats left</div>
-                  {isLowest && <div className={styles.badge}>Lowest price</div>}
+                  <div className={styles.seats}>
+                    {flight.seatsLeft} seats left
+                  </div>
+
+                  {isLowest && (
+                    <div className={styles.badge}>
+                      Lowest price
+                    </div>
+                  )}
                 </div>
               </div>
 
               <div className={styles.resultRight}>
-                <div className={styles.price}>${flight.price}</div>
-                <div className={styles.perPerson}>per person</div>
+                <div className={styles.price}>
+                  ${flight.price}
+                </div>
+                <div className={styles.perPerson}>
+                  per person
+                </div>
               </div>
             </button>
           );
@@ -89,17 +179,17 @@ export default function Results({ booking, onSelectFlight, onBack }) {
 
       <div className={styles.resultsViewmoreWrap}>
         <button
-          type="button"
           className={styles.resultsViewmore}
+          type="button"
           onClick={() => alert("Pagination coming soon")}
         >
           View more
         </button>
       </div>
 
-      {/* <div className={styles.resultsFeatured}>
+      <div className={styles.resultsFeatured}>
         <FeaturedFlights />
-      </div> */}
+      </div>
     </div>
   );
 }
