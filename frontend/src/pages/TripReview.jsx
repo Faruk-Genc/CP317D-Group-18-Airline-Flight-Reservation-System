@@ -29,20 +29,6 @@ export default function TripReview({ booking, onConfirm, onBack }) {
 
   const baseFare = flight?.base_cost_cad ?? 0;
   const taxesAndFees = baseFare * 0.13
-  
-  const departureTime = new Date(flight?.departure_time).toLocaleDateString([], {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
-  })
-
-  const arrivalTime = new Date(flight?.arrival_time).toLocaleDateString([], {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
-  })
 
   const total = (baseFare + taxesAndFees) * passengers;
 
@@ -117,7 +103,7 @@ export default function TripReview({ booking, onConfirm, onBack }) {
 
           <div className={styles.flightRow}>
             <div className={styles.flightBlock}>
-              <div className={styles.flightTime}>{departureTime}</div>
+              <div className={styles.flightTime}>{booking?.flightTimes.departureTime}</div>
               <div className={styles.flightIata}>{flight.origin_iata}</div>
               <div className={styles.flightCity}>{flight.origin_city}</div>
             </div>
@@ -125,7 +111,7 @@ export default function TripReview({ booking, onConfirm, onBack }) {
             <div className={styles.flightArrow}>→</div>
 
             <div className={styles.flightBlock}>
-              <div className={styles.flightTime}>{arrivalTime}</div>
+              <div className={styles.flightTime}>{booking?.flightTimes.arrivalTime}</div>
               <div className={styles.flightIata}>{flight.destination_iata}</div>
               <div className={styles.flightCity}>{flight.destination_city}</div>
             </div>
@@ -170,7 +156,7 @@ export default function TripReview({ booking, onConfirm, onBack }) {
           <div className={styles.priceLines}>
             <div className={styles.priceLine}>
               <span>Base fare</span>
-              <span>{formatMoney(baseFare * passengers, currency)}</span>
+              <span>{formatMoney(booking?.priceSummary?.baseFare, currency)}</span>
             </div>
 
             <div className={styles.priceLine}>

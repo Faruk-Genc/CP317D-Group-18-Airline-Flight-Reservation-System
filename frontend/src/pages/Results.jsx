@@ -166,7 +166,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
 
               <div className={styles.resultRight}>
                 <div className={styles.price}>
-                  ${flight.price}
+                  ${flight?.base_cost_cad}
                 </div>
                 <div className={styles.perPerson}>
                   per person
