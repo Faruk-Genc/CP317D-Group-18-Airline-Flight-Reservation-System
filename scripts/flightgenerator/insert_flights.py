@@ -23,10 +23,44 @@ with open(os.path.join(BASE_DIR, "airports.json"), "r", encoding="utf-8") as f:
 
 AIRPORT_CODES = list(AIRPORTS.keys())
 
-AIRCRAFT_NAMES = [
-    "B737", "B777", "B787", "A320", "A321", "A330", "A350", "A380",
-    "CRJ700", "E170", "E190", "SSJ100"
+LONG_HAUL_AIRCRAFT = [
+    "B777",
+    "B787",
+    "A330",
+    "A350",
+    "A380",
+    "B747"
 ]
+
+SHORT_HAUL_AIRCRAFT = [
+    "A220",
+    "A320",
+    "A321",
+    "B737",
+    "CRJ700",
+    "CRJ900",
+    "E170",
+    "E175",
+    "E190"
+]
+
+AIRCRAFT_SEATS = {
+    "A220": 130,
+    "A320": 180,
+    "A321": 220,
+    "B737": 178,
+    "B777": 396,
+    "B787": 290,
+    "A330": 270,
+    "A350": 325,
+    "A380": 525,
+    "B747": 416,
+    "CRJ700": 70,
+    "CRJ900": 90,
+    "E170": 76,
+    "E175": 88,
+    "E190": 100
+}
 
 IATA = "AL"
 AIRLINE_NAME = "Air Laurier"
@@ -38,14 +72,54 @@ AIRPORT_INFO = {code: (
     info["lat"], info["lon"], info["name"], info["city"], info["country"]
 ) for code, info in AIRPORTS.items()}
 
-HUBS = []
-seen_countries = set()
-for code, info in AIRPORTS.items():
-    country = info["country"]
-    if country not in seen_countries:
-        HUBS.append(code)
-        seen_countries.add(country)
+HUBS = [
+    # North America
+    "ATL",  # Atlanta
+    "DFW",  # Dallas
+    "ORD",  # Chicago
+    "LAX",  # Los Angeles
+    "JFK",  # New York
+    "SEA",  # Seattle
+    "YYZ",  # Toronto
+    "YVR",  # Vancouver
 
+    # Europe
+    "LHR",  # London Heathrow
+    "CDG",  # Paris Charles de Gaulle
+    "FRA",  # Frankfurt
+    "AMS",  # Amsterdam
+    "MAD",  # Madrid
+    "MUC",  # Munich
+    "IST",  # Istanbul
+
+    # Middle East
+    "DXB",  # Dubai
+    "DOH",  # Doha
+    "AUH",  # Abu Dhabi
+
+    # Asia
+    "HND",  # Tokyo Haneda
+    "NRT",  # Tokyo Narita
+    "ICN",  # Seoul Incheon
+    "PEK",  # Beijing
+    "PVG",  # Shanghai
+    "HKG",  # Hong Kong
+    "SIN",  # Singapore
+    "BKK",  # Bangkok
+    "DEL",  # Delhi
+
+    # Oceania
+    "SYD",  # Sydney
+    "MEL",  # Melbourne
+
+    # Latin America
+    "GRU",  # Sao Paulo
+    "MEX",  # Mexico City
+    "BOG"   # Bogotá
+]
+SPOKES = [a for a in AIRPORT_CODES if a not in HUBS]
+SPOKE_DISTANCE = 8000
+MAX_DISTANCE = 13000
 def distance_km(lat1, lon1, lat2, lon2):
     r = 6371
     lat1, lat2 = math.radians(lat1), math.radians(lat2)
@@ -62,27 +136,117 @@ def generate_daily_flights(date_obj, n_flights):
     random.seed(date_obj.year * 10000 + date_obj.month * 100 + date_obj.day)
     flights = []
     assigned = set()
+    trafficHours = {0:1, 1:1, 2:1, 3:1, 4:1,          
+    5:2,
+    6:6, 7:8, 8:9, 9:7,               
+    10:4,
+    11:6, 12:5,                       
+    13:6, 14:5,
+    15:7,
+    16:8, 17:9, 18:9, 19:7,          
+    20:6,
+    21:4,
+    22:3,
+    23:2}
+    hours = list(trafficHours.keys())
+    weights = list(trafficHours.values())
+    flight_counter = 1000
 
-    hub_pairs = [(o, d) for o in HUBS for d in HUBS if o != d]
-    for origin, destination in hub_pairs:
+    def random_departure():
+       
+
+        hour = random.choices(hours, weights = weights)[0]
+        minute = random.randint(0,59)
+
+        dt = datetime(
+            date_obj.year,
+            date_obj.month,
+            date_obj.day,
+            hour,
+            minute,tzinfo=tz.utc
+        )
+        return round_to_5_min(dt)
+        
+    #generate flights from each hub
+    for origin in HUBS:
+        for destination in HUBS:
+            if origin == destination:
+                continue
+            lat_o, lon_o, name_o, city_o, country_o = AIRPORT_INFO[origin]
+            lat_d, lon_d, name_d, city_d, country_d = AIRPORT_INFO[destination]
+            dist_km = distance_km(lat_o, lon_o, lat_d, lon_d)
+            if dist_km > MAX_DISTANCE:
+                continue
+
+
+            for _ in range(random.randint(2,5)): # generate more flighs between hubs
+                flight_no = f"{IATA}{flight_counter+1000}-{date_obj:%y%m%d}"
+                flight_counter += 1
+                assigned.add(flight_no)
+
+                departure = random_departure()
+                arrival = round_to_5_min(departure + timedelta(hours=dist_km / 900))
+
+                if dist_km > 5000:
+                    aircraft = random.choice(LONG_HAUL_AIRCRAFT)
+                else:
+                    aircraft = random.choice(SHORT_HAUL_AIRCRAFT)
+                variance = random.uniform(0.85, 1.25)
+                base_cost = max(round(dist_km * BASE_COST_PER_KM * variance, 2), 50.0)
+                seatsLeft = AIRCRAFT_SEATS[aircraft]
+
+                flights.append((
+                    flight_no,
+                    departure,
+                    arrival,
+                    origin,
+                    name_o,
+                    city_o,
+                    country_o,
+                    country_o,
+                    destination,
+                    name_d,
+                    city_d,
+                    country_d,
+                    country_d,
+                    aircraft,
+                    AIRLINE_NAME,
+                    dist_km,
+                    base_cost,
+                    seatsLeft
+                ))
+
+    remaining = n_flights - len(flights)
+
+    while remaining > 0:
+
+        if random.random()< 0.7:
+            origin = random.choice(HUBS)
+            destination = random.choice(SPOKES)
+        else:
+            origin = random.choice(SPOKES)
+            destination = random.choice(HUBS)
+
         lat_o, lon_o, name_o, city_o, country_o = AIRPORT_INFO[origin]
         lat_d, lon_d, name_d, city_d, country_d = AIRPORT_INFO[destination]
 
-        flight_no = f"{IATA}{random.randint(100,9999)}-{date_obj:%y%m%d}"
-        while flight_no in assigned:
-            flight_no = f"{IATA}{random.randint(100,9999)}-{date_obj:%y%m%d}"
+        dist_km = distance_km(lat_o, lon_o, lat_d, lon_d)
+        if dist_km > SPOKE_DISTANCE:
+            continue
+
+        flight_no = f"{IATA}{flight_counter+1000}-{date_obj:%y%m%d}"
+        flight_counter += 1
         assigned.add(flight_no)
 
-        dist_km = distance_km(lat_o, lon_o, lat_d, lon_d)
-        departure = round_to_5_min(datetime(
-            date_obj.year, date_obj.month, date_obj.day,
-            random.randint(0, 23), random.randint(0, 59),
-            tzinfo=tz.utc
-        ))
+        departure = random_departure()
         arrival = round_to_5_min(departure + timedelta(hours=dist_km / 900))
 
-        aircraft = random.choice(AIRCRAFT_NAMES)
+        if dist_km > 5000:
+                    aircraft = random.choice(LONG_HAUL_AIRCRAFT)
+        else:
+            aircraft = random.choice(SHORT_HAUL_AIRCRAFT)
         base_cost = max(round(dist_km * BASE_COST_PER_KM, 2), 50.0)
+        seatsLeft = AIRCRAFT_SEATS[aircraft]
 
         flights.append((
             flight_no,
@@ -101,51 +265,10 @@ def generate_daily_flights(date_obj, n_flights):
             aircraft,
             AIRLINE_NAME,
             dist_km,
-            base_cost
+            base_cost,
+            seatsLeft
         ))
-
-    remaining = n_flights - len(flights)
-    if remaining > 0:
-        all_pairs = [(o, d) for o in AIRPORT_CODES for d in AIRPORT_CODES if o != d]
-        for origin, destination in random.sample(all_pairs, remaining):
-            lat_o, lon_o, name_o, city_o, country_o = AIRPORT_INFO[origin]
-            lat_d, lon_d, name_d, city_d, country_d = AIRPORT_INFO[destination]
-
-            flight_no = f"{IATA}{random.randint(100,9999)}-{date_obj:%y%m%d}"
-            while flight_no in assigned:
-                flight_no = f"{IATA}{random.randint(100,9999)}-{date_obj:%y%m%d}"
-            assigned.add(flight_no)
-
-            dist_km = distance_km(lat_o, lon_o, lat_d, lon_d)
-            departure = round_to_5_min(datetime(
-                date_obj.year, date_obj.month, date_obj.day,
-                random.randint(0, 23), random.randint(0, 59),
-                tzinfo=tz.utc
-            ))
-            arrival = round_to_5_min(departure + timedelta(hours=dist_km / 900))
-
-            aircraft = random.choice(AIRCRAFT_NAMES)
-            base_cost = max(round(dist_km * BASE_COST_PER_KM, 2), 50.0)
-
-            flights.append((
-                flight_no,
-                departure,
-                arrival,
-                origin,
-                name_o,
-                city_o,
-                country_o,
-                country_o,
-                destination,
-                name_d,
-                city_d,
-                country_d,
-                country_d,
-                aircraft,
-                AIRLINE_NAME,
-                dist_km,
-                base_cost
-            ))
+        remaining -= 1
 
     random.shuffle(flights)
     return flights
@@ -211,9 +334,9 @@ def update_schedule():
                         flight_no, departure_time, arrival_time,
                         origin_iata, origin_name, origin_city, origin_country_code, origin_country,
                         destination_iata, destination_name, destination_city, destination_country_code, destination_country,
-                        aircraft, airline, distance_km, base_cost_cad
+                        aircraft, airline, distance_km, base_cost_cad, seats_left
                     )
-                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                 """, flights, page_size=500)
             conn.commit()
             print(f"Inserted {len(flights)} flights for {schedule_date}")

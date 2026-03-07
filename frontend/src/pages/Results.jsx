@@ -107,11 +107,11 @@ export default function Results({ booking, onSelectFlight, onBack }) {
       <div className={styles.resultsList}>
         {flights.map(flight => {
           const isLowest =
-            lowestPrice !== null && flight.price === lowestPrice;
+            lowestPrice !== null && flight?.price === lowestPrice;
 
           return (
             <button
-              key={flight.flight_no}
+              key={flight?.flight_no}
               type="button"
               className={`${styles.resultCard} ${
                 isLowest ? styles.lowest : ""
@@ -122,7 +122,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
                 <div className={styles.resultTime}>
                   <div className={styles.time}>
                     {new Date(
-                      flight.departure_time
+                      flight?.departure_time
                     ).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit"
@@ -130,7 +130,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
                   </div>
 
                   <div className={styles.iata}>
-                    {flight.origin_iata}
+                    {flight?.origin_iata}
                   </div>
                 </div>
 
@@ -139,7 +139,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
                 <div className={styles.resultTime}>
                   <div className={styles.time}>
                     {new Date(
-                      flight.arrival_time
+                      flight?.arrival_time
                     ).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit"
@@ -147,13 +147,13 @@ export default function Results({ booking, onSelectFlight, onBack }) {
                   </div>
 
                   <div className={styles.iata}>
-                    {flight.destination_iata}
+                    {flight?.destination_iata}
                   </div>
                 </div>
 
                 <div className={styles.resultMeta}>
                   <div className={styles.seats}>
-                    {flight.seatsLeft} seats left
+                    {flight?.seats_left} seats left
                   </div>
 
                   {isLowest && (
