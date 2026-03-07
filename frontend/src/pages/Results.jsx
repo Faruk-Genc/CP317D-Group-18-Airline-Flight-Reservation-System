@@ -24,7 +24,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
 
   const lowestPrice = useMemo(() => {
     if (!flights.length) return null;
-    return Math.min(...flights.map(f => f.price));
+    return Math.min(...flights.map(f => f.base_cost_cad));
   }, [flights]);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
       try {
         const res = await fetch(`/api/flights/search?${params}`);
         const data = await res.json();
-  
+        console.log("Flight API response:", data);
         setFlights(data.outbound ?? []);
       } catch (err) {
         console.error("Flight search failed", err);
@@ -107,7 +107,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
       <div className={styles.resultsList}>
         {flights.map(flight => {
           const isLowest =
-            lowestPrice !== null && flight?.price === lowestPrice;
+            lowestPrice !== null && Number(flight?.base_cost_cad.toFixed(2)) == Number(lowestPrice.toFixed(2));
 
           return (
             <button
