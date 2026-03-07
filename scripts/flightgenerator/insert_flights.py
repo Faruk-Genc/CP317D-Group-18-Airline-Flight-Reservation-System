@@ -6,6 +6,7 @@ import os
 import psycopg2
 from psycopg2.extras import execute_batch
 from dotenv import load_dotenv
+from io import StringIO
 
 load_dotenv()
 
@@ -65,7 +66,7 @@ AIRCRAFT_SEATS = {
 IATA = "AL"
 AIRLINE_NAME = "Air Laurier"
 BASE_COST_PER_KM = 0.1215
-DAYS_AHEAD = 330
+DAYS_AHEAD = 365
 FLIGHTS_PER_DAY = 6500
 
 AIRPORT_INFO = {code: (
@@ -120,6 +121,7 @@ HUBS = [
 SPOKES = [a for a in AIRPORT_CODES if a not in HUBS]
 SPOKE_DISTANCE = 8000
 MAX_DISTANCE = 13000
+
 def distance_km(lat1, lon1, lat2, lon2):
     r = 6371
     lat1, lat2 = math.radians(lat1), math.radians(lat2)
@@ -129,13 +131,21 @@ def distance_km(lat1, lon1, lat2, lon2):
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     return r * c
 
+HUB_DISTANCES = {}
+for o in HUBS:
+    for d in HUBS:
+        if o != d:
+            lat_o, lon_o, name_o, city_o, country_o = AIRPORT_INFO[o]
+            lat_d, lon_d, name_d, city_d, country_d = AIRPORT_INFO[d]
+            dist = distance_km(lat_o, lon_o, lat_d, lon_d)
+            HUB_DISTANCES[(o,d)] = dist
+
 def round_to_5_min(dt):
     return dt.replace(minute=(dt.minute // 5) * 5, second=0, microsecond=0)
 
 def generate_daily_flights(date_obj, n_flights):
     random.seed(date_obj.year * 10000 + date_obj.month * 100 + date_obj.day)
     flights = []
-    assigned = set()
     trafficHours = {0:1, 1:1, 2:1, 3:1, 4:1,          
     5:2,
     6:6, 7:8, 8:9, 9:7,               
@@ -174,7 +184,7 @@ def generate_daily_flights(date_obj, n_flights):
                 continue
             lat_o, lon_o, name_o, city_o, country_o = AIRPORT_INFO[origin]
             lat_d, lon_d, name_d, city_d, country_d = AIRPORT_INFO[destination]
-            dist_km = distance_km(lat_o, lon_o, lat_d, lon_d)
+            dist_km = HUB_DISTANCES[(origin,destination)]
             if dist_km > MAX_DISTANCE:
                 continue
 
@@ -182,7 +192,6 @@ def generate_daily_flights(date_obj, n_flights):
             for _ in range(random.randint(2,5)): # generate more flighs between hubs
                 flight_no = f"{IATA}{flight_counter+1000}-{date_obj:%y%m%d}"
                 flight_counter += 1
-                assigned.add(flight_no)
 
                 departure = random_departure()
                 arrival = round_to_5_min(departure + timedelta(hours=dist_km / 900))
@@ -230,13 +239,13 @@ def generate_daily_flights(date_obj, n_flights):
         lat_o, lon_o, name_o, city_o, country_o = AIRPORT_INFO[origin]
         lat_d, lon_d, name_d, city_d, country_d = AIRPORT_INFO[destination]
 
+
         dist_km = distance_km(lat_o, lon_o, lat_d, lon_d)
         if dist_km > SPOKE_DISTANCE:
             continue
 
         flight_no = f"{IATA}{flight_counter+1000}-{date_obj:%y%m%d}"
         flight_counter += 1
-        assigned.add(flight_no)
 
         departure = random_departure()
         arrival = round_to_5_min(departure + timedelta(hours=dist_km / 900))
@@ -297,6 +306,7 @@ def create_table(conn):
                 airline TEXT,
                 distance_km REAL,
                 base_cost_cad REAL,
+                seats_left INTEGER,
                 PRIMARY KEY (flight_no, departure_time)
             )
         """)
@@ -323,25 +333,47 @@ def update_schedule():
             """, (today, today + timedelta(days=DAYS_AHEAD)))
             existing_dates = {row[0] for row in cur.fetchall()}
 
+        all_flights = []
         for day_offset in range(DAYS_AHEAD):
             schedule_date = today + timedelta(days=day_offset)
             if schedule_date in existing_dates:
                 continue
             flights = generate_daily_flights(schedule_date, FLIGHTS_PER_DAY)
+            print(f"generated {len(flights)} flights for {schedule_date}")
+            all_flights.extend(flights)
+
+        if all_flights:
+            print("Inserting...")
             with conn.cursor() as cur:
-                execute_batch(cur, """
-                    INSERT INTO daily_flights (
-                        flight_no, departure_time, arrival_time,
-                        origin_iata, origin_name, origin_city, origin_country_code, origin_country,
-                        destination_iata, destination_name, destination_city, destination_country_code, destination_country,
-                        aircraft, airline, distance_km, base_cost_cad, seats_left
+                csv_buffer = StringIO()
+                for flight in all_flights:
+                    row = "\t".join(str(v) for v in flight)
+                    csv_buffer.write(row + "\n")
+                csv_buffer.seek(0)
+                
+                cur.copy_from(
+                    csv_buffer,
+                    'daily_flights',
+                    columns=(
+                        'flight_no', 'departure_time', 'arrival_time',
+                        'origin_iata', 'origin_name', 'origin_city', 
+                        'origin_country_code', 'origin_country',
+                        'destination_iata', 'destination_name', 'destination_city',
+                        'destination_country_code', 'destination_country',
+                        'aircraft', 'airline', 'distance_km', 
+                        'base_cost_cad', 'seats_left'
                     )
-                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                """, flights, page_size=500)
+                )
+            print("Finished")
             conn.commit()
-            print(f"Inserted {len(flights)} flights for {schedule_date}")
     finally:
         conn.close()
 
 if __name__ == "__main__":
     update_schedule()
+    # for day_offset in range(DAYS_AHEAD):
+    #         today = datetime.now(tz.utc).date()
+
+    #         schedule_date = today + timedelta(days=day_offset)
+    #         flights = generate_daily_flights(schedule_date, FLIGHTS_PER_DAY)
+    #         print(f"Inserted {len(flights)} flights for {schedule_date}")
