@@ -35,12 +35,14 @@ export default function TripReview({ booking, onConfirm, onBack }) {
   const [secondsLeft, setSecondsLeft] = useState(10 * 60);
 
   useEffect(() => {
+    setSecondsLeft(10 * 60);
+
     const timer = setInterval(() => {
       setSecondsLeft(s => (s > 0 ? s - 1 : 0));
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [flight]);
 
   const countdown = useMemo(() => {
     const m = Math.floor(secondsLeft / 60);
@@ -124,7 +126,7 @@ export default function TripReview({ booking, onConfirm, onBack }) {
 
             <div>
               <span className={styles.label}>Seats left:</span>{" "}
-              {flight.seatsLeft}
+              {flight.seats_left}
             </div>
           </div>
 
