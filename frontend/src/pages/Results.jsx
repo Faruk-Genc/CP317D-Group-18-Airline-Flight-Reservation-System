@@ -44,11 +44,15 @@ export default function Results({ booking, onSelectFlight, onBack }) {
       departure_date: departureDate,
       passengers: booking?.tripOptions?.passengers ?? 1
     });
+    console.log("Params:", params.toString());
 
     if (booking?.search?.returnDate) {
       params.append("return_date", booking.search.returnDate);
     }
 
+    if (loading) {
+      return <div className={styles.resultsPage}>Loading...</div>;
+    }
     async function loadFlights() {
       try {
         const res = await fetch(`/api/flights/search?${params}`);
@@ -66,9 +70,6 @@ export default function Results({ booking, onSelectFlight, onBack }) {
     loadFlights();
   }, [booking]);
 
-  if (loading) {
-    return <div className={styles.resultsPage}>Loading...</div>;
-  }
 
   return (
     <div className={styles.resultsPage}>

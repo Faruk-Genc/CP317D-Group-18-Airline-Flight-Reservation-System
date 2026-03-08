@@ -66,7 +66,7 @@ AIRCRAFT_SEATS = {
 IATA = "AL"
 AIRLINE_NAME = "Air Laurier"
 BASE_COST_PER_KM = 0.1215
-DAYS_AHEAD = 365
+DAYS_AHEAD = 20
 FLIGHTS_PER_DAY = 6500
 
 AIRPORT_INFO = {code: (
@@ -83,8 +83,23 @@ HUBS = [
     "SEA",  # Seattle
     "YYZ",  # Toronto
     "YVR",  # Vancouver
+    "DEN",  # Denver
+    "PHX",  # Phoenix
+    "MIA",  # Miami
+    "LAS",  # Las Vegas
+    "DTW",  # Detroit
+    "SFO",  # San Francisco
+    "YUL",
+    #Europe
+    "ZRH",  # Zurich
+    "VIE",  # Vienna
+    "BRU",  # Brussels
+    "CPH",  # Copenhagen
+    "LIS",  # Lisbon
+    "BCN",  # Barcelona
+    "ATH",  # Athens
+    "DUB",  # Dublin
 
-    # Europe
     "LHR",  # London Heathrow
     "CDG",  # Paris Charles de Gaulle
     "FRA",  # Frankfurt
@@ -108,6 +123,7 @@ HUBS = [
     "SIN",  # Singapore
     "BKK",  # Bangkok
     "DEL",  # Delhi
+    
 
     # Oceania
     "SYD",  # Sydney
@@ -189,7 +205,7 @@ def generate_daily_flights(date_obj, n_flights):
                 continue
 
 
-            for _ in range(random.randint(2,5)): # generate more flighs between hubs
+            for _ in range(random.randint(2,4)): # generate more flighs between hubs
                 flight_no = f"{IATA}{flight_counter+1000}-{date_obj:%y%m%d}"
                 flight_counter += 1
 
@@ -200,8 +216,23 @@ def generate_daily_flights(date_obj, n_flights):
                     aircraft = random.choice(LONG_HAUL_AIRCRAFT)
                 else:
                     aircraft = random.choice(SHORT_HAUL_AIRCRAFT)
-                variance = random.uniform(0.85, 1.25)
-                base_cost = max(round(dist_km * BASE_COST_PER_KM * variance, 2), 50.0)
+
+                variance = random.uniform(0.90, 1.20)
+                base_fee = random.uniform(180, 260)
+                noise = random.uniform(-30, 40)
+
+                if dist_km < 1200:
+                    multiplier = 1.9
+                elif dist_km < 4000:
+                    multiplier = 1.4
+                elif dist_km < 7000:
+                    multiplier = 1.1
+                else:
+                    multiplier = 0.85   
+
+                distance_cost = dist_km * BASE_COST_PER_KM * multiplier
+
+                base_cost = round((base_fee + distance_cost) * variance + noise, 2)
                 seatsLeft = AIRCRAFT_SEATS[aircraft]
 
                 flights.append((
@@ -254,7 +285,21 @@ def generate_daily_flights(date_obj, n_flights):
                     aircraft = random.choice(LONG_HAUL_AIRCRAFT)
         else:
             aircraft = random.choice(SHORT_HAUL_AIRCRAFT)
-        base_cost = max(round(dist_km * BASE_COST_PER_KM, 2), 50.0)
+        variance = random.uniform(0.90, 1.20)
+        base_fee = random.uniform(180, 260)
+        noise = random.uniform(-30, 40)
+
+        if dist_km < 1200:
+            multiplier = 1.9
+        elif dist_km < 4000:
+            multiplier = 1.4
+        elif dist_km < 7000:
+            multiplier = 1.1
+        else:
+            multiplier = 0.85
+
+        distance_cost = dist_km * BASE_COST_PER_KM * multiplier
+        base_cost = round((base_fee + distance_cost) * variance + noise, 2)
         seatsLeft = AIRCRAFT_SEATS[aircraft]
 
         flights.append((
@@ -371,9 +416,3 @@ def update_schedule():
 
 if __name__ == "__main__":
     update_schedule()
-    # for day_offset in range(DAYS_AHEAD):
-    #         today = datetime.now(tz.utc).date()
-
-    #         schedule_date = today + timedelta(days=day_offset)
-    #         flights = generate_daily_flights(schedule_date, FLIGHTS_PER_DAY)
-    #         print(f"Inserted {len(flights)} flights for {schedule_date}")

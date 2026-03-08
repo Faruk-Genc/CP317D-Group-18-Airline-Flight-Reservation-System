@@ -1069,5 +1069,34 @@
     "country": "PE",
     "lat": -16.340786,
     "lon": -71.569485
+  },
+  "PHX": {
+    "name": "Phoenix Sky Harbor International Airport",
+    "city": "Phoenix",
+    "country": "US",
+    "lat": 33.435302,
+    "lon": -112.005905
+  },
+  "IAH": {
+    "name": "George Bush Intercontinental Airport",
+    "city": "Houston",
+    "country": "US",
+    "lat": 29.9844,
+    "lon": -95.3414
+  },
+  "DTW": {
+    "name": "Detroit Metropolitan Wayne County Airport",
+    "city": "Detroit",
+    "country": "US",
+    "lat": 42.21377,
+    "lon": -83.353786
+  },
+   "DTW": {
+    "name": "Detroit Metropolitan Wayne County Airport",
+    "city": "Detroit",
+    "country": "US",
+    "lat": 42.21377,
+    "lon": -83.353786,
+    "weight": 100
   }
 }
