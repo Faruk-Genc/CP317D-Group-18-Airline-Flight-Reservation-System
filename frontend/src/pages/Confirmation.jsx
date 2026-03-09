@@ -15,9 +15,14 @@ function formatMoney(amount, currency = "CAD") {
 }
 
 export default function Confirmation({ booking, onBackHome }) {
-    const flight = booking?.selectedFlight;
+    const outboundFlight = booking?.selectedFlight?.outbound?.flight;
+    const outboundTimes = booking?.selectedFlight?.outbound?.times;
+
+    const inboundFlight = booking?.selectedFlight?.inbound?.flight;
+    const inboundTimes = booking?.selectedFlight?.inbound?.times;
+
     // If user lands here without selecting, show a safe fallback
-    if (!flight) {
+    if (!outboundFlight) {
         return (
             <div className={styles.confirmPage}>
                 <div className={styles.ticket}>
@@ -43,11 +48,11 @@ export default function Confirmation({ booking, onBackHome }) {
     const cabinClass = booking?.tripOptions?.cabinClass ?? "economy";
     const tripType = booking?.tripOptions?.tripType ?? "round-trip";
 
-    const baseFare = booking?.priceSummary?.baseFare ?? flight.price ?? 0;
-    const taxesAndFees = booking?.priceSummary?.taxesAndFees ?? 50;
+    const baseFare = booking?.priceSummary?.baseFare ?? 0;
+    const taxesAndFees = booking?.priceSummary?.taxesAndFees ?? 0;
+    const total = booking?.priceSummary?.total ?? 0;
 
-    const total = (baseFare + taxesAndFees) * passengers;
-
+    
     return (
         <div className={styles.confirmPage}>
             <div className={styles.ticket}>
@@ -77,14 +82,16 @@ export default function Confirmation({ booking, onBackHome }) {
 
                 <div className={styles.ticketBody}>
                     <div className={styles.ticketLeft}>
+                        {outboundFlight && (
+                                <>
                         <div className={styles.section}>
+                            
                             <h3>Flight details</h3>
-
                             <div className={styles.route}>
                                 <div className={styles.stop}>
-                                    <div className={styles.time}>{booking?.flightTimes?.departureTime}</div>
-                                    <div className={styles.iata}>{flight?.origin_iata}</div>
-                                    <div className={styles.city}>{flight?.origin_city}</div>
+                                    <div className={styles.time}>{outboundTimes?.departure}</div>
+                                    <div className={styles.iata}>{outboundFlight?.origin_iata}</div>
+                                    <div className={styles.city}>{outboundFlight?.origin_city}</div>
                                 </div>
 
                                 <div className={styles.routeMid}>
@@ -92,20 +99,20 @@ export default function Confirmation({ booking, onBackHome }) {
                                 </div>
 
                                 <div className={styles.stop}>
-                                    <div className={styles.time}>{booking?.flightTimes?.arrivalTime}</div>
-                                    <div className={styles.iata}>{flight?.destination_iata}</div>
-                                    <div className={styles.city}>{flight?.destination_city}</div>
+                                    <div className={styles.time}>{outboundTimes?.arrival}</div>
+                                    <div className={styles.iata}>{outboundFlight?.destination_iata}</div>
+                                    <div className={styles.city}>{outboundFlight?.destination_city}</div>
                                 </div>
-                            </div>
-
+                                    </div>        
+                            
                             <div className={styles.kvGrid}>
                                 <div className={styles.kv}>
                                     <div className={styles.k}>Flight</div>
-                                    <div className={styles.v}>{flight?.flight_no}</div>
+                                    <div className={styles.v}>{outboundFlight?.flight_no}</div>
                                 </div>
                                 <div className={styles.kv}>
                                     <div className={styles.k}>Seats left</div>
-                                    <div className={styles.v}>{flight.seatsLeft}</div>
+                                    <div className={styles.v}>{outboundFlight?.seats_left}</div>
                                 </div>
                                 <div className={styles.kv}>
                                     <div className={styles.k}>Trip type</div>
@@ -120,11 +127,65 @@ export default function Confirmation({ booking, onBackHome }) {
                                     <div className={styles.v}>{passengers}</div>
                                 </div>
                                 <div className={styles.kv}>
-                                    <div className={styles.k}>Total</div>
-                                    <div className={`${styles.v} ${styles.strong}`}>{formatMoney(total, currency)}</div>
+                                    <div className={styles.k}>Aircraft</div>
+                                    <div className={styles.v}>{outboundFlight?.aircraft}</div>
                                 </div>
                             </div>
-                        </div>
+                                </div>
+                            </>
+                        )}
+                        {inboundFlight && (
+                                <>
+                        <div className={styles.section}>
+                            
+                            <h3>Flight details</h3>
+                            <div className={styles.route}>
+                                <div className={styles.stop}>
+                                    <div className={styles.time}>{inboundTimes?.departure}</div>
+                                    <div className={styles.iata}>{inboundFlight?.origin_iata}</div>
+                                    <div className={styles.city}>{inboundFlight?.origin_city}</div>
+                                </div>
+
+                                <div className={styles.routeMid}>
+                                    <div className={styles.arrow}>→</div>
+                                </div>
+
+                                <div className={styles.stop}>
+                                    <div className={styles.time}>{inboundTimes?.arrival}</div>
+                                    <div className={styles.iata}>{inboundFlight?.destination_iata}</div>
+                                    <div className={styles.city}>{inboundFlight?.destination_city}</div>
+                                </div>
+                                    </div>        
+                            
+                            <div className={styles.kvGrid}>
+                                <div className={styles.kv}>
+                                    <div className={styles.k}>Flight</div>
+                                    <div className={styles.v}>{inboundFlight?.flight_no}</div>
+                                </div>
+                                <div className={styles.kv}>
+                                    <div className={styles.k}>Seats left</div>
+                                    <div className={styles.v}>{inboundFlight?.seats_left}</div>
+                                </div>
+                                <div className={styles.kv}>
+                                    <div className={styles.k}>Trip type</div>
+                                    <div className={styles.v}>{tripType}</div>
+                                </div>
+                                <div className={styles.kv}>
+                                    <div className={styles.k}>Cabin</div>
+                                    <div className={styles.v}>{cabinClass}</div>
+                                </div>
+                                <div className={styles.kv}>
+                                    <div className={styles.k}>Passengers</div>
+                                    <div className={styles.v}>{passengers}</div>
+                                </div>
+                                <div className={styles.kv}>
+                                    <div className={styles.k}>Aircraft</div>
+                                    <div className={styles.v}>{inboundFlight?.aircraft}</div>
+                                </div>
+                            </div>
+                                </div>
+                            </>
+                                    )}
 
                         <div className={styles.section}>
                             <h3>Price breakdown</h3>
@@ -136,7 +197,7 @@ export default function Confirmation({ booking, onBackHome }) {
                                 </div>
                                 <div className={styles.priceLine}>
                                     <span>Taxes & fees</span>
-                                    <span>{formatMoney(booking?.priceSummary?.taxesAndFees * passengers, currency)}</span>
+                                    <span>{formatMoney(booking?.priceSummary?.taxesAndFees, currency)}</span>
                                 </div>
                                 <div className={styles.divider} />
                                 <div className={`${styles.priceLine} ${styles.total}`}>

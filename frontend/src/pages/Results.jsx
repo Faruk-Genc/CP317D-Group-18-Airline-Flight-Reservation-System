@@ -22,15 +22,22 @@ export default function Results({ booking, onSelectFlight, onBack }) {
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const inboundSelection =
+    booking?.tripOptions.tripType === "round" &&
+    booking?.selectedFlight?.outbound?.flight != null;
+    // selecting return flight
+
+
   const lowestPrice = useMemo(() => {
     if (!flights.length) return null;
     return Math.min(...flights.map(f => f.base_cost_cad));
   }, [flights]);
 
   useEffect(() => {
-    const origin = booking?.search?.from?.iata;
-    const destination = booking?.search?.to?.iata;
-    const departureDate = booking?.search?.departDate;
+    setLoading(true);
+    const origin = inboundSelection ? booking?.search.to?.iata : booking?.search.from?.iata;
+    const destination = inboundSelection ? booking?.search.from?.iata : booking?.search.to?.iata;
+    const departureDate = inboundSelection ? booking?.search.returnDate : booking?.search.departDate;
 
     if (!origin || !destination || !departureDate) {
       setFlights([]);
@@ -46,13 +53,6 @@ export default function Results({ booking, onSelectFlight, onBack }) {
     });
     console.log("Params:", params.toString());
 
-    if (booking?.search?.returnDate) {
-      params.append("return_date", booking.search.returnDate);
-    }
-
-    if (loading) {
-      return <div className={styles.resultsPage}>Loading...</div>;
-    }
     async function loadFlights() {
       try {
         const res = await fetch(`/api/flights/search?${params}`);
@@ -68,9 +68,27 @@ export default function Results({ booking, onSelectFlight, onBack }) {
     }
 
     loadFlights();
-  }, [booking]);
+  }, [booking.search.from,
+  booking.search.to,
+  booking.search.departDate,
+  booking.search.returnDate,
+  booking.selectedFlight?.outbound?.flight]);
 
-
+  const displayFrom = inboundSelection ? to : from;
+  const displayTo = inboundSelection ? from : to;
+  
+  if (loading) {
+  return (
+    <div className={styles.resultsPage}>
+      Loading flights...
+    </div>
+  );
+  }
+  console.log({
+  inboundSelection,
+  departDate: booking.search.departDate,
+  returnDate: booking.search.returnDate
+});
   return (
     <div className={styles.resultsPage}>
       <div className={styles.resultsTopbar}>
@@ -84,8 +102,8 @@ export default function Results({ booking, onSelectFlight, onBack }) {
 
         <div className={styles.resultsTitle}>
           <h2>
-            Showing results from <span>{from.iata}</span> to{" "}
-            <span>{to.iata}</span>
+            Showing results from <span>{displayFrom.iata}</span> to{" "}
+            <span>{displayTo.iata}</span>
           </h2>
 
           <p className={styles.resultsSubtitle}>

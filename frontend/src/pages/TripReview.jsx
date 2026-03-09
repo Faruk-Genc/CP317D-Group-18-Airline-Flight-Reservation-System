@@ -27,10 +27,10 @@ export default function TripReview({ booking, onConfirm, onBack }) {
   const cabinClass = booking?.tripOptions?.cabinClass ?? "economy";
   const tripType = booking?.tripOptions?.tripType ?? "round-trip";
 
-  const baseFare = flight?.base_cost_cad ?? 0;
-  const taxesAndFees = baseFare * 0.13
+  const baseFare = booking?.priceSummary?.baseFare ?? 0;
+  const taxesAndFees = booking?.priceSummary?.taxesAndFees ?? 0;
+  const total = booking?.priceSummary?.total ?? 0;
 
-  const total = (baseFare + taxesAndFees) * passengers;
 
   const [secondsLeft, setSecondsLeft] = useState(10 * 60);
 
@@ -68,6 +68,11 @@ export default function TripReview({ booking, onConfirm, onBack }) {
       </div>
     );
   }
+  const outboundFlight = booking?.selectedFlight?.outbound?.flight;
+  const outboundTimes = booking?.selectedFlight?.outbound?.times;
+
+  const inboundFlight = booking?.selectedFlight?.inbound?.flight;
+  const inboundTimes = booking?.selectedFlight?.inbound?.times;
 
   return (
     <div className={styles.reviewPage}>
@@ -101,34 +106,65 @@ export default function TripReview({ booking, onConfirm, onBack }) {
       <div className={styles.reviewGrid}>
         {/* Flight summary */}
         <div className={styles.reviewCard}>
-          <h3>Selected flight</h3>
+            <div className={styles.flightMeta}>
+                        <div>
+                          <span className={styles.label}>Flight:</span> {<b>{outboundFlight?.flight_no}</b>}
+                        </div>
 
-          <div className={styles.flightRow}>
+                        <div>
+                          <span className={styles.label}>Seats left:</span>{" "}
+                          {outboundFlight?.seats_left}
+                        </div>
+                      </div>
+          {outboundFlight && (
+            
+            <div className={styles.flightRow}>
+            <h3>Departing flight</h3>
             <div className={styles.flightBlock}>
-              <div className={styles.flightTime}>{booking?.flightTimes.departureTime}</div>
-              <div className={styles.flightIata}>{flight.origin_iata}</div>
-              <div className={styles.flightCity}>{flight.origin_city}</div>
+              <div className={styles.flightTime}>{outboundTimes?.departure}</div>
+              <div className={styles.flightIata}>{outboundFlight?.origin_iata}</div>
+              <div className={styles.flightCity}>{outboundFlight?.origin_city}</div>
             </div>
-
             <div className={styles.flightArrow}>→</div>
-
             <div className={styles.flightBlock}>
-              <div className={styles.flightTime}>{booking?.flightTimes.arrivalTime}</div>
-              <div className={styles.flightIata}>{flight.destination_iata}</div>
-              <div className={styles.flightCity}>{flight.destination_city}</div>
+              <div className={styles.flightTime}>{outboundTimes?.arrival}</div>
+              <div className={styles.flightIata}>{outboundFlight?.destination_iata}</div>
+              <div className={styles.flightCity}>{outboundFlight?.destination_city}</div>
             </div>
           </div>
+          )}
+          
 
-          <div className={styles.flightMeta}>
+          {inboundFlight && (
+            <>
+              <div className={styles.flightMeta}>
             <div>
-              <span className={styles.label}>Flight:</span> {<b>{flight?.flight_no}</b>}
+              <span className={styles.label}>Flight:</span> {<b>{inboundFlight?.flight_no}</b>}
             </div>
 
             <div>
               <span className={styles.label}>Seats left:</span>{" "}
-              {flight.seats_left}
+              {inboundFlight?.seats_left}
             </div>
-          </div>
+              </div>
+             
+            <div className={styles.flightRow}>
+            <h3>Return Flight</h3>
+            <div className={styles.flightBlock}>
+              <div className={styles.flightTime}>{inboundTimes?.departure}</div>
+              <div className={styles.flightIata}>{inboundFlight?.origin_iata}</div>
+              <div className={styles.flightCity}>{inboundFlight?.origin_city}</div>
+            </div>
+            <div className={styles.flightArrow}>→</div>
+            <div className={styles.flightBlock}>
+              <div className={styles.flightTime}>{inboundTimes?.arrival}</div>
+              <div className={styles.flightIata}>{inboundFlight?.destination_iata}</div>
+              <div className={styles.flightCity}>{inboundFlight?.destination_city}</div>
+            </div>
+            </div>
+             </>
+          )}
+          
 
           <div className={styles.tripOptionsBox}>
             <div className={styles.tripOptionsTitle}>Trip options</div>
@@ -158,7 +194,7 @@ export default function TripReview({ booking, onConfirm, onBack }) {
           <div className={styles.priceLines}>
             <div className={styles.priceLine}>
               <span>Base fare</span>
-              <span>{formatMoney(booking?.priceSummary?.baseFare, currency)}</span>
+              <span>{formatMoney(baseFare, currency)}</span>
             </div>
 
             <div className={styles.priceLine}>

@@ -51,7 +51,16 @@ function App() {
       tripType: "one-way",
       cabinClass: "economy",
     },
-    selectedFlight: null,
+    selectedFlight: {
+      outbound: {
+        flight: null,
+        times: null,
+      },
+      inbound: {
+        flight: null,
+        times: null
+      }
+    },
     priceSummary: {
       baseFare: 0,
       taxesAndFees: 0,
@@ -92,41 +101,101 @@ function App() {
     setPage("results");
   };
 
-  const selectFlightAndReview = (flight) => {
-      const departureTime = new Date(flight.departure_time).toLocaleString([], {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-
-    const arrivalTime = new Date(flight.arrival_time).toLocaleString([], {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-
-    const baseFare = flight?.base_cost_cad ?? 0;
-    const taxesAndFees = baseFare * 0.13;
-    const total = baseFare + taxesAndFees;
-    setBooking((prev) => ({
+  useEffect(() => {
+  if (page === "home") {
+    setBooking(prev => ({
       ...prev,
-      selectedFlight: flight,
-      flightTimes: {
-        departureTime,
-        arrivalTime
+      selectedFlight: {
+        outbound: { flight: null, times: null },
+        inbound: { flight: null, times: null }
+      },
+      priceSummary: {
+        baseFare: 0,
+        taxesAndFees: 0,
+        total: 0,
+        currency: "CAD"
+      },
+      confirmation: {
+        reference: null,
+        confirmedAt: null
+      }
+    }));
+  }
+}, [page]);
+
+  const selectFlightAndReview = (flight) => {
+    const getFlightTimes = (flightData) => ({
+      departure: new Date(flightData.departure_time).toLocaleString([], {
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      }),
+      arrival: new Date(flightData.arrival_time).toLocaleString([], {
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      })
+    });
+
+    
+    if ( // roundtrip selected, get outbound
+      booking.tripOptions.tripType === 'round' && booking.selectedFlight.outbound.flight === null
+    ) {
+      setBooking((prev) => ({
+        ...prev,
+        selectedFlight: {
+          ...prev.selectedFlight,
+          outbound: { // set outbound
+            flight: flight,
+            times: getFlightTimes(flight)
+          }
+        }
+      }
+      ));
+      setPage("results"); // select inbound flight next
+      return;
+    }
+    
+    const isRoundTrip = booking.tripOptions.tripType === "round";
+    const passengers = booking.tripOptions.passengers ?? 1;
+    let baseFare, taxesAndFees, total;
+    if (isRoundTrip) {
+      const outFare = booking.selectedFlight.outbound.flight?.base_cost_cad ?? 0;
+      const inFare = flight?.base_cost_cad ?? 0;
+      baseFare = (outFare + inFare) * passengers;
+      taxesAndFees = 0.13 * baseFare;
+      total = baseFare + taxesAndFees;
+    }
+    else {
+      baseFare = (flight.base_cost_cad ?? 0) * passengers;
+      taxesAndFees = baseFare * 0.13;
+      total = baseFare + taxesAndFees;
+    }
+
+    setBooking(prev => ({
+      ...prev,
+      selectedFlight: {
+        outbound: isRoundTrip ? prev.selectedFlight.outbound // if roundtrip use prev as outbound else use input flight as outbound
+          : { flight: flight, times: getFlightTimes(flight) },
+        inbound: isRoundTrip 
+          ? { flight: flight, times: getFlightTimes(flight) } //if roundtrip use input flight as inbound, else one way - no inbound
+          : { flight: null, times: null}
       },
       priceSummary: {
         baseFare,
         taxesAndFees,
         total,
-        currency: "CAD",
-      },
-    }));
+        currency: 'CAD',
+      }
+    }))
     setPage("trip-review");
-    console.log("Booking:", booking);
   };
+
+  useEffect(() => {
+  console.log("Booking updated:", booking); //debugging
+}, [booking]);
   
 
   const generateReference = () => {

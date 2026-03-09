@@ -279,7 +279,8 @@ def generate_daily_flights(date_obj, n_flights):
         flight_counter += 1
 
         departure = random_departure()
-        arrival = round_to_5_min(departure + timedelta(hours=dist_km / 900))
+        flight_time = dist_km /820
+        arrival = round_to_5_min(departure + timedelta(hours=flight_time + 0.5)) 
 
         if dist_km > 5000:
                     aircraft = random.choice(LONG_HAUL_AIRCRAFT)
