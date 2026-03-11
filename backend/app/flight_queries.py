@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, date
+from datetime import datetime
 from dotenv import load_dotenv
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -7,7 +7,7 @@ from psycopg2.extras import RealDictCursor
 load_dotenv()
 
 DB_CONFIG = {
-    "dbname": os.getenv("DB_NAME"),
+    "dbname": os.getenv("DB_NAME"), 
     "user": os.getenv("DB_USER"),
     "password": os.getenv("DB_PASSWORD"),
     "host": os.getenv("DB_HOST"),
