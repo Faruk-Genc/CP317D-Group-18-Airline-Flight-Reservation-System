@@ -1,5 +1,6 @@
 .resultsPage {
   padding: 24px;
+    color: #111;
 }
 
 .resultsTopbar {
@@ -16,6 +17,11 @@
   padding: 10px 14px;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.resultsTitle {
+  flex: 1;
+  text-align: center;
 }
 
 .resultsTitle h2 {
@@ -164,4 +170,23 @@
   font-size: 12px;
   color: #666;
   font-weight: 600;
+}
+
+.progress {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #777;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.activeStep {
+  font-weight: 700;
+  color: #111;
+}
+
+
+.arrow {
+  color: #bbb;
 }
