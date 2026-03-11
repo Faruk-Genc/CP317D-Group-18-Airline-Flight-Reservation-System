@@ -76,7 +76,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
 
   const displayFrom = inboundSelection ? to : from;
   const displayTo = inboundSelection ? from : to;
-  
+
   if (loading) {
   return (
     <div className={styles.resultsPage}>
@@ -105,14 +105,8 @@ export default function Results({ booking, onSelectFlight, onBack }) {
             Showing results from <span>{displayFrom.iata}</span> to{" "}
             <span>{displayTo.iata}</span>
           </h2>
-
-          <p className={styles.resultsSubtitle}>
-            {flights.length} flights •{" "}
-            {booking?.tripOptions?.tripType ?? "round-trip"} •{" "}
-            {booking?.tripOptions?.cabinClass ?? "economy"} •{" "}
-            {booking?.tripOptions?.passengers ?? 1} passenger(s)
-          </p>
         </div>
+        
 
         <button
           className={styles.resultsFilter}
@@ -122,7 +116,24 @@ export default function Results({ booking, onSelectFlight, onBack }) {
           Filter
         </button>
       </div>
+      <div className ={styles.progress}>
+              <span className={!inboundSelection ? styles.activeStep : ""}>
+                  Select departing flight
+                </span>
+                {booking?.tripOptions?.tripType == 'round' && (
+                  <>
+                  <span className={styles.arrow}>›</span>
+                  <span className={inboundSelection ? styles.activeStep : ""}>
+                  Select return flight
+                    </span>
+                    </>
+                )}
 
+                <span className={styles.arrow}>›</span>
+                <span>
+                  Confirmation
+                </span>
+              </div>
       <div className={styles.resultsList}>
         {flights.map(flight => {
           const isLowest =
@@ -160,7 +171,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
                   </div>
                 </div>
 
-                <div className={styles.resultArrowWrap}>→</div>
+                <div className={styles.resultArrow}>→</div>
 
                 <div className={styles.resultTime}>
                   <div className={styles.time}>
