@@ -229,9 +229,6 @@ export default function Results({ booking, onSelectFlight, onBack }) {
         </button>
       </div>
 
-      <div className={styles.resultsFeatured}>
-        <FeaturedFlights />
-      </div>
     </div>
   );
 }
