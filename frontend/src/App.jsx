@@ -141,7 +141,7 @@ function App() {
 
     
     if ( // roundtrip selected, get outbound
-      booking.tripOptions.tripType === 'round' && booking.selectedFlight.outbound.flight === null
+      booking.tripOptions.tripType === "round-trip" && booking.selectedFlight.outbound.flight === null
     ) {
       setBooking((prev) => ({
         ...prev,
@@ -158,7 +158,7 @@ function App() {
       return;
     }
     
-    const isRoundTrip = booking.tripOptions.tripType === "round";
+    const isRoundTrip = booking.tripOptions.tripType === "round-trip";
     const passengers = booking.tripOptions.passengers ?? 1;
     let baseFare, taxesAndFees, total;
     if (isRoundTrip) {

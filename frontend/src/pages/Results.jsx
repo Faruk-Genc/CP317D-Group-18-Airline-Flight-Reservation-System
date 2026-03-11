@@ -23,7 +23,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
   const [loading, setLoading] = useState(true);
 
   const inboundSelection =
-    booking?.tripOptions.tripType === "round" &&
+    booking?.tripOptions.tripType === "round-trip" &&
     booking?.selectedFlight?.outbound?.flight != null;
     // selecting return flight
 
@@ -120,7 +120,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
               <span className={!inboundSelection ? styles.activeStep : ""}>
                   Select departing flight
                 </span>
-                {booking?.tripOptions?.tripType == 'round' && (
+                {booking?.tripOptions?.tripType == 'round-trip' && (
                   <>
                   <span className={styles.arrow}>›</span>
                   <span className={inboundSelection ? styles.activeStep : ""}>
