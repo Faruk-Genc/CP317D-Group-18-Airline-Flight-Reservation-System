@@ -66,7 +66,7 @@ AIRCRAFT_SEATS = {
 IATA = "AL"
 AIRLINE_NAME = "Air Laurier"
 BASE_COST_PER_KM = 0.1215
-DAYS_AHEAD = 365
+DAYS_AHEAD = 31
 FLIGHTS_PER_DAY = 6500
 
 AIRPORT_INFO = {code: (
@@ -205,19 +205,25 @@ def generate_daily_flights(date_obj, n_flights):
                 continue
 
 
-            for _ in range(random.randint(2,4)): # generate more flighs between hubs
+            for _ in range(random.randint(2,4)): # generate more flights between hubs
                 flight_no = f"{IATA}{flight_counter+1000}-{date_obj:%y%m%d}"
                 flight_counter += 1
-
+                if dist_km < 3000:
+                    speed = random.uniform(650, 720)   
+                else:
+                    speed = random.uniform(780, 840)
                 departure = random_departure()
-                arrival = round_to_5_min(departure + timedelta(hours=dist_km / 900))
+                variance = random.uniform(0.95, 1.12)  
+                base_hours = dist_km / speed
+                arrival = round_to_5_min(
+                    departure + timedelta(hours=base_hours * variance + 0.4)
+                )
 
                 if dist_km > 5000:
                     aircraft = random.choice(LONG_HAUL_AIRCRAFT)
                 else:
                     aircraft = random.choice(SHORT_HAUL_AIRCRAFT)
 
-                variance = random.uniform(0.90, 1.20)
                 base_fee = random.uniform(180, 260)
                 noise = random.uniform(-30, 40)
 
@@ -274,13 +280,18 @@ def generate_daily_flights(date_obj, n_flights):
         dist_km = distance_km(lat_o, lon_o, lat_d, lon_d)
         if dist_km > SPOKE_DISTANCE:
             continue
+        if dist_km < 3000:
+            speed = random.uniform(650, 720)   
+        else:
+            speed = random.uniform(780, 840)
+        variance = random.uniform(0.95, 1.12)  
+        base_hours = dist_km / speed
 
         flight_no = f"{IATA}{flight_counter+1000}-{date_obj:%y%m%d}"
         flight_counter += 1
 
         departure = random_departure()
-        flight_time = dist_km /820
-        arrival = round_to_5_min(departure + timedelta(hours=flight_time + 0.5)) 
+        arrival = round_to_5_min(departure + timedelta(hours=(base_hours * variance) + 0.4) )
 
         if dist_km > 5000:
                     aircraft = random.choice(LONG_HAUL_AIRCRAFT)
