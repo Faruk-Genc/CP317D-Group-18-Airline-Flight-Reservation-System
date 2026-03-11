@@ -60,6 +60,7 @@
   align-items: center;
   justify-content: space-between;
   transition: transform 0.05s ease;
+  position: relative;
 }
 
 .resultCard:hover {
@@ -144,4 +145,23 @@
 
 .resultsFeatured {
   margin-top: 24px;
+}
+
+.durationCenter {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.duration {
+  font-size: 12px;
+  color: #666;
+  font-weight: 600;
 }

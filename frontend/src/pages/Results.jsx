@@ -127,7 +127,14 @@ export default function Results({ booking, onSelectFlight, onBack }) {
         {flights.map(flight => {
           const isLowest =
             lowestPrice !== null && Number(flight?.base_cost_cad.toFixed(2)) == Number(lowestPrice.toFixed(2));
+          const dep = new Date(flight?.departure_time);
+          const arr = new Date(flight?.arrival_time);
 
+          const diffMs = arr - dep;
+          const hours = Math.floor(diffMs / (1000 * 60 * 60));
+          const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+          const duration = `${hours}h ${mins}m`;
           return (
             <button
               key={flight?.flight_no}
@@ -153,7 +160,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
                   </div>
                 </div>
 
-                <div className={styles.resultArrow}>→</div>
+                <div className={styles.resultArrowWrap}>→</div>
 
                 <div className={styles.resultTime}>
                   <div className={styles.time}>
@@ -164,6 +171,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
                       minute: "2-digit"
                     })}
                   </div>
+
 
                   <div className={styles.iata}>
                     {flight?.destination_iata}
@@ -181,6 +189,10 @@ export default function Results({ booking, onSelectFlight, onBack }) {
                     </div>
                   )}
                 </div>
+              </div>
+              
+              <div className={styles.durationCenter}>
+                  {duration}
               </div>
 
               <div className={styles.resultRight}>
