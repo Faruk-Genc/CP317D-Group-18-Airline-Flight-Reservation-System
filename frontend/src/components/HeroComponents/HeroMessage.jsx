@@ -17,30 +17,35 @@ export default function HeroMessage() {
             {en ? (<>Plan your adventure today!</>) : (<>Planifiez votre aventure <br/>dès aujourd'hui !</>)}
           </div>
 
-          <div className={styles.stats}>
-            <div className={styles.heading}>
-              6,500
-              <div className={styles.sub}>
-                {en ? "daily flights" : "vols quotidiens"}
+          <div className={styles.statsGroup}>
+            <div className={styles.stats}>
+              <div className={styles.heading}>
+                6,500
+                <div className={styles.sub}>
+                  {en ? "daily flights" : "vols quotidiens"}
+                </div>
+              </div>
+
+              <div className={styles.heading}>
+                130+
+                <div className={styles.sub}>
+                  {en ? "destinations" : "destinations"}
+                </div>
+              </div>
+
+              <div className={styles.heading}>
+                58
+                <div className={styles.sub}>
+                  {en ? "countries" : "pays"}
+                </div>
               </div>
             </div>
-            <div className={styles.heading}>
-              130+
-              <div className={styles.sub}>
-                {en ? "destinations" : "destinations"}
-              </div>
-            </div>
-            <div className={styles.heading}>
-              58
-              <div className={styles.sub}>
-                {en ? "countries" : "pays"}
-              </div>
-            </div>
+
+            <button className={styles.button}>
+              {en ? "View Flights" : "Voir les vols"}
+            </button>
           </div>
 
-          <button className={styles.button}>
-            {en ? "View Flights" : "Voir les vols"}
-          </button>
         </div>
       </div>
     </div>

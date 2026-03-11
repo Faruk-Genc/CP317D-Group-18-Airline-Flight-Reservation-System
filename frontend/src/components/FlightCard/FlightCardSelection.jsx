@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import airportsData from "../../../../scripts/flightgenerator/data/airports.json";
 import countriesData from "../../../../scripts/flightgenerator/data/countries.json";
+import { useLang } from "../../context/LangContext";
 import styles from "./FlightCardSelection.module.css";
 
 export default function FlightCardSelection({ onSelect }) {
@@ -10,6 +11,7 @@ export default function FlightCardSelection({ onSelect }) {
   const [active, setActive] = useState(false);
   const [selected, setSelected] = useState(null);
   const inputRef = useRef(null);
+  const { en } = useLang();
 
   useEffect(() => {
     if (!query.trim()) {
@@ -74,7 +76,7 @@ export default function FlightCardSelection({ onSelect }) {
         ref={inputRef}
         className={styles.input}
         type="text"
-        placeholder="Search airport, city, or country"
+        placeholder= {en ? "Search airport, city, or country": "Rechercher un aéroport, une ville ou un pays"}
         value={selected?.isCountry ? selected.origin_country : query}
         onChange={(e) => {
           setQuery(e.target.value);

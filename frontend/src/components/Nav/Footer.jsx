@@ -13,7 +13,7 @@ export default function Footer() {
           <img src={logo} alt="Airline Logo" style={{ width: "50px" }}/> AIR LAURIER
         </div>
         <br/>
-        <hr style={{ color: "#333" }}/>
+        <hr style={{ border: "none", borderTop: "2px solid #333"}} />
         <br/>
 
         <nav className={styles.columns}>
