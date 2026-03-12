@@ -22,8 +22,8 @@ def flights():
 
 @api.route("/flights/search", methods=["GET"])
 def flights_search():
-    origin = request.args.get("origin", "").strip()
-    destination = request.args.get("destination", "").strip()
+    origin = request.args.get("origin", "").strip().upper()
+    destination = request.args.get("destination", "").strip().upper()
     departure_date = request.args.get("departure_date", "").strip()
     return_date = request.args.get("return_date", "").strip() or None
 
@@ -37,6 +37,9 @@ def flights_search():
             "error": "origin, destination, and departure_date are required"
         }), 400
 
+    origin_is_country = len(origin) == 2
+    destination_is_country = len(destination) == 2
+
     result = search_flights(
         origin_iata=origin,
         destination_iata=destination,
@@ -44,6 +47,7 @@ def flights_search():
         return_date=return_date,
         passengers=passengers,
     )
+
     return jsonify(result)
 
 

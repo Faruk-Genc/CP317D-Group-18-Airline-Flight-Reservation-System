@@ -27,7 +27,7 @@ export default function FlightCardSelection({ onSelect }) {
     );
 
     const countryResults = matchedCountryEntries.map(([code, countryName]) => ({
-      origin_iata: null,
+      origin_iata: code,
       origin_city: "",
       origin_country: countryName,
       isCountry: true,

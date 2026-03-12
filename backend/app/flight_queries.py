@@ -198,20 +198,18 @@ def _serialize_flight(row):
 
 def search_flights(origin_iata, destination_iata, departure_date, return_date=None, passengers=1):
     """
-    Search flights by origin, destination, and date(s).
-    For one-way: only outbound flights on departure_date.
-    For round-trip: outbound on departure_date, return (destination → origin) on return_date.
+    Search flights by airport IATA or country code.
+    If origin/destination is 2 characters, treat as country code.
 
     Args:
-        origin_iata (str): IATA code of departure airport.
-        destination_iata (str): IATA code of arrival airport.
-        departure_date (str): Outbound date in 'YYYY-MM-DD' format.
-        return_date (str | None): Return date in 'YYYY-MM-DD' for round-trip; None for one-way.
-        passengers (int): Number of passengers (accepted for API; capacity check not yet implemented).
+        origin_iata (str): IATA code (3 letters) or country code (2 letters).
+        destination_iata (str): IATA code (3 letters) or country code (2 letters).
+        departure_date (str): Outbound date in 'YYYY-MM-DD'.
+        return_date (str|None): Return date for round-trip; None for one-way.
+        passengers (int): Number of passengers.
 
     Returns:
-        dict: {"outbound": [flight, ...], "return": [flight, ...] | None}
-              Each flight is a dict from daily_flights. "return" is None for one-way.
+        dict: {"outbound": [...], "return": [...]}  # return is None for one-way
     """
     if not origin_iata or not destination_iata or not departure_date:
         return {"outbound": [], "return": None}
@@ -219,25 +217,34 @@ def search_flights(origin_iata, destination_iata, departure_date, return_date=No
     origin_iata = origin_iata.strip().upper()
     destination_iata = destination_iata.strip().upper()
 
+    # Determine if the input is a country code
+    origin_is_country = len(origin_iata) == 2
+    destination_is_country = len(destination_iata) == 2
+
+    origin_col = "origin_country_code" if origin_is_country else "origin_iata"
+    destination_col = "destination_country_code" if destination_is_country else "destination_iata"
+
     conn = get_connection()
     try:
         with conn.cursor() as cur:
-            cur.execute("""
+            # Outbound flights
+            cur.execute(f"""
                 SELECT *
                 FROM daily_flights
-                WHERE origin_iata = %s
-                  AND destination_iata = %s
+                WHERE {origin_col} = %s
+                  AND {destination_col} = %s
                   AND departure_time::date = %s
                 ORDER BY departure_time
             """, (origin_iata, destination_iata, departure_date))
             outbound = [_serialize_flight(dict(row)) for row in cur.fetchall()]
 
+            # Return flights if round-trip
             if return_date and return_date.strip():
-                cur.execute("""
+                cur.execute(f"""
                     SELECT *
                     FROM daily_flights
-                    WHERE origin_iata = %s
-                      AND destination_iata = %s
+                    WHERE {destination_col} = %s
+                      AND {origin_col} = %s
                       AND departure_time::date = %s
                     ORDER BY departure_time
                 """, (destination_iata, origin_iata, return_date.strip()))
