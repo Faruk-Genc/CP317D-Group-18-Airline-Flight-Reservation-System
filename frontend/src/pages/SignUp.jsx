@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import losAngeles from "../assets/featured/losangeles.jpg";
 import "./SignIn.css";
+import { useUser } from "../context/UserContext";
 
-export default function SignUp({ onBack }) {
+export default function SignUp({ onBack, onSignUpSuccess }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
@@ -15,8 +16,12 @@ export default function SignUp({ onBack }) {
   const [province, setProvince] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [country, setCountry] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const { signIn } = useUser();
 
   async function handleSubmit() {
+    setLoading(true);
     const userData = {
       username,
       email,
@@ -41,19 +46,42 @@ export default function SignUp({ onBack }) {
 
       const data = await res.json();
 
-      if (data.success) {
-        alert(`User created! ID: ${data.user_id}`);
-
-        setFirstName(""); setLastName(""); setUsername(""); setPassword(""); setConfirmPassword("");
-        setEmail(""); setPhone(""); setStreet(""); setCity(""); setProvince(""); setPostalCode(""); setCountry("");
-
-        onBack();
-      } else {
+      if (!data.success) {
         alert("Signup errors: " + JSON.stringify(data.errors));
+        setLoading(false);
+        return;
       }
+
+      const loginRes = await fetch("/api/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const loginData = await loginRes.json();
+
+      if (!loginRes.ok || !loginData.success) {
+        alert("Signup succeeded but auto login failed: " + JSON.stringify(loginData.errors));
+        setLoading(false);
+        return;
+      }
+
+      signIn(loginData.user);
+      console.log("Signed-in user info:", loginData.user);
+
+      setFirstName(""); setLastName(""); setUsername(""); setPassword(""); setConfirmPassword("");
+      setEmail(""); setPhone(""); setStreet(""); setCity(""); setProvince(""); setPostalCode(""); setCountry("");
+
+      if (onSignUpSuccess) {
+        onSignUpSuccess();
+        onBack();
+      }
+
     } catch (err) {
       console.error(err);
       alert("Something went wrong. Check console.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -75,7 +103,9 @@ export default function SignUp({ onBack }) {
         <input placeholder="Postal Code" value={postalCode} onChange={e => setPostalCode(e.target.value)} />
         <input placeholder="Country" value={country} onChange={e => setCountry(e.target.value.replace(/[^a-zA-Z]/g, ""))} />
 
-        <button className="sign-up-button" onClick={handleSubmit}>Create Account</button>
+        <button className="sign-up-button" onClick={handleSubmit} disabled={loading}>
+          {loading ? "Creating Account..." : "Create Account"}
+        </button>
       </div>
     </div>
   );

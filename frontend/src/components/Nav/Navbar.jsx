@@ -1,14 +1,17 @@
 import styles from "./Navbar.module.css";
 import logo from "../../assets/logo/airline-logo.svg";
+import iconImg from "../../assets/icons/usericon.png"
 import { useLang } from "../../context/LangContext";
+import { useUser } from "../../context/UserContext"; 
 
 export default function Navbar({ onSignIn, onHome, onFlightStatus, onCheckIn, onMyFlights }) {
   const { en, toggle } = useLang();
+  const { user } = useUser();
 
   return (
     <nav className={styles.bar}>
       <section className={styles.brand}>
-        <img className={styles.logo} src={logo} alt="placeholder" onClick={onHome}/>
+        <img className={styles.logo} src={logo} alt="logo" onClick={onHome} />
         <div className={styles.title} onClick={onHome}>AIR LAURIER</div>
       </section>
 
@@ -42,11 +45,22 @@ export default function Navbar({ onSignIn, onHome, onFlightStatus, onCheckIn, on
           {en ? "FR" : "EN"}
         </button>
 
-        <img className={styles.userIcon} src="https://placehold.co/50x50" alt="placeholder" />
+        {user ? (
+          <>
+            <div className={styles.userName}>{user.forename}</div>
+            <img
+              className={styles.userIcon}
+              src={iconImg}
+              alt="user icon"
+            />
+          </>
+        ) : null}
 
-        <button className={styles.signIn} onClick={onSignIn}>
-          {en ? "Sign in" : "Se connecter"}
-        </button>
+        {!user && (
+          <button className={styles.signIn} onClick={onSignIn}>
+            {en ? "Sign in" : "Se connecter"}
+          </button>
+        )}
       </section>
     </nav>
   );

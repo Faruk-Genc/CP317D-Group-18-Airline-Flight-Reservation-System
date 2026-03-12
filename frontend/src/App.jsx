@@ -253,11 +253,18 @@ function App() {
         </div>
 
         <div style={{ display: page === "sign-in" ? "block" : "none" }}>
-          <SignIn onSignUp={() => setPage("sign-up")} />
+          <SignIn 
+          onSignUp={() => setPage("sign-up")} 
+          onBack={() => setPage("home")}
+          onSignInSuccess={() => setPage("home")}
+          />
         </div>
 
         <div style={{ display: page === "sign-up" ? "block" : "none" }}>
-          <SignUp onBack={() => setPage("home")} />
+          <SignUp
+            onBack={() => setPage("home")}
+            onSignUpSuccess={() => setPage("home")}
+          />
         </div>
 
         <div style={{ display: page === "results" ? "block" : "none" }}>

@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import losAngeles from "../assets/featured/losangeles.jpg";
 import "./SignIn.css";
+import { useUser } from "../context/UserContext";
 
-export default function SignIn({ onSignUp }) {
+export default function SignIn({ onSignUp, onSignInSuccess, onBack }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { signIn } = useUser();
 
   async function handleSubmit() {
     setError("");
@@ -26,18 +29,28 @@ export default function SignIn({ onSignUp }) {
       const data = await res.json();
 
       if (!res.ok || !data.success) {
-        alert("Sign-in failed: " + JSON.stringify(data.errors));
+        alert("Sign-in failed: " + JSON.stringify(data.errors || "Unknown error"));
         setLoading(false);
         return;
       }
 
-      alert("Sign-in successful! Welcome, " + data.user.username);
+      signIn(data.user);
+
+      console.log(data.user);
+
       setUsername("");
       setPassword("");
+
+      if (onSignInSuccess) {
+        onSignInSuccess();
+        onBack();
+      }
+
     } catch (err) {
       alert("Server error: " + err.message);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   return (
