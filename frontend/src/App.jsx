@@ -222,6 +222,7 @@ function App() {
   return (
     <LangProvider>
       <Navbar
+        page={page}
         onSignIn={() => setPage("sign-in")}
         onSignUp={() => setPage("sign-up")}
         onHome={() => setPage("home")}

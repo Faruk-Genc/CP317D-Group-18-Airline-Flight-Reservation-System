@@ -13,6 +13,7 @@
 
     z-index: 100;
     position: sticky;
+    padding-right: 20px;
 }
 
 .brand {
@@ -91,7 +92,6 @@
 }
 
 .signIn {
-    margin-right: 20px;
     background-color: #eee;
     padding: 10px 20px;
     border-radius: 20px;

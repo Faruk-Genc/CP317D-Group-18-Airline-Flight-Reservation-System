@@ -4,7 +4,7 @@ import iconImg from "../../assets/icons/usericon.png"
 import { useLang } from "../../context/LangContext";
 import { useUser } from "../../context/UserContext"; 
 
-export default function Navbar({ onSignIn, onHome, onFlightStatus, onCheckIn, onMyFlights }) {
+export default function Navbar({ page, onSignIn, onHome, onFlightStatus, onCheckIn, onMyFlights }) {
   const { en, toggle } = useLang();
   const { user } = useUser();
 
@@ -45,18 +45,14 @@ export default function Navbar({ onSignIn, onHome, onFlightStatus, onCheckIn, on
           {en ? "FR" : "EN"}
         </button>
 
-        {user ? (
+        {user && (
           <>
             <div className={styles.userName}>{user.forename}</div>
-            <img
-              className={styles.userIcon}
-              src={iconImg}
-              alt="user icon"
-            />
+            <img className={styles.userIcon} src={iconImg} alt="user icon" />
           </>
-        ) : null}
+        )}
 
-        {!user && (
+        {!user && page !== "sign-in" && (
           <button className={styles.signIn} onClick={onSignIn}>
             {en ? "Sign in" : "Se connecter"}
           </button>
