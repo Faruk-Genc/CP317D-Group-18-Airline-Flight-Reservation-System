@@ -1,38 +1,127 @@
-from flask import Blueprint, request, jsonify
-from werkzeug.security import generate_password_hash, check_password_hash
+import os
+import psycopg2
+from passlib.hash import argon2
+from dotenv import load_dotenv
 
-auth = Blueprint("auth", __name__)
+load_dotenv()
 
-# fake in-memory "database"
-users = {}
+DB_URL = os.getenv("DATABASE_URL")
+if not DB_URL:
+    raise ValueError("DATABASE_URL not found.")
 
-@auth.post("/register")
-def register():
-    data = request.get_json()
-    username = data["username"]
-    password = data["password"]
 
-    if username in users:
-        return jsonify({"error": "User already exists"}), 400
+def create_user(user_data: dict) -> dict:
+    """
+    Create a new user in the database.
 
-    users[username] = {
-        "password_hash": generate_password_hash(password)
+    Expected keys in user_data:
+    - username, email, password, phone_number, forename, surname,
+      street, city, province, postal_code, country
+    """
+    conn = psycopg2.connect(DB_URL)
+    cur = conn.cursor()
+    result = {"success": False, "user_id": None, "errors": {}}
+
+    try:
+        cur.execute("""
+            SELECT username, email, phone_number
+            FROM users
+            WHERE username = %s OR email = %s OR (phone_number IS NOT NULL AND phone_number = %s)
+            LIMIT 1;
+        """, (
+            user_data["username"],
+            user_data["email"],
+            user_data.get("phone_number")
+        ))
+
+        row = cur.fetchone()
+        if row:
+            if row[0] == user_data["username"]:
+                result["errors"]["username"] = "already exists"
+            if row[1] == user_data["email"]:
+                result["errors"]["email"] = "already exists"
+            if row[2] == user_data.get("phone_number"):
+                result["errors"]["phone_number"] = "already exists"
+            return result
+
+        hashed_password = argon2.hash(user_data["password"])
+
+        cur.execute("""
+            INSERT INTO users (
+                username,
+                email,
+                password_hash,
+                phone_number,
+                forename,
+                surname,
+                street,
+                city,
+                province,
+                postal_code,
+                country
+            ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            RETURNING id;
+        """, (
+            user_data["username"],
+            user_data["email"],
+            hashed_password,
+            user_data.get("phone_number"),
+            user_data["forename"],
+            user_data["surname"],
+            user_data.get("street"),
+            user_data.get("city"),
+            user_data.get("province"),
+            user_data.get("postal_code"),
+            user_data.get("country")
+        ))
+
+        user_id = cur.fetchone()[0]
+        conn.commit()
+        result["success"] = True
+        result["user_id"] = user_id
+        return result
+
+    except Exception as e:
+        conn.rollback()
+        result["errors"]["exception"] = str(e)
+        return result
+
+    finally:
+        cur.close()
+        conn.close()
+
+
+def reset_users_table() -> None:
+    """
+    Truncate the users table and reset auto-increment ID.
+    """
+    conn = psycopg2.connect(DB_URL)
+    cur = conn.cursor()
+    try:
+        cur.execute("TRUNCATE TABLE users RESTART IDENTITY CASCADE;")
+        conn.commit()
+    finally:
+        cur.close()
+        conn.close()
+
+
+if __name__ == "__main__":
+    test_user = {
+        "username": "asd",
+        "email": "asd@email.com",
+        "password": "asd",
+        "phone_number": "asd",
+        "forename": "asd",
+        "surname": "asd",
+        "street": "asd",
+        "city": "asd",
+        "province": "asd",
+        "postal_code": "ABC123",
+        "country": "Canada"
     }
 
-    return jsonify({"message": "User created"}), 201
-
-
-@auth.post("/login")
-def login():
-    data = request.get_json()
-    username = data["username"]
-    password = data["password"]
-
-    user = users.get(username)
-    if not user:
-        return jsonify({"error": "Invalid credentials"}), 401
-
-    if check_password_hash(user["password_hash"], password):
-        return jsonify({"message": "Login successful"}), 200
-
-    return jsonify({"error": "Invalid credentials"}), 401
+    result = create_user(test_user)
+    if result["success"]:
+        print(f"Created user with ID: {result['user_id']}")
+    else:
+        print("Failed to create user:", result["errors"])

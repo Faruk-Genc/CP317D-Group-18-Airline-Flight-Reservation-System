@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import losAngeles from "../assets/featured/losangeles.jpg";
 import "./SignIn.css";
 
-export default function SignUp() {
+export default function SignIn({ onSignUp }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -23,7 +23,7 @@ export default function SignUp() {
       style={{ backgroundImage: `url(${losAngeles})` }}
     >
       <div className="main-box-container">
-        <p className="sign-up-text">SIGN UP</p>
+        <p className="sign-up-text">SIGN IN</p>
 
         <input
           placeholder="User name"
@@ -38,19 +38,12 @@ export default function SignUp() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-
         <button className="sign-up-button" onClick={handleSubmit}>
-          Sign Up
+          Sign In
         </button>
 
-        <p className="log-in-text">
-          Already have an account? <span className="log-in-here">Log in here</span>
+        <p className="log-in-text" onClick={onSignUp}>
+          Don't have an account? <span className="log-in-here" onClick={onSignUp}>Join AeroHawk</span>
         </p>
       </div>
     </div>

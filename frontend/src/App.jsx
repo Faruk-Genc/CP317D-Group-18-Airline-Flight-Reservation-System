@@ -6,6 +6,7 @@ import HeroSplash from "./components/HeroComponents/HeroSplash";
 import FeaturedFlights from "./components/FeaturedFlights/FeaturedFlights";
 import HeroMessage from "./components/HeroComponents/HeroMessage";
 import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 import FlightStatus from "./pages/FlightStatus";
 import CheckIn from "./pages/CheckIn";
 import MyFlights from "./pages/MyFlights";
@@ -22,6 +23,7 @@ function App() {
   const validPages = [
     "home",
     "sign-in",
+    "sign-up",
     "results",
     "trip-review",
     "confirmation",
@@ -221,6 +223,7 @@ function App() {
     <LangProvider>
       <Navbar
         onSignIn={() => setPage("sign-in")}
+        onSignUp={() => setPage("sign-up")}
         onHome={() => setPage("home")}
         onFlightStatus={() => setPage("flight-status")}
         onCheckIn={() => setPage("check-in")}
@@ -250,7 +253,11 @@ function App() {
         </div>
 
         <div style={{ display: page === "sign-in" ? "block" : "none" }}>
-          <SignIn onBack={() => setPage("home")} />
+          <SignIn onSignUp={() => setPage("sign-up")} />
+        </div>
+
+        <div style={{ display: page === "sign-up" ? "block" : "none" }}>
+          <SignUp onBack={() => setPage("home")} />
         </div>
 
         <div style={{ display: page === "results" ? "block" : "none" }}>

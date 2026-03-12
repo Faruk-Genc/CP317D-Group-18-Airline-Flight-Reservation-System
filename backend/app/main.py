@@ -7,7 +7,6 @@ from flask_cors import CORS
 from .routes import api
 from .config import Config
 from .db import init_db, get_db
-from .user_creation import auth
 
 
 def create_app():
@@ -18,7 +17,6 @@ def create_app():
 
     init_db(app)
     app.register_blueprint(api, url_prefix="/api")
-    app.register_blueprint(auth)   # add this
 
     start_time = time.time()
     est_offset = timedelta(hours=-5)

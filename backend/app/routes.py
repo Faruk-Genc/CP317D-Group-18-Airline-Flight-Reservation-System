@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from .flight_queries import search_flights, get_unique_origins
+from .user_creation import create_user
 
 api = Blueprint("api", __name__)
 
@@ -12,16 +13,6 @@ def flights():
 
 @api.route("/flights/search", methods=["GET"])
 def flights_search():
-    """
-    Search flights by origin, destination, and date(s).
-    Query params:
-      - origin (IATA)
-      - destination (IATA)
-      - departure_date (YYYY-MM-DD)
-      - return_date (optional, YYYY-MM-DD)
-      - passengers (optional, default 1)
-    One-way: omit return_date. Round-trip: include return_date.
-    """
     origin = request.args.get("origin", "").strip()
     destination = request.args.get("destination", "").strip()
     departure_date = request.args.get("departure_date", "").strip()
@@ -45,3 +36,12 @@ def flights_search():
         passengers=passengers,
     )
     return jsonify(result)
+
+@api.route("/signup", methods=["POST"])
+def signup():
+    data = request.json
+    if data.get("password") != data.get("confirmPassword"):
+        return jsonify({"success": False, "errors": {"password": "Passwords do not match"}}), 400
+    result = create_user(data)
+    status_code = 200 if result.get("success") else 400
+    return jsonify(result), status_code

@@ -1,6 +1,7 @@
 .resultsPage {
+  min-height: calc(100vh - 562px);
   padding: 24px;
-    color: #111;
+  color: #111;
 }
 
 .resultsTopbar {
