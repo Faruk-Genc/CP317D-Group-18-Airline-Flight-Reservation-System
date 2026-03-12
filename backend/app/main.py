@@ -11,9 +11,9 @@ from .db import init_db, get_db
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(Config())
+    app.config.from_object(Config)  
 
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    CORS(app, resources={r"/api/*": {"origins": Config.CORS_ORIGINS}})
 
     init_db(app)
     app.register_blueprint(api, url_prefix="/api")
@@ -58,4 +58,4 @@ def create_app():
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(debug=True)
+    app.run(debug=True, host="127.0.0.1", port=5000)

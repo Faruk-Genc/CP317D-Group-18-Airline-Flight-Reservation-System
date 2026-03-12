@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import losAngeles from "../assets/featured/losangeles.jpg";
 import "./SignIn.css";
 
-export default function SignUp() {
+export default function SignUp({ onBack }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
@@ -43,9 +43,11 @@ export default function SignUp() {
 
       if (data.success) {
         alert(`User created! ID: ${data.user_id}`);
-        // reset form
+
         setFirstName(""); setLastName(""); setUsername(""); setPassword(""); setConfirmPassword("");
         setEmail(""); setPhone(""); setStreet(""); setCity(""); setProvince(""); setPostalCode(""); setCountry("");
+
+        onBack();
       } else {
         alert("Signup errors: " + JSON.stringify(data.errors));
       }

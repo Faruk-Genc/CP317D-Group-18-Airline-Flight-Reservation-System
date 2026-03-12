@@ -5,16 +5,39 @@ import "./SignIn.css";
 export default function SignIn({ onSignUp }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit() {
-    console.log("Username:", username);
-    console.log("Password:", password);
-    console.log("Confirm Password:", confirmPassword);
+  async function handleSubmit() {
+    setError("");
+    if (!username || !password) {
+      setError("Username and password are required");
+      return;
+    }
 
-    setUsername("");
-    setPassword("");
-    setConfirmPassword("");
+    setLoading(true);
+    try {
+      const res = await fetch("/api/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        alert("Sign-in failed: " + JSON.stringify(data.errors));
+        setLoading(false);
+        return;
+      }
+
+      alert("Sign-in successful! Welcome, " + data.user.username);
+      setUsername("");
+      setPassword("");
+    } catch (err) {
+      alert("Server error: " + err.message);
+    }
+    setLoading(false);
   }
 
   return (
@@ -38,12 +61,21 @@ export default function SignIn({ onSignUp }) {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="sign-up-button" onClick={handleSubmit}>
-          Sign In
+        {error && <p className="error-text">{error}</p>}
+
+        <button
+          className="sign-up-button"
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {loading ? "Signing In..." : "Sign In"}
         </button>
 
-        <p className="log-in-text" onClick={onSignUp}>
-          Don't have an account? <span className="log-in-here" onClick={onSignUp}>Join AeroHawk</span>
+        <p className="log-in-text">
+          Don't have an account?{" "}
+          <span className="log-in-here" onClick={onSignUp}>
+            Join AeroHawk
+          </span>
         </p>
       </div>
     </div>
