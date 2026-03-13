@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import losAngeles from "../assets/featured/losangeles.jpg";
-import "./SignIn.css";
+import styles from "./SignIn.module.css";
 import { useUser } from "../context/UserContext";
 
 export default function SignIn({ onSignUp, onSignInSuccess, onBack }) {
@@ -13,6 +13,7 @@ export default function SignIn({ onSignUp, onSignInSuccess, onBack }) {
 
   async function handleSubmit() {
     setError("");
+
     if (!username || !password) {
       setError("Username and password are required");
       return;
@@ -29,15 +30,12 @@ export default function SignIn({ onSignUp, onSignInSuccess, onBack }) {
       const data = await res.json();
 
       if (!res.ok || !data.success) {
-        alert("Sign-in failed: " + JSON.stringify(data.errors || "Unknown error"));
+        setError("Username or password is incorrect");
         setLoading(false);
         return;
       }
 
       signIn(data.user);
-
-      console.log(data.user);
-
       setUsername("");
       setPassword("");
 
@@ -47,7 +45,7 @@ export default function SignIn({ onSignUp, onSignInSuccess, onBack }) {
       }
 
     } catch (err) {
-      alert("Server error: " + err.message);
+      setError("Server error: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -55,38 +53,40 @@ export default function SignIn({ onSignUp, onSignInSuccess, onBack }) {
 
   return (
     <div
-      className="signup-page"
+      className={styles.page}
       style={{ backgroundImage: `url(${losAngeles})` }}
     >
-      <div className="main-box-container">
-        <p className="sign-up-text">SIGN IN</p>
+      <div className={styles.container}>
+        <p className={styles.title}>SIGN IN</p>
 
         <input
+          className={styles.input}
           placeholder="User name"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
 
         <input
+          className={styles.input}
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        {error && <p className="error-text">{error}</p>}
+        {error && <p className={styles.error}>{error}</p>}
 
         <button
-          className="sign-up-button"
+          className={styles.button}
           onClick={handleSubmit}
           disabled={loading}
         >
           {loading ? "Signing In..." : "Sign In"}
         </button>
 
-        <p className="log-in-text">
+        <p className={styles.text}>
           Don't have an account?{" "}
-          <span className="log-in-here" onClick={onSignUp}>
+          <span className={styles.link} onClick={onSignUp}>
             Join AeroHawk
           </span>
         </p>

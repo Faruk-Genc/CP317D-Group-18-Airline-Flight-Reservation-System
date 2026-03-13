@@ -27,22 +27,21 @@ def create_user(user_data: dict) -> dict:
             SELECT username, email, phone_number
             FROM users
             WHERE username = %s OR email = %s OR (phone_number IS NOT NULL AND phone_number = %s)
-            LIMIT 1;
-        """, (
-            user_data["username"],
-            user_data["email"],
-            user_data.get("phone_number")
-        ))
+        """, (user_data["username"], user_data["email"], user_data.get("phone_number")))
 
-        row = cur.fetchone()
-        if row:
+        rows = cur.fetchall()
+        errors = {}
+
+        for row in rows:
             if row[0] == user_data["username"]:
-                result["errors"]["username"] = "already exists"
+                errors["username"] = "Username already exists"
             if row[1] == user_data["email"]:
-                result["errors"]["email"] = "already exists"
+                errors["email"] = "Email address already in use"
             if row[2] == user_data.get("phone_number"):
-                result["errors"]["phone_number"] = "already exists"
-            return result
+                errors["phone_number"] = "Phone number already in use"
+
+        if errors:
+            return {"success": False, "errors": errors}
 
         hashed_password = argon2.hash(user_data["password"])
 

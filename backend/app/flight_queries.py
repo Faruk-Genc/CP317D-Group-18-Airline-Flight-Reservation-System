@@ -217,7 +217,6 @@ def search_flights(origin_iata, destination_iata, departure_date, return_date=No
     origin_iata = origin_iata.strip().upper()
     destination_iata = destination_iata.strip().upper()
 
-    # Determine if the input is a country code
     origin_is_country = len(origin_iata) == 2
     destination_is_country = len(destination_iata) == 2
 

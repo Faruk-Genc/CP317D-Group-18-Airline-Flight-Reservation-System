@@ -1,17 +1,28 @@
 import styles from "./Navbar.module.css";
 import logo from "../../assets/logo/airline-logo.svg";
-import iconImg from "../../assets/icons/usericon.png"
+import iconImg from "../../assets/icons/usericon.png";
 import { useLang } from "../../context/LangContext";
-import { useUser } from "../../context/UserContext"; 
+import { useUser } from "../../context/UserContext";
 
-export default function Navbar({ page, onSignIn, onHome, onFlightStatus, onCheckIn, onMyFlights }) {
+export default function Navbar({
+  page,
+  onSignIn,
+  onHome,
+  onFlightStatus,
+  onCheckIn,
+  onMyFlights,
+  onUserEnter,
+  onUserLeave
+}) {
+
   const { en, toggle } = useLang();
   const { user } = useUser();
 
   return (
     <nav className={styles.bar}>
+
       <section className={styles.brand}>
-        <img className={styles.logo} src={logo} alt="logo" onClick={onHome} />
+        <img className={styles.logo} src={logo} alt="logo" onClick={onHome}/>
         <div className={styles.title} onClick={onHome}>AIR LAURIER</div>
       </section>
 
@@ -41,6 +52,7 @@ export default function Navbar({ page, onSignIn, onHome, onFlightStatus, onCheck
       </section>
 
       <section className={styles.auth}>
+
         <button className={styles.language} onClick={toggle}>
           {en ? "FR" : "EN"}
         </button>
@@ -48,7 +60,14 @@ export default function Navbar({ page, onSignIn, onHome, onFlightStatus, onCheck
         {user && (
           <>
             <div className={styles.userName}>{user.forename}</div>
-            <img className={styles.userIcon} src={iconImg} alt="user icon" />
+
+            <img
+              className={styles.userIcon}
+              src={iconImg}
+              alt="user icon"
+              onMouseEnter={onUserEnter}
+              onMouseLeave={onUserLeave}
+            />
           </>
         )}
 
@@ -57,7 +76,9 @@ export default function Navbar({ page, onSignIn, onHome, onFlightStatus, onCheck
             {en ? "Sign in" : "Se connecter"}
           </button>
         )}
+
       </section>
+
     </nav>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { LangProvider } from "./context/LangContext";
 import Navbar from "./components/Nav/Navbar";
+import UserDropDown from "./components/UserDropdown/Userdropdown";
 import Footer from "./components/Nav/Footer";
 import HeroSplash from "./components/HeroComponents/HeroSplash";
 import FeaturedFlights from "./components/FeaturedFlights/FeaturedFlights";
@@ -32,6 +33,23 @@ function App() {
     "my-flights",
   ];
 
+ const [showUserDropdown, setShowUserDropdown] = useState(false);
+const hideDropdownTimeout = useRef(null);
+
+const handleUserEnter = () => {
+  if (hideDropdownTimeout.current) {
+    clearTimeout(hideDropdownTimeout.current);
+    hideDropdownTimeout.current = null;
+  }
+  setShowUserDropdown(true);
+};
+
+const handleUserLeave = () => {
+  hideDropdownTimeout.current = setTimeout(() => {
+    setShowUserDropdown(false);
+  }, 250); 
+};
+
   const [page, setPage] = useState(() => {
     const path = window.location.pathname.replace("/", "");
     if (path && validPages.includes(path)) return path;
@@ -54,14 +72,8 @@ function App() {
       cabinClass: "economy",
     },
     selectedFlight: {
-      outbound: {
-        flight: null,
-        times: null,
-      },
-      inbound: {
-        flight: null,
-        times: null
-      }
+      outbound: { flight: null, times: null },
+      inbound: { flight: null, times: null }
     },
     priceSummary: {
       baseFare: 0,
@@ -104,26 +116,26 @@ function App() {
   };
 
   useEffect(() => {
-  if (page === "home") {
-    setBooking(prev => ({
-      ...prev,
-      selectedFlight: {
-        outbound: { flight: null, times: null },
-        inbound: { flight: null, times: null }
-      },
-      priceSummary: {
-        baseFare: 0,
-        taxesAndFees: 0,
-        total: 0,
-        currency: "CAD"
-      },
-      confirmation: {
-        reference: null,
-        confirmedAt: null
-      }
-    }));
-  }
-}, [page]);
+    if (page === "home") {
+      setBooking(prev => ({
+        ...prev,
+        selectedFlight: {
+          outbound: { flight: null, times: null },
+          inbound: { flight: null, times: null }
+        },
+        priceSummary: {
+          baseFare: 0,
+          taxesAndFees: 0,
+          total: 0,
+          currency: "CAD"
+        },
+        confirmation: {
+          reference: null,
+          confirmedAt: null
+        }
+      }));
+    }
+  }, [page]);
 
   const selectFlightAndReview = (flight) => {
     const getFlightTimes = (flightData) => ({
@@ -141,25 +153,24 @@ function App() {
       })
     });
 
-    
-    if ( // roundtrip selected, get outbound
-      booking.tripOptions.tripType === "round-trip" && booking.selectedFlight.outbound.flight === null
+    if (
+      booking.tripOptions.tripType === "round-trip" &&
+      booking.selectedFlight.outbound.flight === null
     ) {
       setBooking((prev) => ({
         ...prev,
         selectedFlight: {
           ...prev.selectedFlight,
-          outbound: { // set outbound
+          outbound: {
             flight: flight,
             times: getFlightTimes(flight)
           }
         }
-      }
-      ));
-      setPage("results"); // select inbound flight next
+      }));
+      setPage("results");
       return;
     }
-    
+
     const isRoundTrip = booking.tripOptions.tripType === "round-trip";
     const passengers = booking.tripOptions.passengers ?? 1;
     let baseFare, taxesAndFees, total;
@@ -169,8 +180,7 @@ function App() {
       baseFare = (outFare + inFare) * passengers;
       taxesAndFees = 0.13 * baseFare;
       total = baseFare + taxesAndFees;
-    }
-    else {
+    } else {
       baseFare = (flight.base_cost_cad ?? 0) * passengers;
       taxesAndFees = baseFare * 0.13;
       total = baseFare + taxesAndFees;
@@ -179,11 +189,8 @@ function App() {
     setBooking(prev => ({
       ...prev,
       selectedFlight: {
-        outbound: isRoundTrip ? prev.selectedFlight.outbound // if roundtrip use prev as outbound else use input flight as outbound
-          : { flight: flight, times: getFlightTimes(flight) },
-        inbound: isRoundTrip 
-          ? { flight: flight, times: getFlightTimes(flight) } //if roundtrip use input flight as inbound, else one way - no inbound
-          : { flight: null, times: null}
+        outbound: isRoundTrip ? prev.selectedFlight.outbound : { flight: flight, times: getFlightTimes(flight) },
+        inbound: isRoundTrip ? { flight: flight, times: getFlightTimes(flight) } : { flight: null, times: null }
       },
       priceSummary: {
         baseFare,
@@ -191,14 +198,13 @@ function App() {
         total,
         currency: 'CAD',
       }
-    }))
+    }));
     setPage("trip-review");
   };
 
   useEffect(() => {
-  console.log("Booking updated:", booking); //debugging
-}, [booking]);
-  
+    console.log("Booking updated:", booking);
+  }, [booking]);
 
   const generateReference = () => {
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -229,6 +235,14 @@ function App() {
         onFlightStatus={() => setPage("flight-status")}
         onCheckIn={() => setPage("check-in")}
         onMyFlights={() => setPage("my-flights")}
+        onUserEnter={handleUserEnter}
+        onUserLeave={handleUserLeave}
+      />
+
+      <UserDropDown
+        visible={showUserDropdown}
+        onEnter={handleUserEnter}
+        onLeave={handleUserLeave}
       />
 
       <div className="scrollable-content">
@@ -239,25 +253,19 @@ function App() {
             search={booking.search}
             tripOptions={booking.tripOptions}
             setSearch={(data) =>
-              setBooking((prev) => ({
-                ...prev,
-                search: { ...prev.search, ...data },
-              }))
+              setBooking((prev) => ({ ...prev, search: { ...prev.search, ...data } }))
             }
             setTripOptions={(data) =>
-              setBooking((prev) => ({
-                ...prev,
-                tripOptions: { ...prev.tripOptions, ...data },
-              }))
+              setBooking((prev) => ({ ...prev, tripOptions: { ...prev.tripOptions, ...data } }))
             }
           />
         </div>
 
         <div style={{ display: page === "sign-in" ? "block" : "none" }}>
-          <SignIn 
-          onSignUp={() => setPage("sign-up")} 
-          onBack={() => setPage("home")}
-          onSignInSuccess={() => setPage("home")}
+          <SignIn
+            onSignUp={() => setPage("sign-up")}
+            onBack={() => setPage("home")}
+            onSignInSuccess={() => setPage("home")}
           />
         </div>
 
