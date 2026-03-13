@@ -92,6 +92,7 @@ export default function TripOptions({
                 type="date"
                 id="departureDate"
                 value={departDate || ""}
+                min={new Date().toISOString().split("T")[0]}
                 onChange={(e) => onChange({ departDate: e.target.value })}
               />
             </div>
