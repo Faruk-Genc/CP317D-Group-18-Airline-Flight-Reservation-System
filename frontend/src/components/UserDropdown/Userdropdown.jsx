@@ -2,9 +2,9 @@ import styles from "./Userdropdown.module.css";
 import { useUser } from "../../context/UserContext"; 
 
 export default function UserDropDown({ visible, onEnter, onLeave }) {
-  const { signOut } = useUser();
+  const { user, signOut } = useUser();
 
-  if (!visible) return null;
+  if (!visible || !user) return null;
 
   return (
     <div
