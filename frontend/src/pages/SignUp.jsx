@@ -18,6 +18,18 @@ function Field({ placeholder, value, onChange, type = "text", error }) {
   );
 }
 
+function capitalizeName(input) {
+  return input
+    .split(/([ -'])/) 
+    .map((part) => {
+      if (/^[a-zA-Z]+$/.test(part)) {
+        return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+      }
+      return part; 
+    })
+    .join("");
+}
+
 export default function SignUp({ onBack, onSignUpSuccess }) {
   const { signIn } = useUser();
 
@@ -33,7 +45,7 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
     city: "",
     province: "",
     postalCode: "",
-    country: ""
+    country: "",
   });
 
   const [fieldErrors, setFieldErrors] = useState({});
@@ -63,6 +75,12 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
+    if (!form.username) {
+      newErrors.username = "Field cannot be empty";
+    } else if (form.username.length < 4 || form.username.length > 20) {
+      newErrors.username = "Username must be between 4 and 20 characters";
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setFieldErrors(newErrors);
       return;
@@ -83,14 +101,14 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
       city: form.city,
       province: form.province,
       postal_code: form.postalCode,
-      country: form.country
+      country: form.country,
     };
 
     try {
       const res = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userData)
+        body: JSON.stringify(userData),
       });
 
       const data = await res.json();
@@ -99,7 +117,7 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
         const mappedErrors = {};
         if (data.errors.username) mappedErrors.username = data.errors.username;
         if (data.errors.email) mappedErrors.email = data.errors.email;
-        if (data.errors.phone_number) mappedErrors.phone = data.errors.phone_number; 
+        if (data.errors.phone_number) mappedErrors.phone = data.errors.phone_number;
         setFieldErrors(mappedErrors);
         setLoading(false);
         return;
@@ -110,8 +128,8 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           username: form.username,
-          password: form.password
-        })
+          password: form.password,
+        }),
       });
 
       const loginData = await loginRes.json();
@@ -148,7 +166,10 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           value={form.firstName}
           error={fieldErrors.forename}
           onChange={(e) =>
-            updateField("firstName", e.target.value.replace(/[^a-zA-Z]/g, ""))
+            updateField(
+              "firstName",
+              capitalizeName(e.target.value.replace(/[^a-zA-Z' -]/g, ""))
+            )
           }
         />
 
@@ -157,7 +178,10 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           value={form.lastName}
           error={fieldErrors.surname}
           onChange={(e) =>
-            updateField("lastName", e.target.value.replace(/[^a-zA-Z]/g, ""))
+            updateField(
+              "lastName",
+              capitalizeName(e.target.value.replace(/[^a-zA-Z' -]/g, ""))
+            )
           }
         />
 
@@ -165,11 +189,15 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           placeholder="User name"
           value={form.username}
           error={fieldErrors.username}
-          onChange={(e) => updateField("username", e.target.value)}
+          onChange={(e) => {
+            const sanitized = e.target.value.replace(/[^a-zA-Z0-9._-]/g, "");
+            updateField("username", sanitized.slice(0, 20)); // max 20 chars
+          }}
         />
 
         <Field
           placeholder="Email"
+          type="email"
           value={form.email}
           error={fieldErrors.email}
           onChange={(e) => updateField("email", e.target.value)}
@@ -196,19 +224,16 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           value={form.phone}
           error={fieldErrors.phone}
           onChange={(e) =>
-            updateField(
-              "phone",
-              e.target.value.replace(/[^0-9]/g, "").slice(0, 15)
-            )
+            updateField("phone", e.target.value.replace(/[^0-9]/g, "").slice(0, 15))
           }
         />
 
-         <Field
+        <Field
           placeholder="Country"
           value={form.country}
           error={fieldErrors.country}
           onChange={(e) =>
-            updateField("country", e.target.value.replace(/[^a-zA-Z]/g, ""))
+            updateField("country", e.target.value.replace(/[^a-zA-Z' -]/g, ""))
           }
         />
 
@@ -216,7 +241,9 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           placeholder="Street Address"
           value={form.street}
           error={fieldErrors.street}
-          onChange={(e) => updateField("street", e.target.value)}
+          onChange={(e) =>
+            updateField("street", e.target.value.replace(/[^a-zA-Z0-9\s.,-]/g, ""))
+          }
         />
 
         <Field
@@ -224,7 +251,7 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           value={form.city}
           error={fieldErrors.city}
           onChange={(e) =>
-            updateField("city", e.target.value.replace(/[^a-zA-Z]/g, ""))
+            updateField("city", e.target.value.replace(/[^a-zA-Z' -]/g, ""))
           }
         />
 
@@ -233,7 +260,7 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           value={form.province}
           error={fieldErrors.province}
           onChange={(e) =>
-            updateField("province", e.target.value.replace(/[^a-zA-Z]/g, ""))
+            updateField("province", e.target.value.replace(/[^a-zA-Z' -]/g, ""))
           }
         />
 
@@ -241,7 +268,9 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           placeholder="Postal Code"
           value={form.postalCode}
           error={fieldErrors.postal_code}
-          onChange={(e) => updateField("postalCode", e.target.value)}
+          onChange={(e) =>
+            updateField("postalCode", e.target.value.replace(/[^a-zA-Z0-9 -]/g, ""))
+          }
         />
 
         <button
