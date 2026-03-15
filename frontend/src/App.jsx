@@ -137,76 +137,6 @@ function App() {
     navigateToPage("confirmation");
   };
 
-  const renderPage = (page) => {
-    switch (page) {
-      case "home":
-        return (
-          <>
-            <HeroSplash
-              heroImage={heroImage}
-              search={booking.search}
-              tripOptions={booking.tripOptions}
-              onSearch={(payload) => { setBooking(prev => ({ ...prev, ...payload })); navigateToPage("results"); }}
-              setSearch={(data) => setBooking(prev => ({ ...prev, search: { ...prev.search, ...data } }))}
-              setTripOptions={(data) => setBooking(prev => ({ ...prev, tripOptions: { ...prev.tripOptions, ...data } }))}
-            />
-            <FeaturedFlights />
-            <HeroMessage />
-          </>
-        );
-
-      case "sign-in":
-        return <SignIn
-          onSignUp={() => navigateToPage("sign-up")}
-          onBack={() => navigateToPage("home")}
-          onSignInSuccess={() => navigateToPage("home")}
-        />;
-
-      case "sign-up":
-        return <SignUp
-          onBack={() => navigateToPage("home")}
-          onSignUpSuccess={() => navigateToPage("home")}
-        />;
-
-      case "results":
-        return <Results
-          booking={booking}
-          onSelectFlight={selectFlightAndReview}
-          onBack={() => navigateToPage("home")}
-          forceHideLoader={forceHideLoader}
-        />;
-
-      case "trip-review":
-        return <TripReview
-          booking={booking}
-          onConfirm={confirmPurchase}
-          onBack={() => navigateToPage("results")}
-          onSignIn={() => navigateToPage("sign-in")}
-        />;
-
-      case "confirmation":
-        return <Confirmation
-          booking={booking}
-          onBackHome={() => navigateToPage("home")}
-        />;
-
-      case "flight-status":
-        return <FlightStatus onBack={() => navigateToPage("home")} />;
-
-      case "check-in":
-        return <CheckIn onBack={() => navigateToPage("home")} />;
-
-      case "admin-panel":
-        return <AdminPanel onBack={() => navigateToPage("home")} />;
-
-      case "my-flights":
-        return <MyFlights onBack={() => navigateToPage("home")} />;
-
-      default:
-        return null;
-    }
-  };
-
   return (
     <>
       <Navbar
@@ -227,9 +157,76 @@ function App() {
         onLeave={handleUserLeave}
       />
       <div className="page-container">
-        <div className={`page ${currentPage === "home" ? "home" : ""}`}>
-          {renderPage(currentPage)}
-        </div>
+        {currentPage === "home" && (
+          <div className="page home">
+            <HeroSplash
+              heroImage={heroImage}
+              search={booking.search}
+              tripOptions={booking.tripOptions}
+              onSearch={(payload) => { setBooking(prev => ({ ...prev, ...payload })); navigateToPage("results"); }}
+              setSearch={(data) => setBooking(prev => ({ ...prev, search: { ...prev.search, ...data } }))}
+              setTripOptions={(data) => setBooking(prev => ({ ...prev, tripOptions: { ...prev.tripOptions, ...data } }))}
+            />
+            <FeaturedFlights />
+            <HeroMessage />
+          </div>
+        )}
+
+        {currentPage === "sign-in" && (
+          <SignIn
+            onSignUp={() => navigateToPage("sign-up")}
+            onBack={() => navigateToPage("home")}
+            onSignInSuccess={() => navigateToPage("home")}
+          />
+        )}
+
+        {currentPage === "sign-up" && (
+          <SignUp
+            onBack={() => navigateToPage("home")}
+            onSignUpSuccess={() => navigateToPage("home")}
+          />
+        )}
+
+        {currentPage === "results" && (
+          <Results
+            booking={booking}
+            onSelectFlight={selectFlightAndReview}
+            onBack={() => navigateToPage("home")}
+            forceHideLoader={forceHideLoader}
+          />
+        )}
+
+        {currentPage === "trip-review" && (
+          <TripReview
+            booking={booking}
+            onConfirm={confirmPurchase}
+            onBack={() => navigateToPage("results")}
+            onSignIn={() => navigateToPage("sign-in")}
+          />
+        )}
+
+        {currentPage === "confirmation" && (
+          <Confirmation
+            booking={booking}
+            onBackHome={() => navigateToPage("home")}
+          />
+        )}
+
+        {currentPage === "flight-status" && (
+          <FlightStatus onBack={() => navigateToPage("home")} />
+        )}
+
+        {currentPage === "check-in" && (
+          <CheckIn onBack={() => navigateToPage("home")} />
+        )}
+
+        {currentPage === "admin-panel" && (
+          <AdminPanel onBack={() => navigateToPage("home")} />
+        )}
+
+        {currentPage === "my-flights" && (
+          <MyFlights onBack={() => navigateToPage("home")} />
+        )}
       </div>
       <Footer />
     </>

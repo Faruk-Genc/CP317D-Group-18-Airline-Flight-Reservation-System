@@ -1,5 +1,5 @@
 .resultsPage {
-  min-height: calc(100vh - 562px);
+  min-height: calc(100vh - 400px);
   padding: 24px;
   color: #111;
 }
