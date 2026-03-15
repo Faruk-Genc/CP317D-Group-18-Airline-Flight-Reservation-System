@@ -15,7 +15,9 @@ export default function UserDropDown({ visible, onEnter, onLeave }) {
       <div className={styles.item}>Profile</div>
       <div className={styles.item}>History</div>
       <div className={styles.item}>Settings</div>
-      <div className={styles.item} onClick={signOut}>Log out</div>
+      <div className={styles.item} onClick={() => { signOut(); onLeave();}}>
+        Log out
+      </div>
     </div>
   );
 }

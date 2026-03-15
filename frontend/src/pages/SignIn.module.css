@@ -1,5 +1,5 @@
 .page {
-  min-height: calc(100vh - 80px);
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,11 +20,11 @@
   min-height: 400px;
   padding: 40px 30px;
   background-color: white;
-  border: 1px solid yellow;
+  border: 1px solid #f8b500;
   border-radius: 5px;
   box-sizing: border-box;
   margin-top: -120px;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .title {
@@ -47,7 +47,7 @@
 }
 
 .button {
-  width: 182px;
+  width: 70%;
   height: 35px;
   background-color: rgb(75, 20, 130);
   color: white;
@@ -66,12 +66,15 @@
 }
 
 .text {
-  font-size: 10px;
+  width: 70%;
+  text-align: center;
+  font-size: 12px;
   margin-top: 12px;
   color: black;
 }
 
 .link {
+  color: #380875;
   text-decoration: underline;
   cursor: pointer;
 }

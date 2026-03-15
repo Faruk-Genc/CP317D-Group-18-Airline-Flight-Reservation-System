@@ -11,6 +11,7 @@ export default function Navbar({
   onFlightStatus,
   onCheckIn,
   onMyFlights,
+  onAdminPanel,
   onUserEnter,
   onUserLeave
 }) {
@@ -48,6 +49,13 @@ export default function Navbar({
               {en ? "My Flights" : "Mes vols"}
             </div>
           </li>
+          {user?.role === "admin" && (
+            <li className={styles.item}>
+              <div className={styles.link} onClick={onAdminPanel}>
+                {en ? "Admin Panel" : "Panneau d'administration"}
+              </div>
+            </li>
+          )}
         </ul>
       </section>
 

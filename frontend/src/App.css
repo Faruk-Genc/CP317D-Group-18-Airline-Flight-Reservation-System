@@ -14,3 +14,21 @@
   flex: 1; 
   overflow-y: auto; 
 }
+.page-container {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.page {
+  background-color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.page.home {
+  position: relative; 
+  z-index: 1;
+}

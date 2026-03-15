@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import losAngeles from "../assets/featured/losangeles.jpg";
+import React, { useState, useEffect } from "react";
+import losAngeles from "../assets/featured/clouds.jpg";
 import styles from "./SignIn.module.css";
 import { useUser } from "../context/UserContext";
 
@@ -12,14 +12,11 @@ export default function SignIn({ onSignUp, onSignInSuccess, onBack }) {
   const { signIn } = useUser();
 
   async function handleSubmit() {
+    if (!username || !password) return;
+
     setError("");
-
-    if (!username || !password) {
-      setError("Username and password are required");
-      return;
-    }
-
     setLoading(true);
+
     try {
       const res = await fetch("/api/signin", {
         method: "POST",
@@ -36,6 +33,8 @@ export default function SignIn({ onSignUp, onSignInSuccess, onBack }) {
       }
 
       signIn(data.user);
+      console.log("Signed-in user object:", data.user);
+
       setUsername("");
       setPassword("");
 
@@ -50,6 +49,17 @@ export default function SignIn({ onSignUp, onSignInSuccess, onBack }) {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    function handleEnter(e) {
+      if (e.key === "Enter" && username && password && !loading) {
+        handleSubmit();
+      }
+    }
+
+    window.addEventListener("keydown", handleEnter);
+    return () => window.removeEventListener("keydown", handleEnter);
+  }, [username, password, loading]);
 
   return (
     <div
@@ -79,13 +89,13 @@ export default function SignIn({ onSignUp, onSignInSuccess, onBack }) {
         <button
           className={styles.button}
           onClick={handleSubmit}
-          disabled={loading}
+          disabled={loading || !username || !password}
         >
           {loading ? "Signing In..." : "Sign In"}
         </button>
 
         <p className={styles.text}>
-          Don't have an account?{" "}
+          Don't have an account?<br />
           <span className={styles.link} onClick={onSignUp}>
             Join AeroHawk
           </span>

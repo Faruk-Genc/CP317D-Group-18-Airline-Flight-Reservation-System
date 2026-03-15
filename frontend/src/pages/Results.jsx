@@ -1,12 +1,12 @@
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState, useRef } from "react";
 import styles from "./Results.module.css";
 import countries from "../../../scripts/flightgenerator/data/countries.json"; 
+import lottie from "lottie-web";
+import loadingAnimation from "../assets/animation/loading.json";
 
 function getDisplay(location) {
   if (!location) return { iata: "—", city: "" };
-  if (typeof location === "string") {
-    return { iata: location, city: "" };
-  }
+  if (typeof location === "string") return { iata: location, city: "" };
   return {
     iata: location.iata ?? location.code ?? "—",
     city: location.city ?? location.name ?? ""
@@ -15,18 +15,47 @@ function getDisplay(location) {
 
 function displayIataOrCountry(iata) {
   if (!iata) return "—";
-  if (iata.length === 2) {
-    return countries[iata.toUpperCase()] ?? iata; 
-  }
+  if (iata.length === 2) return countries[iata.toUpperCase()] ?? iata; 
   return iata;
 }
 
-export default function Results({ booking, onSelectFlight, onBack }) {
+function Loader({ hidden }) {
+  const container = useRef(null);
+
+  useEffect(() => {
+    if (hidden) return;
+    const anim = lottie.loadAnimation({
+      container: container.current,
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      animationData: loadingAnimation,
+    });
+    return () => anim?.destroy();
+  }, [hidden]);
+
+  if (hidden) return null;
+
+  return (
+    <div style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100vh",
+      width: "100%",
+    }}>
+      <div ref={container} style={{ width: 200, height: 200 }}></div>
+    </div>
+  );
+}
+
+export default function Results({ booking, onSelectFlight, onBack, forceHideLoader = false }) {
   const from = getDisplay(booking?.search?.from);
   const to = getDisplay(booking?.search?.to);
 
   const [flights, setFlights] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); 
+  const [didFetch, setDidFetch] = useState(false); 
 
   const inboundSelection =
     booking?.tripOptions.tripType === "round-trip" &&
@@ -38,52 +67,56 @@ export default function Results({ booking, onSelectFlight, onBack }) {
   }, [flights]);
 
   useEffect(() => {
+  if (forceHideLoader) return; 
+
+  const origin = inboundSelection ? booking?.search.to?.iata : booking?.search.from?.iata;
+  const destination = inboundSelection ? booking?.search.from?.iata : booking?.search.to?.iata;
+  const departureDate = inboundSelection ? booking?.search.returnDate : booking?.search.departDate;
+
+  if (!origin || !destination || !departureDate) return;
+
+  const params = new URLSearchParams({
+    origin,
+    destination,
+    departure_date: departureDate,
+    passengers: booking?.tripOptions?.passengers ?? 1
+  });
+
+  let cancelled = false;
+
+  async function loadFlights() {
     setLoading(true);
-    const origin = inboundSelection ? booking?.search.to?.iata : booking?.search.from?.iata;
-    const destination = inboundSelection ? booking?.search.from?.iata : booking?.search.to?.iata;
-    const departureDate = inboundSelection ? booking?.search.returnDate : booking?.search.departDate;
-
-    if (!origin || !destination || !departureDate) {
+    try {
+      const res = await fetch(`/api/flights/search?${params}`);
+      if (cancelled) return;
+      const data = await res.json();
+      setFlights(data.outbound ?? []);
+    } catch (err) {
+      if (cancelled) return;
+      console.error("Flight search failed", err);
       setFlights([]);
-      setLoading(false);
-      return;
+    } finally {
+      if (!cancelled) setLoading(false);
     }
+  }
 
-    const params = new URLSearchParams({
-      origin,
-      destination,
-      departure_date: departureDate,
-      passengers: booking?.tripOptions?.passengers ?? 1
-    });
+  loadFlights();
 
-    async function loadFlights() {
-      try {
-        const res = await fetch(`/api/flights/search?${params}`);
-        const data = await res.json();
-        setFlights(data.outbound ?? []);
-      } catch (err) {
-        console.error("Flight search failed", err);
-        setFlights([]);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadFlights();
-  }, [
-    booking.search.from,
-    booking.search.to,
-    booking.search.departDate,
-    booking.search.returnDate,
-    booking.selectedFlight?.outbound?.flight
-  ]);
+  return () => { cancelled = true; };
+}, [
+  booking.search.from,
+  booking.search.to,
+  booking.search.departDate,
+  booking.search.returnDate,
+  booking.selectedFlight?.outbound?.flight,
+  inboundSelection,
+  forceHideLoader
+]);
 
   const displayFrom = inboundSelection ? to : from;
   const displayTo = inboundSelection ? from : to;
 
-  if (loading) {
-    return <div className={styles.resultsPage}>Loading flights...</div>;
-  }
+  if (loading && !forceHideLoader) return <Loader hidden={forceHideLoader} />;
 
   return (
     <div className={styles.resultsPage}>
@@ -91,14 +124,12 @@ export default function Results({ booking, onSelectFlight, onBack }) {
         <button className={styles.resultsBack} type="button" onClick={onBack}>
           ← Back
         </button>
-
         <div className={styles.resultsTitle}>
           <h2>
             Showing results from <span>{displayIataOrCountry(displayFrom.iata)}</span> to{" "}
             <span>{displayIataOrCountry(displayTo.iata)}</span>
           </h2>
         </div>
-
         <button
           className={styles.resultsFilter}
           type="button"
@@ -151,9 +182,7 @@ export default function Results({ booking, onSelectFlight, onBack }) {
                     {displayIataOrCountry(flight?.origin_iata)}
                   </div>
                 </div>
-
                 <div className={styles.resultArrow}>→</div>
-
                 <div className={styles.resultTime}>
                   <div className={styles.time}>
                     {arr.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
@@ -162,7 +191,6 @@ export default function Results({ booking, onSelectFlight, onBack }) {
                     {displayIataOrCountry(flight?.destination_iata)}
                   </div>
                 </div>
-
                 <div className={styles.resultMeta}>
                   <div className={styles.seats}>{flight?.seats_left} seats left</div>
                   {isLowest && <div className={styles.badge}>Lowest price</div>}

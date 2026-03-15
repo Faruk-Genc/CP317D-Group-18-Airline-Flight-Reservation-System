@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import losAngeles from "../assets/featured/losangeles.jpg";
+import losAngeles from "../assets/featured/clouds.jpg";
 import styles from "./SignUp.module.css";
 import { useUser } from "../context/UserContext";
 
@@ -18,16 +18,32 @@ function Field({ placeholder, value, onChange, type = "text", error }) {
   );
 }
 
-function capitalizeName(input) {
+function capitalizeFirstLetter(input) {
+  if (!input) return "";
   return input
-    .split(/([ -'])/) 
-    .map((part) => {
-      if (/^[a-zA-Z]+$/.test(part)) {
-        return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
-      }
-      return part; 
-    })
-    .join("");
+    .split(" ")
+    .map((word) =>
+      word
+        .split("-")
+        .map((sub) =>
+          sub
+            .split("'")
+            .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+            .join("'")
+        )
+        .join("-")
+    )
+    .join(" ");
+}
+
+function isValidName(name) {
+  const regex = /^(?!.*[-']{2})[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[ '-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/;
+  return regex.test(name);
+}
+
+function isValidEmail(email) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
 }
 
 export default function SignUp({ onBack, onSignUpSuccess }) {
@@ -59,27 +75,38 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
     const newErrors = {};
 
     if (!form.firstName) newErrors.forename = "Field cannot be empty";
+    else if (!isValidName(form.firstName)) newErrors.forename = "Invalid first name";
+
     if (!form.lastName) newErrors.surname = "Field cannot be empty";
+    else if (!isValidName(form.lastName)) newErrors.surname = "Invalid last name";
+
+    if (!form.country) newErrors.country = "Field cannot be empty";
+    else if (!isValidName(form.country)) newErrors.country = "Invalid country";
+
+    if (!form.province) newErrors.province = "Field cannot be empty";
+    else if (!isValidName(form.province)) newErrors.province = "Invalid province";
+
+    if (!form.city) newErrors.city = "Field cannot be empty";
+    else if (!isValidName(form.city)) newErrors.city = "Invalid city";
+
     if (!form.username) newErrors.username = "Field cannot be empty";
+    else if (form.username.length < 4 || form.username.length > 20)
+      newErrors.username = "Username must be 4-20 characters";
+
     if (!form.password) newErrors.password = "Field cannot be empty";
+    else if (/\s/.test(form.password))
+      newErrors.password = "Password cannot contain spaces";
+
     if (!form.confirmPassword) newErrors.confirmPassword = "Field cannot be empty";
+    else if (form.password !== form.confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
+
     if (!form.email) newErrors.email = "Field cannot be empty";
+    else if (!isValidEmail(form.email)) newErrors.email = "Invalid email address";
+
     if (!form.phone) newErrors.phone = "Field cannot be empty";
     if (!form.street) newErrors.street = "Field cannot be empty";
-    if (!form.city) newErrors.city = "Field cannot be empty";
-    if (!form.province) newErrors.province = "Field cannot be empty";
     if (!form.postalCode) newErrors.postal_code = "Field cannot be empty";
-    if (!form.country) newErrors.country = "Field cannot be empty";
-
-    if (form.password && form.confirmPassword && form.password !== form.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
-
-    if (!form.username) {
-      newErrors.username = "Field cannot be empty";
-    } else if (form.username.length < 4 || form.username.length > 20) {
-      newErrors.username = "Username must be between 4 and 20 characters";
-    }
 
     if (Object.keys(newErrors).length > 0) {
       setFieldErrors(newErrors);
@@ -166,10 +193,7 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           value={form.firstName}
           error={fieldErrors.forename}
           onChange={(e) =>
-            updateField(
-              "firstName",
-              capitalizeName(e.target.value.replace(/[^a-zA-Z' -]/g, ""))
-            )
+            updateField("firstName", capitalizeFirstLetter(e.target.value.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿ\s'-]/g, "")))
           }
         />
 
@@ -178,10 +202,7 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           value={form.lastName}
           error={fieldErrors.surname}
           onChange={(e) =>
-            updateField(
-              "lastName",
-              capitalizeName(e.target.value.replace(/[^a-zA-Z' -]/g, ""))
-            )
+            updateField("lastName", capitalizeFirstLetter(e.target.value.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿ\s'-]/g, "")))
           }
         />
 
@@ -189,10 +210,12 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           placeholder="User name"
           value={form.username}
           error={fieldErrors.username}
-          onChange={(e) => {
-            const sanitized = e.target.value.replace(/[^a-zA-Z0-9._-]/g, "");
-            updateField("username", sanitized.slice(0, 20)); // max 20 chars
-          }}
+          onChange={(e) =>
+            updateField(
+              "username",
+              e.target.value.replace(/[^a-zA-Z0-9._ -]/g, "").slice(0, 20)
+            )
+          }
         />
 
         <Field
@@ -208,7 +231,9 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           type="password"
           value={form.password}
           error={fieldErrors.password}
-          onChange={(e) => updateField("password", e.target.value)}
+          onChange={(e) =>
+            updateField("password", e.target.value.replace(/\s/g, ""))
+          }
         />
 
         <Field
@@ -216,7 +241,9 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           type="password"
           value={form.confirmPassword}
           error={fieldErrors.confirmPassword}
-          onChange={(e) => updateField("confirmPassword", e.target.value)}
+          onChange={(e) =>
+            updateField("confirmPassword", e.target.value.replace(/\s/g, ""))
+          }
         />
 
         <Field
@@ -233,7 +260,7 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           value={form.country}
           error={fieldErrors.country}
           onChange={(e) =>
-            updateField("country", e.target.value.replace(/[^a-zA-Z' -]/g, ""))
+            updateField("country", capitalizeFirstLetter(e.target.value.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿ\s'-]/g, "")))
           }
         />
 
@@ -242,7 +269,7 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           value={form.street}
           error={fieldErrors.street}
           onChange={(e) =>
-            updateField("street", e.target.value.replace(/[^a-zA-Z0-9\s.,-]/g, ""))
+            updateField("street", capitalizeFirstLetter(e.target.value.replace(/[^a-zA-Z0-9\s.,'-]/g, "")))
           }
         />
 
@@ -251,7 +278,7 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           value={form.city}
           error={fieldErrors.city}
           onChange={(e) =>
-            updateField("city", e.target.value.replace(/[^a-zA-Z' -]/g, ""))
+            updateField("city", capitalizeFirstLetter(e.target.value.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿ\s'-]/g, "")))
           }
         />
 
@@ -260,7 +287,7 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           value={form.province}
           error={fieldErrors.province}
           onChange={(e) =>
-            updateField("province", e.target.value.replace(/[^a-zA-Z' -]/g, ""))
+            updateField("province", capitalizeFirstLetter(e.target.value.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿ\s'-]/g, "")))
           }
         />
 
@@ -269,7 +296,7 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
           value={form.postalCode}
           error={fieldErrors.postal_code}
           onChange={(e) =>
-            updateField("postalCode", e.target.value.replace(/[^a-zA-Z0-9 -]/g, ""))
+            updateField("postalCode", e.target.value.replace(/[^a-zA-Z0-9\s]/g, "").toUpperCase())
           }
         />
 
@@ -280,6 +307,10 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
         >
           {loading ? "Creating Account..." : "Create Account"}
         </button>
+
+        {fieldErrors.general && (
+          <div className={styles.errorText}>{fieldErrors.general}</div>
+        )}
       </div>
     </div>
   );
