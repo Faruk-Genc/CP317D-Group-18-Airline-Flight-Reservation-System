@@ -5,6 +5,16 @@
     <link rel="icon" type="image/x-icon" href="/airline-logo.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Air Laurier</title>
+
+    <script>
+      const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 1;
+      const isMobileUA = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const isMobile = isTouch && isMobileUA;
+
+      if (isMobile && !window.location.href.includes("mobile.html")) {
+        window.location.href = "/mobile.html";
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

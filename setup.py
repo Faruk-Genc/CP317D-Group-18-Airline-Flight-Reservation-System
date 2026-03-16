@@ -4,12 +4,23 @@ import subprocess
 import sys
 import getpass
 import time
+import socket
+import signal
 
 def run(cmd, cwd=None):
     """Run a shell command and exit on failure"""
     print(f"> {cmd}")
     if subprocess.run(cmd, shell=True, check=False, cwd=cwd).returncode != 0:
         sys.exit(1)
+
+def get_local_ip():
+    """Get local IP address of the current machine"""
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))
+        return s.getsockname()[0]
+    finally:
+        s.close()
 
 def ensure_env():
     """Create .env if it doesn't exist"""
@@ -48,7 +59,6 @@ def setup_backend():
     venv_python = ".\\venv\\Scripts\\python" if system == "Windows" else "venv/bin/python"
 
     run(f"{venv_python} -m pip install --upgrade pip")
-
     run(f"{venv_python} -m pip install -r requirements.txt")
 
     backend_process = subprocess.Popen(
@@ -69,21 +79,36 @@ def setup_frontend():
     run("npm install", cwd=frontend_dir)
 
     frontend_process = subprocess.Popen(
-        "npm run dev",
+        "npm run dev -- --host",
         shell=True,
         cwd=frontend_dir
     )
+
+    time.sleep(2)
+
+    local_ip = get_local_ip()
+    local_url = f"http://{local_ip}:5173"
+
+    print(f"\n\033[92mFRONTEND READY | Mobile URL: {local_url}\033[0m\n")
 
     return frontend_process
 
 if __name__ == "__main__":
     backend_proc = setup_backend()
-    time.sleep(3)  
+    time.sleep(3) 
     frontend_proc = setup_frontend()
+
+    def shutdown(signum, frame):
+        print("\nShutting down...")
+        backend_proc.terminate()
+        frontend_proc.terminate()
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, shutdown)
+    signal.signal(signal.SIGTERM, shutdown)
+
     try:
         backend_proc.wait()
         frontend_proc.wait()
     except KeyboardInterrupt:
-        print("\nShutting down...")
-        backend_proc.terminate()
-        frontend_proc.terminate()
+        shutdown(None, None)
