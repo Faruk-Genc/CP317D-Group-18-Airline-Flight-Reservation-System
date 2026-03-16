@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import styles from "./Confirmation.module.css";
+import { useUser } from "../context/UserContext";
 
 function formatMoney(amount, currency = "CAD") {
     const num = Number(amount || 0);
@@ -20,6 +21,8 @@ export default function Confirmation({ booking, onBackHome }) {
 
     const inboundFlight = booking?.selectedFlight?.inbound?.flight;
     const inboundTimes = booking?.selectedFlight?.inbound?.times;
+
+    const { user } = useUser();
 
     // If user lands here without selecting, show a safe fallback
     if (!outboundFlight) {
@@ -207,7 +210,8 @@ export default function Confirmation({ booking, onBackHome }) {
                             </div>
                             <p className={`${styles.muted} ${styles.small}`}>
                                 Demo note: passenger names and ticket numbers will be added later when the passenger
-                                details page is implemented.
+                                details page is implemented.<br/>
+                                Hey {user.forename} {user.surname}! 😎
                             </p>
                         </div>
                     </div>

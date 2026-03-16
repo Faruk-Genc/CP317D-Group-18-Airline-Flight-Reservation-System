@@ -9,7 +9,8 @@
 } 
 
 .content {
-    width: 60%;
+    width: 80%;
+    max-width: 1920px;
     height: 80%;
     transition: all 0.5s ease;
 }

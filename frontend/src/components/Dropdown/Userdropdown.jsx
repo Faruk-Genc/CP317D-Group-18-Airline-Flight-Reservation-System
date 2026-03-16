@@ -12,6 +12,7 @@ export default function UserDropDown({ visible, onEnter, onLeave }) {
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
     >
+      <div className={styles.userName}>{user.username}</div>
       <div className={styles.item}>Profile</div>
       <div className={styles.item}>History</div>
       <div className={styles.item}>Settings</div>
