@@ -77,6 +77,10 @@ function App() {
   }, [currentPage]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
+  useEffect(() => {
     const onPopState = () => {
       const path = window.location.pathname.replace("/", "");
       setCurrentPage(validPages.includes(path) ? path : "home");
