@@ -77,8 +77,8 @@ function App() {
     if (page === currentPage) return;
 
     if (rememberPrev && (page === "sign-in" || page === "sign-up")) {
-      setPreviousPage(currentPage);
       if (currentPage !== "sign-in" && currentPage !== "sign-up") {
+        setPreviousPage(currentPage);
         setPreAuthPage(currentPage);
       }
     }
@@ -260,7 +260,7 @@ function App() {
 
         {currentPage === "sign-up" && (
           <SignUp
-            onBack={() => navigateToPage(previousPage, false)}
+            onBack={() => navigateToPage("sign-in", false)}
             onSignUpSuccess={() => navigateToPage(preAuthPage, false)}
           />
         )}
