@@ -94,8 +94,7 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
       newErrors.username = "Username must be 4-20 characters";
 
     if (!form.password) newErrors.password = "Field cannot be empty";
-    else if (/\s/.test(form.password))
-      newErrors.password = "Password cannot contain spaces";
+    else if (/\s/.test(form.password)) newErrors.password = "Password cannot contain spaces";
 
     if (!form.confirmPassword) newErrors.confirmPassword = "Field cannot be empty";
     else if (form.password !== form.confirmPassword)
@@ -153,12 +152,8 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
       const loginRes = await fetch("/api/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: form.username,
-          password: form.password,
-        }),
+        body: JSON.stringify({ username: form.username, password: form.password }),
       });
-
       const loginData = await loginRes.json();
 
       if (!loginData.success) {
@@ -169,10 +164,8 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
 
       signIn(loginData.user);
 
-      if (onSignUpSuccess) {
-        onSignUpSuccess();
-        onBack();
-      }
+      if (onSignUpSuccess) onSignUpSuccess();
+
     } catch (err) {
       setFieldErrors({ general: "Something went wrong." });
     }
@@ -311,6 +304,12 @@ export default function SignUp({ onBack, onSignUpSuccess }) {
         {fieldErrors.general && (
           <div className={styles.errorText}>{fieldErrors.general}</div>
         )}
+
+        <p className={styles.text}>
+          <span className={styles.link} onClick={onBack}>
+            Back
+          </span>
+        </p>
       </div>
     </div>
   );

@@ -33,15 +33,10 @@ export default function SignIn({ onSignUp, onSignInSuccess, onBack }) {
       }
 
       signIn(data.user);
-      console.log("Signed-in user object:", data.user);
-
       setUsername("");
       setPassword("");
 
-      if (onSignInSuccess) {
-        onSignInSuccess();
-        onBack();
-      }
+      if (onSignInSuccess) onSignInSuccess();
 
     } catch (err) {
       setError("Server error: " + err.message);
@@ -98,6 +93,12 @@ export default function SignIn({ onSignUp, onSignInSuccess, onBack }) {
           Don't have an account?<br />
           <span className={styles.link} onClick={onSignUp}>
             Join AeroHawk
+          </span>
+        </p>
+
+        <p className={styles.text}>
+          <span className={styles.link} onClick={onBack}>
+            Back
           </span>
         </p>
       </div>

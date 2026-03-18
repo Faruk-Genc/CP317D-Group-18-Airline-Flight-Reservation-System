@@ -2,9 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import styles from "./TripReview.module.css";
 import { useUser } from "../context/UserContext";
 
+const TIMER_DURATION = 10 * 60 * 1000;
+const STORAGE_KEY = "booking_timer";
+
 function formatMoney(amount, currency = "CAD") {
   const num = Number(amount || 0);
-
   try {
     return new Intl.NumberFormat("en-CA", {
       style: "currency",
@@ -31,19 +33,46 @@ export default function TripReview({ booking, onConfirm, onBack, onSignIn }) {
 
   const [secondsLeft, setSecondsLeft] = useState(10 * 60);
 
-  const outboundFlightNo = flight?.outbound?.flight?.flight_no;
+  const flightId = useMemo(() => {
+    if (!flight) return null;
+    return JSON.stringify({
+      out: flight?.outbound?.flight?.flight_no,
+      in: flight?.inbound?.flight?.flight_no,
+      total
+    });
+  }, [flight, total]);
 
   useEffect(() => {
-    if (!outboundFlightNo) return;
+    if (!flightId) return;
 
-    setSecondsLeft(10 * 60);
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
 
-    const timer = setInterval(() => {
-      setSecondsLeft((s) => (s > 0 ? s - 1 : 0));
-    }, 1000);
+    let startTime;
 
-    return () => clearInterval(timer);
-  }, [outboundFlightNo]);
+    if (stored.flightId !== flightId) {
+      startTime = Date.now();
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ flightId, startTime })
+      );
+    } else {
+      startTime = stored.startTime;
+    }
+
+    const updateTimer = () => {
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(TIMER_DURATION - elapsed, 0);
+      setSecondsLeft(Math.floor(remaining / 1000));
+
+      if (remaining <= 0) {
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, [flightId]);
 
   const countdown = useMemo(() => {
     const m = Math.floor(secondsLeft / 60);
@@ -51,13 +80,12 @@ export default function TripReview({ booking, onConfirm, onBack, onSignIn }) {
     return `${m}:${String(s).padStart(2, "0")}`;
   }, [secondsLeft]);
 
-  if (!flight) {
+  if (!flight || (booking.priceSummary?.total ?? 0) === 0) {
     return (
       <div className={styles.reviewPage}>
         <div className={styles.reviewCard}>
           <h2>Trip Review</h2>
           <p>No flight selected yet.</p>
-
           <button
             type="button"
             className={`${styles.reviewBtn} ${styles.secondary}`}
@@ -72,9 +100,13 @@ export default function TripReview({ booking, onConfirm, onBack, onSignIn }) {
 
   const outboundFlight = flight?.outbound?.flight;
   const outboundTimes = flight?.outbound?.times;
-
   const inboundFlight = flight?.inbound?.flight;
   const inboundTimes = flight?.inbound?.times;
+
+  const handleConfirm = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    onConfirm();
+  };
 
   return (
     <div className={styles.reviewPage}>
@@ -89,11 +121,7 @@ export default function TripReview({ booking, onConfirm, onBack, onSignIn }) {
 
         <div className={styles.reviewTimer}>
           <div className={styles.timerLabel}>Time remaining</div>
-          <div
-            className={`${styles.timerValue} ${
-              secondsLeft === 0 ? styles.expired : ""
-            }`}
-          >
+          <div className={`${styles.timerValue} ${secondsLeft === 0 ? styles.expired : ""}`}>
             {countdown}
           </div>
         </div>
@@ -110,12 +138,10 @@ export default function TripReview({ booking, onConfirm, onBack, onSignIn }) {
             <>
               <div className={styles.flightMeta}>
                 <div>
-                  <span className={styles.label}>Flight:</span>{" "}
-                  <b>{outboundFlight?.flight_no}</b>
+                  <span className={styles.label}>Flight:</span> <b>{outboundFlight?.flight_no}</b>
                 </div>
                 <div>
-                  <span className={styles.label}>Seats left:</span>{" "}
-                  {outboundFlight?.seats_left}
+                  <span className={styles.label}>Seats left:</span> {outboundFlight?.seats_left}
                 </div>
               </div>
 
@@ -140,12 +166,10 @@ export default function TripReview({ booking, onConfirm, onBack, onSignIn }) {
             <>
               <div className={styles.flightMeta}>
                 <div>
-                  <span className={styles.label}>Flight:</span>{" "}
-                  <b>{inboundFlight?.flight_no}</b>
+                  <span className={styles.label}>Flight:</span> <b>{inboundFlight?.flight_no}</b>
                 </div>
                 <div>
-                  <span className={styles.label}>Seats left:</span>{" "}
-                  {inboundFlight?.seats_left}
+                  <span className={styles.label}>Seats left:</span> {inboundFlight?.seats_left}
                 </div>
               </div>
 
@@ -169,28 +193,21 @@ export default function TripReview({ booking, onConfirm, onBack, onSignIn }) {
           <div className={styles.tripOptionsBox}>
             <div className={styles.tripOptionsTitle}>Trip options</div>
             <div className={styles.tripOptionsGrid}>
-              <div>
-                <span className={styles.label}>Trip type:</span> {tripType}
-              </div>
-              <div>
-                <span className={styles.label}>Cabin:</span> {cabinClass}
-              </div>
-              <div>
-                <span className={styles.label}>Passengers:</span> {passengers}
-              </div>
+              <div><span className={styles.label}>Trip type:</span> {tripType}</div>
+              <div><span className={styles.label}>Cabin:</span> {cabinClass}</div>
+              <div><span className={styles.label}>Passengers:</span> {passengers}</div>
             </div>
           </div>
         </div>
 
-        {/* Pricing */}
         <div className={styles.reviewCard}>
           <h3>Price summary</h3>
+
           <div className={styles.priceLines}>
             <div className={styles.priceLine}>
               <span>Base fare</span>
               <span>{formatMoney(baseFare, currency)}</span>
             </div>
-
             <div className={styles.priceLine}>
               <span>Taxes & fees</span>
               <span>{formatMoney(taxesAndFees * passengers, currency)}</span>
@@ -208,7 +225,7 @@ export default function TripReview({ booking, onConfirm, onBack, onSignIn }) {
             <button
               type="button"
               className={`${styles.reviewBtn} ${styles.primary}`}
-              onClick={onSignIn} 
+              onClick={onSignIn}
             >
               Sign Up / Sign In
             </button>
@@ -217,15 +234,8 @@ export default function TripReview({ booking, onConfirm, onBack, onSignIn }) {
           <button
             type="button"
             className={`${styles.reviewBtn} ${styles.primary}`}
-            onClick={onConfirm}
+            onClick={handleConfirm}
             disabled={!user || secondsLeft === 0}
-            title={
-              !user
-                ? "You must sign in to purchase"
-                : secondsLeft === 0
-                ? "Session expired — go back to results"
-                : ""
-            }
           >
             I accept, purchase
           </button>

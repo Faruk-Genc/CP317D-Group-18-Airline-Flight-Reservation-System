@@ -31,43 +31,65 @@ function App() {
     return validPages.includes(path) ? path : localStorage.getItem("page") || "home";
   });
 
+  const [previousPage, setPreviousPage] = useState(currentPage);
+  const [preAuthPage, setPreAuthPage] = useState(currentPage);
+
+  const [booking, setBooking] = useState(() => {
+    const saved = localStorage.getItem("booking");
+    if (saved) return JSON.parse(saved);
+
+    return {
+      search: {
+        from: { iata: "YYZ", city: "Toronto", isCountry: false, origin_country: "" },
+        to: { iata: "HND", city: "Tokyo", isCountry: false, origin_country: "" },
+        departDate: null,
+        returnDate: null,
+      },
+      tripOptions: { passengers: 1, tripType: "one-way", cabinClass: "economy" },
+      selectedFlight: {
+        outbound: { flight: null, times: null },
+        inbound: { flight: null, times: null }
+      },
+      priceSummary: { baseFare: 0, taxesAndFees: 0, total: 0, currency: "CAD" },
+      confirmation: { reference: null, confirmedAt: null },
+    };
+  });
+
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const hideDropdownTimeout = useRef(null);
   const [forceHideLoader, setForceHideLoader] = useState(false);
   const isInitialMount = useRef(true);
+
   const [heroImage] = useState(() =>
     imagesArray[Math.floor(Math.random() * imagesArray.length)]
   );
-
-  const [booking, setBooking] = useState({
-    search: {
-      from: { iata: "YYZ", city: "Toronto", isCountry: false, origin_country: "" },
-      to: { iata: "HND", city: "Tokyo", isCountry: false, origin_country: "" },
-      departDate: null,
-      returnDate: null,
-    },
-    tripOptions: { passengers: 1, tripType: "one-way", cabinClass: "economy" },
-    selectedFlight: { outbound: { flight: null, times: null }, inbound: { flight: null, times: null } },
-    priceSummary: { baseFare: 0, taxesAndFees: 0, total: 0, currency: "CAD" },
-    confirmation: { reference: null, confirmedAt: null },
-  });
 
   const handleUserEnter = () => {
     if (hideDropdownTimeout.current) clearTimeout(hideDropdownTimeout.current);
     setShowUserDropdown(true);
   };
+
   const handleUserLeave = () => {
     hideDropdownTimeout.current = setTimeout(() => setShowUserDropdown(false), 250);
   };
 
-  const navigateToPage = (page) => {
+  const navigateToPage = (page, rememberPrev = true) => {
     if (page === currentPage) return;
+
+    if (rememberPrev && (page === "sign-in" || page === "sign-up")) {
+      setPreviousPage(currentPage);
+      if (currentPage !== "sign-in" && currentPage !== "sign-up") {
+        setPreAuthPage(currentPage);
+      }
+    }
+
     setForceHideLoader(currentPage === "results" && page !== "results");
     setCurrentPage(page);
   };
 
   useEffect(() => {
     localStorage.setItem("page", currentPage);
+
     if (isInitialMount.current) {
       window.history.replaceState(null, "", currentPage === "home" ? "/" : `/${currentPage}`);
       isInitialMount.current = false;
@@ -85,59 +107,96 @@ function App() {
       const path = window.location.pathname.replace("/", "");
       setCurrentPage(validPages.includes(path) ? path : "home");
     };
+
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("booking", JSON.stringify(booking));
+  }, [booking]);
+
   const selectFlightAndReview = (flight) => {
     const getTimes = (f) => ({
-      departure: new Date(f.departure_time).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
-      arrival: new Date(f.arrival_time).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+      departure: new Date(f.departure_time).toLocaleString([], {
+        month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+      }),
+      arrival: new Date(f.arrival_time).toLocaleString([], {
+        month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+      }),
     });
 
     const isRoundTrip = booking.tripOptions.tripType === "round-trip";
     const passengers = booking.tripOptions.passengers ?? 1;
 
     if (isRoundTrip && !booking.selectedFlight.outbound.flight) {
-      setBooking(prev => ({
-        ...prev,
-        selectedFlight: { ...prev.selectedFlight, outbound: { flight, times: getTimes(flight) } }
-      }));
+      const updated = {
+        ...booking,
+        selectedFlight: {
+          ...booking.selectedFlight,
+          outbound: { flight, times: getTimes(flight) }
+        }
+      };
+
+      setBooking(updated);
+      localStorage.setItem("booking", JSON.stringify(updated));
       return;
     }
 
     let baseFare, taxesAndFees, total;
+
     if (isRoundTrip) {
       const outFare = booking.selectedFlight.outbound.flight?.base_cost_cad ?? 0;
       const inFare = flight?.base_cost_cad ?? 0;
       baseFare = (outFare + inFare) * passengers;
-      taxesAndFees = baseFare * 0.13;
-      total = baseFare + taxesAndFees;
     } else {
       baseFare = (flight.base_cost_cad ?? 0) * passengers;
-      taxesAndFees = baseFare * 0.13;
-      total = baseFare + taxesAndFees;
     }
 
-    setBooking(prev => ({
-      ...prev,
+    taxesAndFees = baseFare * 0.13;
+    total = baseFare + taxesAndFees;
+
+    const updated = {
+      ...booking,
       selectedFlight: {
-        outbound: isRoundTrip ? prev.selectedFlight.outbound : { flight, times: getTimes(flight) },
-        inbound: isRoundTrip ? { flight, times: getTimes(flight) } : { flight: null, times: null },
+        outbound: isRoundTrip
+          ? booking.selectedFlight.outbound
+          : { flight, times: getTimes(flight) },
+        inbound: isRoundTrip
+          ? { flight, times: getTimes(flight) }
+          : { flight: null, times: null },
       },
       priceSummary: { baseFare, taxesAndFees, total, currency: "CAD" }
-    }));
+    };
+
+    setBooking(updated);
+    localStorage.setItem("booking", JSON.stringify(updated));
 
     navigateToPage("trip-review");
   };
 
   const generateReference = () => {
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-    return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+    return Array.from({ length: 6 }, () =>
+      chars[Math.floor(Math.random() * chars.length)]
+    ).join("");
   };
+
   const confirmPurchase = () => {
     const reference = generateReference();
-    setBooking(prev => ({ ...prev, confirmation: { reference, confirmedAt: new Date().toISOString() } }));
+
+    const updated = {
+      ...booking,
+      confirmation: {
+        reference,
+        confirmedAt: new Date().toISOString()
+      }
+    };
+
+    setBooking(updated);
+    localStorage.setItem("booking", JSON.stringify(updated));
+    localStorage.removeItem("booking_timer");
+
     navigateToPage("confirmation");
   };
 
@@ -155,11 +214,13 @@ function App() {
         onUserEnter={handleUserEnter}
         onUserLeave={handleUserLeave}
       />
+
       <UserDropDown
         visible={showUserDropdown}
         onEnter={handleUserEnter}
         onLeave={handleUserLeave}
       />
+
       <div className="page-container">
         {currentPage === "home" && (
           <div className="page home">
@@ -167,9 +228,22 @@ function App() {
               heroImage={heroImage}
               search={booking.search}
               tripOptions={booking.tripOptions}
-              onSearch={(payload) => { setBooking(prev => ({ ...prev, ...payload })); navigateToPage("results"); }}
-              setSearch={(data) => setBooking(prev => ({ ...prev, search: { ...prev.search, ...data } }))}
-              setTripOptions={(data) => setBooking(prev => ({ ...prev, tripOptions: { ...prev.tripOptions, ...data } }))}
+              onSearch={(payload) => {
+                setBooking(prev => ({ ...prev, ...payload }));
+                navigateToPage("results");
+              }}
+              setSearch={(data) =>
+                setBooking(prev => ({
+                  ...prev,
+                  search: { ...prev.search, ...data }
+                }))
+              }
+              setTripOptions={(data) =>
+                setBooking(prev => ({
+                  ...prev,
+                  tripOptions: { ...prev.tripOptions, ...data }
+                }))
+              }
             />
             <FeaturedFlights />
             <HeroMessage />
@@ -179,15 +253,15 @@ function App() {
         {currentPage === "sign-in" && (
           <SignIn
             onSignUp={() => navigateToPage("sign-up")}
-            onBack={() => navigateToPage("home")}
-            onSignInSuccess={() => navigateToPage("home")}
+            onSignInSuccess={() => navigateToPage(preAuthPage, false)}
+            onBack={() => navigateToPage(previousPage, false)}
           />
         )}
 
         {currentPage === "sign-up" && (
           <SignUp
-            onBack={() => navigateToPage("home")}
-            onSignUpSuccess={() => navigateToPage("home")}
+            onBack={() => navigateToPage(previousPage, false)}
+            onSignUpSuccess={() => navigateToPage(preAuthPage, false)}
           />
         )}
 
@@ -232,6 +306,7 @@ function App() {
           <MyFlights onBack={() => navigateToPage("home")} />
         )}
       </div>
+
       <Footer />
     </>
   );
