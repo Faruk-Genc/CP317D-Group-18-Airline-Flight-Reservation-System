@@ -5,11 +5,14 @@ from passlib.hash import argon2
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
-import os
+import os, json
+from datetime import datetime
 
 load_dotenv("backend/.env")
 DB_URL = os.getenv("DATABASE_URL")
 
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+AIRPORTS_PATH = os.path.join(BASE_DIR, "scripts/flightgenerator/data/airports.json")
 
 api = Blueprint("api", __name__)
 
@@ -89,3 +92,136 @@ def signin():
 
     except Exception as e:
         return jsonify({"success": False, "errors": {"exception": str(e)}}), 500
+
+def get_connection():
+    return psycopg2.connect(DB_URL, cursor_factory=RealDictCursor)
+
+@api.route("/flights/search_recent", methods=["GET"])
+def flights_search_recent():
+    try:
+        origin = request.args.get("origin", "").strip().upper()
+        destination = request.args.get("destination", "").strip().upper()
+        departure_date_str = request.args.get("departure_date", "").strip()
+
+        try:
+            passengers = max(1, int(request.args.get("passengers", 1)))
+        except:
+            passengers = 1
+
+        if not origin or not destination or not departure_date_str:
+            return jsonify([])
+
+        try:
+            target_date = datetime.fromisoformat(departure_date_str)
+        except:
+            return jsonify([])
+
+        with open(AIRPORTS_PATH) as f:
+            AIRPORTS = json.load(f)
+
+        conn = get_connection()
+
+        def serialize(f):
+            f = dict(f)
+            for k in ("departure_time", "arrival_time"):
+                if f.get(k):
+                    f[k] = f[k].isoformat()
+            return f
+
+        def exact():
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT * FROM daily_flights
+                    WHERE origin_iata = %s
+                    AND destination_iata = %s
+                    ORDER BY ABS(EXTRACT(EPOCH FROM (departure_time - %s))) ASC
+                    LIMIT 20
+                """, (origin, destination, target_date))
+                return cur.fetchall()
+
+        def dest_country():
+            if len(destination) == 3 and destination in AIRPORTS:
+                return AIRPORTS[destination]["country"]
+            return destination
+
+        def origin_country():
+            if len(origin) == 3 and origin in AIRPORTS:
+                return AIRPORTS[origin]["country"]
+            return origin
+
+        def country_to_country(existing_ids, limit):
+            with conn.cursor() as cur:
+                if existing_ids:
+                    cur.execute("""
+                        SELECT * FROM daily_flights
+                        WHERE origin_country_code = %s
+                        AND destination_country_code = %s
+                        AND flight_no NOT IN %s
+                        ORDER BY ABS(EXTRACT(EPOCH FROM (departure_time - %s))) ASC
+                        LIMIT %s
+                    """, (
+                        origin_country(),
+                        dest_country(),
+                        tuple(existing_ids),
+                        target_date,
+                        limit
+                    ))
+                else:
+                    cur.execute("""
+                        SELECT * FROM daily_flights
+                        WHERE origin_country_code = %s
+                        AND destination_country_code = %s
+                        ORDER BY ABS(EXTRACT(EPOCH FROM (departure_time - %s))) ASC
+                        LIMIT %s
+                    """, (
+                        origin_country(),
+                        dest_country(),
+                        target_date,
+                        limit
+                    ))
+                return cur.fetchall()
+
+        def global_fill(existing_ids, limit):
+            with conn.cursor() as cur:
+                if existing_ids:
+                    cur.execute("""
+                        SELECT * FROM daily_flights
+                        WHERE flight_no NOT IN %s
+                        ORDER BY ABS(EXTRACT(EPOCH FROM (departure_time - %s))) ASC
+                        LIMIT %s
+                    """, (tuple(existing_ids), target_date, limit))
+                else:
+                    cur.execute("""
+                        SELECT * FROM daily_flights
+                        ORDER BY ABS(EXTRACT(EPOCH FROM (departure_time - %s))) ASC
+                        LIMIT %s
+                    """, (target_date, limit))
+                return cur.fetchall()
+
+        flights = exact()
+
+        if len(flights) < 20:
+            existing = [f["flight_no"] for f in flights]
+            needed = 20 - len(flights)
+
+            more = country_to_country(existing, needed)
+            flights.extend(more)
+
+        if len(flights) < 20:
+            existing = [f["flight_no"] for f in flights]
+            needed = 20 - len(flights)
+
+            more = global_fill(existing, needed)
+            flights.extend(more)
+
+        return jsonify([serialize(f) for f in flights])
+
+    except Exception as e:
+        print("Error in /flights/search_recent:", e)
+        return jsonify([])
+
+    finally:
+        try:
+            conn.close()
+        except:
+            pass

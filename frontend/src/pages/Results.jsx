@@ -21,7 +21,6 @@ function displayIataOrCountry(iata) {
 
 function Loader({ hidden }) {
   const container = useRef(null);
-
   useEffect(() => {
     if (hidden) return;
     const anim = lottie.loadAnimation({
@@ -33,9 +32,7 @@ function Loader({ hidden }) {
     });
     return () => anim?.destroy();
   }, [hidden]);
-
   if (hidden) return null;
-
   return (
     <div style={{
       display: "flex",
@@ -52,70 +49,70 @@ function Loader({ hidden }) {
 export default function Results({ booking, onSelectFlight, onBack, forceHideLoader = false }) {
   const from = getDisplay(booking?.search?.from);
   const to = getDisplay(booking?.search?.to);
-
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false); 
-  const [didFetch, setDidFetch] = useState(false); 
-
+  const [flexible, setFlexible] = useState(false);
   const inboundSelection =
     booking?.tripOptions.tripType === "round-trip" &&
     booking?.selectedFlight?.outbound?.flight != null;
-
   const lowestPrice = useMemo(() => {
     if (!flights.length) return null;
     return Math.min(...flights.map(f => f.base_cost_cad));
   }, [flights]);
 
   useEffect(() => {
-  if (forceHideLoader) return; 
+    if (forceHideLoader) return; 
+    let origin = inboundSelection
+      ? booking?.search.to?.iata
+      : booking?.search.from?.iata;
 
-  const origin = inboundSelection ? booking?.search.to?.iata : booking?.search.from?.iata;
-  const destination = inboundSelection ? booking?.search.from?.iata : booking?.search.to?.iata;
-  const departureDate = inboundSelection ? booking?.search.returnDate : booking?.search.departDate;
+    let destination = inboundSelection
+      ? booking?.search.from?.iata
+      : booking?.search.to?.iata;
 
-  if (!origin || !destination || !departureDate) return;
-
-  const params = new URLSearchParams({
-    origin,
-    destination,
-    departure_date: departureDate,
-    passengers: booking?.tripOptions?.passengers ?? 1
-  });
-
-  let cancelled = false;
-
-  async function loadFlights() {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/flights/search?${params}`);
-      if (cancelled) return;
-      const data = await res.json();
-      setFlights(data.outbound ?? []);
-    } catch (err) {
-      if (cancelled) return;
-      console.error("Flight search failed", err);
-      setFlights([]);
-    } finally {
-      if (!cancelled) setLoading(false);
+    if (flexible) {
+      origin = origin;
+      destination = destination;
     }
-  }
-
-  loadFlights();
-
-  return () => { cancelled = true; };
-}, [
-  booking.search.from,
-  booking.search.to,
-  booking.search.departDate,
-  booking.search.returnDate,
-  booking.selectedFlight?.outbound?.flight,
-  inboundSelection,
-  forceHideLoader
-]);
+    const departureDate = inboundSelection ? booking?.search.returnDate : booking?.search.departDate;
+    if (!origin || !destination || !departureDate) return;
+    const endpoint = flexible ? "/api/flights/search_recent" : "/api/flights/search";
+    const params = new URLSearchParams({
+      origin,
+      destination,
+      departure_date: departureDate,
+      passengers: booking?.tripOptions?.passengers ?? 1
+    });
+    let cancelled = false;
+    async function loadFlights() {
+      setLoading(true);
+      try {
+        const res = await fetch(`${endpoint}?${params}`);
+        if (cancelled) return;
+        const data = await res.json();
+        setFlights(flexible ? data : data.outbound ?? []);
+      } catch {
+        if (cancelled) return;
+        setFlights([]);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    loadFlights();
+    return () => { cancelled = true; };
+  }, [
+    booking.search.from,
+    booking.search.to,
+    booking.search.departDate,
+    booking.search.returnDate,
+    booking.selectedFlight?.outbound?.flight,
+    inboundSelection,
+    forceHideLoader,
+    flexible
+  ]);
 
   const displayFrom = inboundSelection ? to : from;
   const displayTo = inboundSelection ? from : to;
-
   if (loading && !forceHideLoader) return <Loader hidden={forceHideLoader} />;
 
   return (
@@ -129,6 +126,10 @@ export default function Results({ booking, onSelectFlight, onBack, forceHideLoad
             Showing results from <span>{displayIataOrCountry(displayFrom.iata)}</span> to{" "}
             <span>{displayIataOrCountry(displayTo.iata)}</span>
           </h2>
+          <div className={styles.flexFilter}>
+            Im flexible
+            <input className={styles.checkBox} type="checkbox" checked={flexible} onChange={e => setFlexible(e.target.checked)} />
+          </div>
         </div>
         <button
           className={styles.resultsFilter}
@@ -138,7 +139,6 @@ export default function Results({ booking, onSelectFlight, onBack, forceHideLoad
           Filter
         </button>
       </div>
-
       <div className={styles.progress}>
         <span className={!inboundSelection ? styles.activeStep : ""}>
           Select departing flight
@@ -154,7 +154,6 @@ export default function Results({ booking, onSelectFlight, onBack, forceHideLoad
         <span className={styles.arrow}>›</span>
         <span>Confirmation</span>
       </div>
-
       <div className={styles.resultsList}>
         {flights.map(flight => {
           const isLowest =
@@ -165,7 +164,6 @@ export default function Results({ booking, onSelectFlight, onBack, forceHideLoad
           const hours = Math.floor(diffMs / (1000 * 60 * 60));
           const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
           const duration = `${hours}h ${mins}m`;
-
           return (
             <button
               key={flight?.flight_no}
@@ -177,6 +175,11 @@ export default function Results({ booking, onSelectFlight, onBack, forceHideLoad
                 <div className={styles.resultTime}>
                   <div className={styles.time}>
                     {dep.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                    {flexible && (
+                      <span className={styles.date}>
+                        {" • " + dep.toLocaleDateString([], { month: "short", day: "numeric" })}
+                      </span>
+                    )}
                   </div>
                   <div className={styles.iata}>
                     {displayIataOrCountry(flight?.origin_iata)}
@@ -196,9 +199,7 @@ export default function Results({ booking, onSelectFlight, onBack, forceHideLoad
                   {isLowest && <div className={styles.badge}>Lowest price</div>}
                 </div>
               </div>
-
               <div className={styles.durationCenter}>{duration}</div>
-
               <div className={styles.resultRight}>
                 <div className={styles.price}>${flight?.base_cost_cad}</div>
                 <div className={styles.perPerson}>per person</div>
@@ -207,7 +208,6 @@ export default function Results({ booking, onSelectFlight, onBack, forceHideLoad
           );
         })}
       </div>
-
       <div className={styles.resultsViewmoreWrap}>
         <button
           className={styles.resultsViewmore}
