@@ -307,7 +307,12 @@ function App() {
         )}
 
         {currentPage === "my-flights" && (
-          <MyFlights onBack={() => navigateToPage("home")} />
+          <MyFlights
+            onBook={() => navigateToPage("home")}
+            onFlightStatus={() => navigateToPage("flight-status")}
+            onCheckIn={() => navigateToPage("check-in")}
+            onMyFlights={() => navigateToPage("my-flights")}
+          />
         )}
       </div>
 
