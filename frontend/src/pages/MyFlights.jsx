@@ -14,7 +14,28 @@ function formatDate(dateString) {
   });
 }
 
+const imageModules = import.meta.glob('/src/assets/city_images/*.{jpeg,jpg,png}', {
+  eager: true,
+  import: 'default'
+});
 
+const imageMap = Object.fromEntries(
+  Object.entries(imageModules).map(([path, src]) => {
+    const filename = path
+      .split("/")
+      .pop()
+      .replace(/\.(jpeg|jpg|png)$/i, "");
+    return [filename.toLowerCase(), src];
+  })
+);
+
+const getImage = (city) => {
+  if (!city) return null;
+
+  const key = city.trim().toLowerCase();
+  console.log(key)
+  return imageMap[key] || null;
+};
 
 export default function MyFlights({
   onBook,
@@ -64,7 +85,6 @@ export default function MyFlights({
         passengers: trip.passengers,
         raw: trip,
       };
-      console.log(raw);
     })
     .filter((trip) => {
       const matchesTab = trip.status === activeTab;
@@ -137,18 +157,18 @@ export default function MyFlights({
                   className={styles.tripCard}
                 >
                   <div className={styles.tripImageWrap}>
-                    <div className={styles.tripImageWrap}>
-                        <img
-                          src={trip.image || getRandomImage()}
-                          alt={trip.city}
-                          className={styles.tripImage}
-                        />
-                      </div> (
-                      <div className={styles.tripImageFallback}>
-                        <span>{trip.city}</span>
-                      </div>
-                    )
-                  </div>
+                  {getImage(trip.city) ? (
+                    <img
+                      src={getImage(trip.city)}
+                      alt={trip.city}
+                      className={styles.tripImage}
+                    />
+                  ) : (
+                    <div className={styles.tripImageFallback}>
+                      <span>{trip.city}</span>
+                    </div>
+                  )}
+                </div>
 
                   <div className={styles.tripBody}>
                     <div className={styles.tripTop}>
@@ -222,6 +242,13 @@ export default function MyFlights({
                         onClick={() => onManageBooking?.(trip)}
                       >
                         {en ? "Manage booking" : "Gérer la réservation"}
+                      </button>
+                      <button
+                        type="button"
+                        className={styles.secondaryBtn}
+                        onClick={() => onManageBooking?.(trip)}
+                      >
+                        {en ? "Cancel" : "Gérer la réservation"}
                       </button>
                     </div>
                   </div>
