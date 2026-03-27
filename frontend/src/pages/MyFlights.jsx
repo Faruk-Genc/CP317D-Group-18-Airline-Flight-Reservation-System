@@ -1,53 +1,9 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect} from "react";
 import { useLang } from "../context/LangContext";
 import styles from "./MyFlights.module.css";
+import { useUser } from "../context/UserContext";
 
-const mockTrips = [
-  {
-    bookingNumber: "BK10293",
-    city: "New York City",
-    airport: "JFK",
-    startDate: "2026-04-16",
-    endDate: "2026-04-23",
-    stops: 1,
-    status: "upcoming",
-    cabinClass: "Business",
-    image: "",
-  },
-  {
-    bookingNumber: "BK20814",
-    city: "Tokyo",
-    airport: "HND",
-    startDate: "2026-05-02",
-    endDate: "2026-05-11",
-    stops: 0,
-    status: "upcoming",
-    cabinClass: "Economy",
-    image: "",
-  },
-  {
-    bookingNumber: "BK77821",
-    city: "Vancouver",
-    airport: "YVR",
-    startDate: "2025-11-02",
-    endDate: "2025-11-10",
-    stops: 0,
-    status: "past",
-    cabinClass: "Premium Economy",
-    image: "",
-  },
-  {
-    bookingNumber: "BK55190",
-    city: "Paris",
-    airport: "CDG",
-    startDate: "2025-09-14",
-    endDate: "2025-09-22",
-    stops: 1,
-    status: "past",
-    cabinClass: "Economy",
-    image: "",
-  },
-];
+
 
 function formatDate(dateString) {
   const date = new Date(dateString);
@@ -58,6 +14,8 @@ function formatDate(dateString) {
   });
 }
 
+
+
 export default function MyFlights({
   onBook,
   onFlightStatus,
@@ -66,27 +24,61 @@ export default function MyFlights({
   onViewTrip,
   onManageBooking,
 }) {
+  const images = Object.values(
+  import.meta.glob('../assets/featured/*', { eager: true, import: 'default' })
+  );
+  const getRandomImage = () => {
+  return images[Math.floor(Math.random() * images.length)];
+};
+  const { user } = useUser();
+  const [trips, setTrips] = useState([]);
+
   const { en } = useLang();
   const [activeTab, setActiveTab] = useState("upcoming");
   const [query, setQuery] = useState("");
+  useEffect(() => {
+  if (!user) return;
+
+  fetch(`/api/bookings/${user.id}`)
+    .then(res => res.json())
+    .then(setTrips)
+    .catch(console.error);
+}, [user]);
 
   const filteredTrips = useMemo(() => {
-    return mockTrips.filter((trip) => {
-      const isPast = new Date(trip.endDate) < new Date();
-      const tripStatus = isPast ? "past" : "upcoming";
+  return trips
+    .map((trip) => {
+      const isPast = new Date(trip.departure_time) < new Date();
 
-      const matchesTab = tripStatus === activeTab;
-      const normalizedQuery = query.trim().toLowerCase();
+      const isRoundTrip = !!trip.return_time;
 
-      const matchesQuery =
-        normalizedQuery === "" ||
-        trip.bookingNumber.toLowerCase().includes(normalizedQuery) ||
-        trip.city.toLowerCase().includes(normalizedQuery);
+      return {
+        bookingNumber: trip.booking_id,
+        city: trip.destination_city,
+        airport: trip.destination_iata,
+        startDate: trip.departure_time,
+        endDate: trip.return_time || null,
+        type: isRoundTrip ? "round-trip" : "one-way",
+        status: isPast ? "past" : "upcoming",
+        cabinClass: trip.cabin_type || "Economy",
+        passengers: trip.passengers,
+        raw: trip,
+      };
+      console.log(raw);
+    })
+    .filter((trip) => {
+      const matchesTab = trip.status === activeTab;
+      const q = query.toLowerCase();
 
-      return matchesTab && matchesQuery;
+      return (
+        matchesTab &&
+        (q === "" ||
+          trip.bookingNumber.toLowerCase().includes(q) ||
+          trip.city.toLowerCase().includes(q))
+      );
     });
-  }, [activeTab, query]);
-
+  }, [trips, activeTab, query]);
+  
   return (
     <div className={styles.page}>
       <div className={styles.panel}>
@@ -145,17 +137,17 @@ export default function MyFlights({
                   className={styles.tripCard}
                 >
                   <div className={styles.tripImageWrap}>
-                    {trip.image ? (
-                      <img
-                        src={trip.image}
-                        alt={trip.city}
-                        className={styles.tripImage}
-                      />
-                    ) : (
+                    <div className={styles.tripImageWrap}>
+                        <img
+                          src={trip.image || getRandomImage()}
+                          alt={trip.city}
+                          className={styles.tripImage}
+                        />
+                      </div> (
                       <div className={styles.tripImageFallback}>
                         <span>{trip.city}</span>
                       </div>
-                    )}
+                    )
                   </div>
 
                   <div className={styles.tripBody}>
@@ -190,20 +182,18 @@ export default function MyFlights({
                           {en ? "Dates" : "Dates"}
                         </span>
                         <span className={styles.detailValue}>
-                          {formatDate(trip.startDate)} — {formatDate(trip.endDate)}
+                          {trip.endDate
+                            ? `${formatDate(trip.startDate)} — ${formatDate(trip.endDate)}`
+                            : formatDate(trip.startDate)}
                         </span>
                       </div>
 
                       <div className={styles.detailItem}>
                         <span className={styles.detailLabel}>
-                          {en ? "Stops" : "Escales"}
+                          {en ? "Passengers" : "Escales"}
                         </span>
                         <span className={styles.detailValue}>
-                          {trip.stops === 0
-                            ? en
-                              ? "Non-stop"
-                              : "Direct"
-                            : `${trip.stops} ${en ? "stop" : "escale"}${trip.stops > 1 ? "s" : ""}`}
+                          {trip.passengers}
                         </span>
                       </div>
 

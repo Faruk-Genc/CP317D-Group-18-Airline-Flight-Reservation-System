@@ -280,9 +280,54 @@ def insert_booking():
                     return {"booking_id": booking_id}, 201
                 except psycopg2.errors.UniqueViolation:
                     continue
+
     except Exception as e:
-        import traceback
-        traceback.print_exc()
         return {"error": str(e)}, 500
     finally:
         conn.close()
+
+@api.route("/bookings/<int:user_id>", methods = ["GET"])
+def retrieve_booking(user_id):
+    conn = get_connection()
+
+    try:
+        with conn.cursor() as curr:
+            curr.execute("""
+                SELECT 
+                    ub.booking_id,
+
+                    -- outbound
+                    df_out.origin_city AS origin_city,
+                    df_out.origin_iata AS origin_iata,
+                    df_out.destination_city AS destination_city,
+                    df_out.destination_iata AS destination_iata,
+
+                    -- return
+                    df_ret.origin_city AS return_origin_city,
+                    df_ret.origin_iata AS return_origin_iata,
+                    df_ret.destination_city AS return_destination_city,
+                    df_ret.destination_iata AS return_destination_iata,
+
+                    ub.departure_time,
+                    ub.return_time,
+                    ub.passengers,
+                    ub.cabin_type
+
+                FROM user_bookings ub
+
+                JOIN daily_flights df_out
+                ON ub.departing_flight_no = df_out.flight_no
+                AND ub.departure_time = df_out.departure_time
+
+                LEFT JOIN daily_flights df_ret
+                ON ub.returning_flight_no = df_ret.flight_no
+                AND ub.return_time = df_ret.departure_time
+                """)
+            
+            bookings = curr.fetchall()
+            return jsonify(bookings)
+    except Exception as e:
+        return{"error": str(e)}, 500
+    finally:
+        conn.close()
+    
