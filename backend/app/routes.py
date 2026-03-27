@@ -296,13 +296,11 @@ def retrieve_booking(user_id):
                 SELECT 
                     ub.booking_id,
 
-                    -- outbound
                     df_out.origin_city AS origin_city,
                     df_out.origin_iata AS origin_iata,
                     df_out.destination_city AS destination_city,
                     df_out.destination_iata AS destination_iata,
 
-                    -- return
                     df_ret.origin_city AS return_origin_city,
                     df_ret.origin_iata AS return_origin_iata,
                     df_ret.destination_city AS return_destination_city,
@@ -322,7 +320,8 @@ def retrieve_booking(user_id):
                 LEFT JOIN daily_flights df_ret
                 ON ub.returning_flight_no = df_ret.flight_no
                 AND ub.return_time = df_ret.departure_time
-                """)
+                WHERE ub.user_id = %s
+                """, (user_id,))
             
             bookings = curr.fetchall()
             return jsonify(bookings)
@@ -331,3 +330,54 @@ def retrieve_booking(user_id):
     finally:
         conn.close()
     
+@api.route("/bookings/<booking_id>", methods=["DELETE"])
+def cancel_booking(booking_id):
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+
+            cur.execute("""
+                SELECT departing_flight_no, returning_flight_no, departure_time, return_time, passengers
+                FROM user_bookings
+                WHERE booking_id = %s
+            """, (booking_id,))
+            
+            booking = cur.fetchone()
+
+            if not booking:
+                return {"error": "Booking not found"}, 404
+
+            departing_flight_no = booking["departing_flight_no"]
+            returning_flight_no = booking["returning_flight_no"]
+            departure_time = booking["departure_time"]
+            return_time = booking["return_time"]
+            passengers = booking["passengers"]
+            print(booking)
+            cur.execute("""
+                DELETE FROM user_bookings
+                WHERE booking_id = %s
+            """, (booking_id,))
+
+            # refund outbound
+            cur.execute("""
+                UPDATE daily_flights
+                SET seats_left = seats_left + %s
+                WHERE flight_no = %s AND departure_time = %s
+            """, (passengers, departing_flight_no, departure_time))
+
+            
+            if returning_flight_no and return_time:
+                cur.execute("""
+                    UPDATE daily_flights
+                    SET seats_left = seats_left + %s
+                    WHERE flight_no = %s AND departure_time = %s
+                """, (passengers, returning_flight_no, return_time))
+
+            conn.commit()
+            return {"message": "Booking cancelled"}, 200
+
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+    finally:
+        conn.close()

@@ -14,6 +14,7 @@ function formatDate(dateString) {
   });
 }
 
+
 const imageModules = import.meta.glob('/src/assets/city_images/*.{jpeg,jpg,png}', {
   eager: true,
   import: 'default'
@@ -65,7 +66,27 @@ export default function MyFlights({
     .then(setTrips)
     .catch(console.error);
 }, [user]);
+  const cancelBooking = async (bookingId) => {
+  const confirmed = window.confirm("Cancel this flight?");
 
+  if (!confirmed) return;
+  try {
+    const res = await fetch(`/api/bookings/${bookingId}`, {
+      method: "DELETE",
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text);
+    }
+
+    setTrips(prev => prev.filter(t => t.booking_id !== bookingId));
+
+  } catch (err) {
+    console.error(err);
+    alert("Cancel failed: " + err.message);
+  }
+};
   const filteredTrips = useMemo(() => {
   return trips
     .map((trip) => {
@@ -246,7 +267,7 @@ export default function MyFlights({
                       <button
                         type="button"
                         className={styles.secondaryBtn}
-                        onClick={() => onManageBooking?.(trip)}
+                        onClick={() => cancelBooking?.(trip.bookingNumber)}
                       >
                         {en ? "Cancel" : "Gérer la réservation"}
                       </button>
