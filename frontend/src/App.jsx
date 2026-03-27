@@ -299,7 +299,13 @@ function App() {
         )}
 
         {currentPage === "check-in" && (
-          <CheckIn onBack={() => navigateToPage("home")} />
+          <CheckIn
+            heroImage={heroImage}
+            onBook={() => navigateToPage("home")}
+            onFlightStatus={() => navigateToPage("flight-status")}
+            onCheckIn={() => navigateToPage("check-in")}
+            onMyFlights={() => navigateToPage("my-flights")}
+          />
         )}
 
         {currentPage === "admin-panel" && (
