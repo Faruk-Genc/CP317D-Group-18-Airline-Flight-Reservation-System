@@ -90,45 +90,7 @@ export default function MyFlights({
   return (
     <div className={styles.page}>
       <div className={styles.panel}>
-        <div className={styles.tabs} role="tablist">
-          <button
-            type="button"
-            role="tab"
-            className={styles.tab}
-            onClick={onBook}
-          >
-            {en ? "Book" : "Réserver"}
-          </button>
-
-          <button
-            type="button"
-            role="tab"
-            className={styles.tab}
-            onClick={onFlightStatus}
-          >
-            {en ? "Flight Status" : "Statut des vols"}
-          </button>
-
-          <button
-            type="button"
-            role="tab"
-            className={styles.tab}
-            onClick={onCheckIn}
-          >
-            {en ? "Check-in" : "Enregistrement"}
-          </button>
-
-          <button
-            type="button"
-            role="tab"
-            className={`${styles.tab} ${styles.tabActive}`}
-            aria-selected="true"
-            onClick={onMyFlights}
-          >
-            {en ? "My Flights" : "Mes vols"}
-          </button>
-        </div>
-
+  
         <div className={styles.content}>
           <div className={styles.headerRow}>
             <div>

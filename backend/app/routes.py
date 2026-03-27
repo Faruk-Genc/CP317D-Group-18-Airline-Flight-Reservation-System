@@ -5,7 +5,7 @@ from passlib.hash import argon2
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
-import os, json
+import os, json, secrets
 from datetime import datetime
 
 load_dotenv("backend/.env")
@@ -225,3 +225,64 @@ def flights_search_recent():
             conn.close()
         except:
             pass
+
+@api.route("/bookings", methods=["POST"])
+def insert_booking():
+    chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+
+    data = request.get_json()
+
+    required = ["departing_flight_no", "departure_time", "user_id", "passengers"]
+    for field in required:
+        if field not in data:
+            return {"error": f"Missing {field}"}, 400
+
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            for _ in range(5):
+                booking_id =  ''.join(secrets.choice(chars) for _ in range(10))
+                try:
+                    cur.execute("""
+                            INSERT INTO user_bookings
+                                                (booking_id, departing_flight_no, returning_flight_no, departure_time, user_id, passengers, cabin_type, return_time)
+                                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                        """,(booking_id,
+                            data["departing_flight_no"],
+                            data.get("returning_flight_no"),
+                            data["departure_time"],
+                            data["user_id"],
+                            data["passengers"],
+                            data.get("cabin_type"),
+                            data.get("return_time")))
+                    
+                    cur.execute("""
+                                    UPDATE daily_flights
+                                    SET seats_left = seats_left - %s
+                                    WHERE flight_no = %s AND departure_time = %s
+                                """, (
+                                    data["passengers"],
+                                    data["departing_flight_no"],
+                                    data["departure_time"]
+                                ))
+
+                    if data.get("returning_flight_no") and data.get("return_time"):
+                        cur.execute("""
+                            UPDATE daily_flights
+                            SET seats_left = seats_left - %s
+                            WHERE flight_no = %s AND departure_time = %s
+                        """, (
+                            data["passengers"],
+                            data["returning_flight_no"],
+                            data["return_time"]
+                        ))
+                    conn.commit()
+                    return {"booking_id": booking_id}, 201
+                except psycopg2.errors.UniqueViolation:
+                    continue
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return {"error": str(e)}, 500
+    finally:
+        conn.close()

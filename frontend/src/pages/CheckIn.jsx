@@ -79,32 +79,6 @@ function CheckIn({
     >
       <div className={styles["main-container"]}>
         <div className={styles.panel}>
-          <div className={styles.tabs} role="tablist">
-            <button type="button" className={styles.tab} onClick={onBook}>
-              Book
-            </button>
-
-            <button
-              type="button"
-              className={styles.tab}
-              onClick={onFlightStatus}
-            >
-              Flight Status
-            </button>
-
-            <button
-              type="button"
-              className={`${styles.tab} ${styles.tabActive}`}
-              onClick={onCheckIn}
-            >
-              Check-in
-            </button>
-
-            <button type="button" className={styles.tab} onClick={onMyFlights}>
-              My Flights
-            </button>
-          </div>
-
           <div className={styles["input-container"]}>
             <div className={styles.fieldBlock}>
               <label className={styles.label}>Flight Number</label>

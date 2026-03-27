@@ -84,41 +84,7 @@ export default function FlightStatus({
   return (
     <div className={styles.page}>
       <div className={styles.panel}>
-        <div className={styles.tabs} role="tablist">
-          <button
-            type="button"
-            role="tab"
-            className={styles.tab}
-            onClick={onBook}
-          >
-            {en ? "Book" : "Réserver"}
-          </button>
-          <button
-            type="button"
-            role="tab"
-            className={`${styles.tab} ${styles.tabActive}`}
-            aria-selected="true"
-          >
-            {en ? "Flight Status" : "Statut des vols"}
-          </button>
-          <button
-            type="button"
-            role="tab"
-            className={styles.tab}
-            onClick={onCheckIn}
-          >
-            {en ? "Check-in" : "Enregistrement"}
-          </button>
-          <button
-            type="button"
-            role="tab"
-            className={styles.tab}
-            onClick={onMyFlights}
-          >
-            {en ? "My Flights" : "Mes vols"}
-          </button>
-        </div>
-
+      
         <form onSubmit={handleSearch} noValidate>
           <div className={styles.formArea}>
             <div className={styles.formRow}>

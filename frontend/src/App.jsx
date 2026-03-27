@@ -14,13 +14,14 @@ import AdminPanel from "./pages/AdminPanel";
 import Results from "./pages/Results";
 import TripReview from "./pages/TripReview";
 import Confirmation from "./pages/Confirmation";
-
+import { useUser } from "./context/UserContext";
 import "./App.css";
 
 const heroImages = import.meta.glob("./assets/heropage/*.{jpg,jpeg,png,svg}", { eager: true });
 const imagesArray = Object.values(heroImages).map((module) => module.default);
 
 function App() {
+  const { user } = useUser();
   const validPages = [
     "home", "sign-in", "sign-up", "results", "trip-review",
     "confirmation", "flight-status", "check-in", "my-flights", "admin-panel"
@@ -75,6 +76,19 @@ function App() {
 
   const navigateToPage = (page, rememberPrev = true) => {
     if (page === currentPage) return;
+    if (page === "home") {
+    const reset = {
+      ...booking,
+      selectedFlight: {
+        outbound: { flight: null, times: null },
+        inbound: { flight: null, times: null }
+      },
+      confirmation: { reference: null, confirmedAt: null }
+    };
+
+    setBooking(reset);
+    localStorage.setItem("booking", JSON.stringify(reset));
+  }
 
     if (rememberPrev && (page === "sign-in" || page === "sign-up")) {
       if (currentPage !== "sign-in" && currentPage !== "sign-up") {
@@ -175,29 +189,56 @@ function App() {
     navigateToPage("trip-review");
   };
 
-  const generateReference = () => {
-    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-    return Array.from({ length: 6 }, () =>
-      chars[Math.floor(Math.random() * chars.length)]
-    ).join("");
-  };
+  const confirmPurchase = async () => {
 
-  const confirmPurchase = () => {
-    const reference = generateReference();
+    if (!user) {
+      navigateToPage("sign-in");
+      return;
+    }
+    try {
+      const departing_flight = booking.selectedFlight.outbound.flight;
+      const returning_flight = booking.selectedFlight.inbound.flight;
+      const passengers = booking.tripOptions.passengers;
+      
+      const result = await fetch("/api/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          departing_flight_no: departing_flight.flight_no,
+          returning_flight_no: returning_flight?.flight_no || null,
+          departure_time: departing_flight.departure_time,
+          return_time: returning_flight ? returning_flight.departure_time : null,
+          user_id: user.id,
+          passengers: passengers,
+          cabin_type: booking.tripOptions.cabinClass
+        })
+      });
 
-    const updated = {
-      ...booking,
-      confirmation: {
-        reference,
-        confirmedAt: new Date().toISOString()
+      const data = await result.json();
+
+      if (!result.ok) {
+        throw new Error(data.error || "Booking Error");
       }
-    };
+      const updated = {
+        ...booking,
+        confirmation: {
+          reference: data.booking_id,
+          confirmedAt: new Date().toISOString()
+        }
+      };
 
-    setBooking(updated);
-    localStorage.setItem("booking", JSON.stringify(updated));
-    localStorage.removeItem("booking_timer");
+      setBooking(updated);
+      localStorage.setItem("booking", JSON.stringify(updated));
+      localStorage.removeItem("booking_timer");
 
-    navigateToPage("confirmation");
+      navigateToPage("confirmation");
+    }
+    catch (err) {
+      console.error(err)
+      alert("Booking failed" + err.message);
+    }
   };
 
   return (
