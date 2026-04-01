@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import styles from "./Confirmation.module.css";
 import { useUser } from "../context/UserContext";
-import { useEffect } from "react";
 
 function formatMoney(amount, currency = "CAD") {
     const num = Number(amount || 0);
@@ -16,7 +15,6 @@ function formatMoney(amount, currency = "CAD") {
     }
 }
 
-
 export default function Confirmation({ booking, onBackHome }) {
     const outboundFlight = booking?.selectedFlight?.outbound?.flight;
     const outboundTimes = booking?.selectedFlight?.outbound?.times;
@@ -25,14 +23,6 @@ export default function Confirmation({ booking, onBackHome }) {
     const inboundTimes = booking?.selectedFlight?.inbound?.times;
 
     const { user } = useUser();
-
-    
-    useEffect(() => {
-        console.log("Full booking object:", booking);
-        console.log("Outbound flight:", booking?.selectedFlight?.outbound);
-        console.log("Inbound flight:", booking?.selectedFlight?.inbound);
-        console.log("Price summary:", booking?.priceSummary);
-    }, [booking]);
 
     if (!outboundFlight) {
         return (

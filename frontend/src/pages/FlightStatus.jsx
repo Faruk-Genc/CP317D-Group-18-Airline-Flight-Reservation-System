@@ -81,7 +81,6 @@ export default function FlightStatus({
           <div className={styles.formArea}>
             <div className={styles.formRow}>
 
-              {/* FROM (with dropdown overlay ONLY) */}
               <div className={styles.columnFlight}>
                 <div className={styles.hoverWrapper}>
                   <div className={styles.field}>
@@ -134,23 +133,21 @@ export default function FlightStatus({
                 </div>
               </div>
 
-              {/* Divider (UNCHANGED) */}
               <h3 className={styles.divider} aria-hidden="true">
                 {en ? "and/or" : "et/ou"}
               </h3>
 
-              {/* Flight number + date (UNCHANGED) */}
               <div className={styles.columnFlight}>
                 <div className={styles.field}>
                   <label className={styles.fieldLabel}>
-                    {en ? "Flight Number" : "Numéro de vol"}
+                    {en ? "Booking Reference" : "Référence de réservation"}
                   </label>
 
                   <input
                     className={styles.fieldInput}
                     type="text"
                     autoComplete="off"
-                    placeholder={en ? "Flight Number" : "Numéro de vol"}
+                    placeholder={en ? "Booking Reference" : "Référence de réservation"}
                     value={flightNumber}
                     onChange={(e) => setFlightNumber(e.target.value)}
                   />
