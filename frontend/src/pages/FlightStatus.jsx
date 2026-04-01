@@ -158,7 +158,7 @@ export default function FlightStatus({
 
                 <div className={styles.field}>
                   <label className={styles.fieldLabel}>
-                    {en ? "Date" : "Date"}
+                    {en ? "Return" : "Retour"}
                   </label>
 
                   <input
