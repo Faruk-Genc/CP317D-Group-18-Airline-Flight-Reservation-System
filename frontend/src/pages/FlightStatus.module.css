@@ -20,6 +20,55 @@
   overflow: hidden;
 }
 
+
+.headerRow {
+  padding: 28px 0 0 24px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #474747;
+  margin: 0 0 6px;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+
+.hoverWrapper {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+
+  width: 100%;
+  margin-top: 6px;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: 0.2s ease;
+
+  z-index: 50;
+
+  pointer-events: none;
+}
+
+.hoverWrapper:hover .dropdown,
+.hoverWrapper:focus-within .dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+
+  pointer-events: auto;
+}
 .tab {
   flex: 1;
   padding: 14px 12px;
@@ -64,25 +113,14 @@
 .divider {
   flex: 0 0 auto;
   width: 72px;
-  min-height: 180px;
+
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  margin-top: 20px;
   border-radius: 8px;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(220, 220, 220, 0.9) 100%),
-    repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 6px,
-      rgba(0, 0, 0, 0.04) 6px,
-      rgba(0, 0, 0, 0.04) 7px
-    );
-  color: #555;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-size: 16px;
 }
 
 .columnFlight {
@@ -130,6 +168,8 @@
 
 .searchWrap {
   display: flex;
+  width: 100%;
+  align-items: center;
   justify-content: center;
   padding: 20px 24px 0;
 }
@@ -138,7 +178,7 @@
   min-width: 160px;
   padding: 12px 32px;
   border: none;
-  border-radius: 8px;
+  border-radius: 999px;
   font-size: 16px;
   font-weight: 600;
   font-family: inherit;
@@ -147,6 +187,26 @@
   color: #fff;
   transition: background 0.2s ease, transform 0.05s ease;
 }
+
+.emptyState {
+  width: 100%;
+  background: #fff;
+  border: 1px dashed #ccc;
+  border-radius: 14px;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.emptyState h3 {
+  margin: 0 0 8px;
+  color: #213547;
+}
+
+.emptyState p {
+  margin: 0;
+  color: #666;
+}
+
 
 .searchBtn:hover {
   background: #380875;
