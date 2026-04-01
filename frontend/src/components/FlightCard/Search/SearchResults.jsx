@@ -1,43 +1,38 @@
-import airports from "../../../../../scripts/flightgenerator/data/airports.json";
-import countries from "../../../../../scripts/flightgenerator/data/countries.json";
+import airportsData from "../../../../../scripts/flightgenerator/data/airports.json";
+import countriesData from "../../../../../scripts/flightgenerator/data/countries.json";
 
-export default function SearchResults({
-  width,
-  height,
-  query,
-  onSelect,
-}) {
-  if (!query) return null;
+function computeResults(query) {
+  const lowerQuery = query.toLowerCase();
 
-  const q = query.trim().toLowerCase();
+  const matchedCountryEntries = Object.entries(countriesData).filter(
+    ([code, countryName]) =>
+      code.toLowerCase().includes(lowerQuery) ||
+      countryName.toLowerCase().includes(lowerQuery)
+  );
 
-  const countryResults = Object.entries(countries)
-    .filter(([code, name]) => {
-      return (
-        code.toLowerCase().includes(q) ||
-        name.toLowerCase().includes(q)
-      );
-    })
-    .map(([code, name]) => ({
-      type: "country",
-      code,
-      name,
-    }))
-    .slice(0, 10);
+  const countryResults = matchedCountryEntries.map(([code, countryName]) => ({
+    origin_iata: code,
+    origin_city: "",
+    origin_country: countryName,
+    isCountry: true,
+  }));
 
-  const airportResults = Object.entries(airports)
-    .filter(([iata]) => {
-      return iata.toLowerCase().includes(q);
-    })
-    .map(([iata, data]) => ({
-      type: "airport",
-      iata,
-      city: data.city,
-      country: data.country,
-    }))
-    .slice(0, 10);
+  const airportResults = Object.entries(airportsData)
+    .filter(([iata]) => iata.toLowerCase().includes(lowerQuery))
+    .map(([iata, airport]) => ({
+      origin_iata: iata,
+      origin_city: airport.city,
+      origin_country: countriesData[airport.country] || airport.country,
+      isCountry: false,
+    }));
 
-  const results = [...countryResults, ...airportResults];
+  return [...countryResults, ...airportResults];
+}
+
+export default function SearchResults({ width, height, query, results, onSelect }) {
+  const items = results ?? (query?.trim() ? computeResults(query.trim()) : []);
+
+  if (!items.length) return null;
 
   return (
     <div
@@ -48,52 +43,26 @@ export default function SearchResults({
         maxHeight: height || "none",
       }}
     >
-      {results.map((item) => {
-        if (item.type === "country") {
-          return (
-            <div
-              key={`c-${item.code}`}
-              onClick={() =>
-                onSelect?.({
-                  type: "country",
-                  country: item.code,
-                  label: item.name, 
-                })
-              }
-              style={{
-                padding: "8px",
-                borderBottom: "1px solid #ccc",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
-              🌍 {item.name} ({item.code})
-            </div>
-          );
-        }
-
-        return (
-          <div
-            key={`a-${item.iata}`}
-            onClick={() =>
-              onSelect?.({
-                type: "airport",
-                iata: item.iata,
-                city: item.city,
-                country: item.country,
-                label: item.iata, 
-              })
-            }
-            style={{
-              padding: "8px",
-              borderBottom: "1px solid #ccc",
-              cursor: "pointer",
-            }}
-          >
-            <strong>{item.iata}</strong> — {item.city} ({item.country})
-          </div>
-        );
-      })}
+      {items.map((item) => (
+        <div
+          key={
+            item.isCountry
+              ? `country-${item.origin_iata}`
+              : `${item.origin_iata}-${item.origin_city}-${item.origin_country}`
+          }
+          onClick={() => onSelect?.(item)}
+          style={{
+            padding: "8px",
+            borderBottom: "1px solid #ccc",
+            cursor: "pointer",
+            fontWeight: item.isCountry ? "600" : "inherit",
+          }}
+        >
+          {item.isCountry
+            ? `${item.origin_country} (${item.origin_iata})`
+            : `${item.origin_city} (${item.origin_iata}) – ${item.origin_country}`}
+        </div>
+      ))}
     </div>
   );
 }

@@ -37,7 +37,20 @@ function App() {
 
   const [booking, setBooking] = useState(() => {
     const saved = localStorage.getItem("booking");
-    if (saved) return JSON.parse(saved);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      const today = new Date().toISOString().split("T")[0];
+
+      if (parsed.search?.departDate && parsed.search.departDate < today) {
+        parsed.search.departDate = null;
+        parsed.search.returnDate = null;
+      }
+      if (parsed.search?.returnDate && parsed.search.returnDate < today) {
+        parsed.search.returnDate = null;
+      }
+
+      return parsed;
+    }
 
     return {
       search: {

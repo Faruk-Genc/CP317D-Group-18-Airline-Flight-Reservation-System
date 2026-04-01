@@ -45,8 +45,12 @@ export default function HeroSplash({
           <FlightCard
             iata1={search.from?.iata}
             city1={search.from?.city}
+            isCountry1={search.from?.isCountry}
+            country1={search.from?.origin_country}
             iata2={search.to?.iata}
             city2={search.to?.city}
+            isCountry2={search.to?.isCountry}
+            country2={search.to?.origin_country}
             onChange={(data) => setSearch({ ...search, ...data })}
           />
 

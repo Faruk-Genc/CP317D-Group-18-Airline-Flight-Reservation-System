@@ -1,24 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ArrowLeftRight } from "lucide-react";
-import FlightCardSelection from "./FlightCardSelection";
+import SearchBox from "./Search/SearchBox";
+import SearchResults from "./Search/SearchResults";
 import styles from "./FlightCard.module.css";
+import airportsData from "../../../../scripts/flightgenerator/data/airports.json";
 import countriesData from "../../../../scripts/flightgenerator/data/countries.json";
 
-export default function FlightCard({ iata1, city1, iata2, city2, onChange }) {
+export default function FlightCard({ iata1, city1, isCountry1, country1, iata2, city2, isCountry2, country2, onChange }) {
   const [from, setFrom] = useState({
     iata: iata1 || "",
     city: city1 || "",
-    isCountry: false,
-    origin_country: "",
+    isCountry: isCountry1 || false,
+    origin_country: country1 || "",
   });
-
   const [to, setTo] = useState({
     iata: iata2 || "",
     city: city2 || "",
-    isCountry: false,
-    origin_country: "",
+    isCountry: isCountry2 || false,
+    origin_country: country2 || "",
   });
-
   const [rotated, setRotated] = useState(false);
 
   useEffect(() => {
@@ -27,7 +27,6 @@ export default function FlightCard({ iata1, city1, iata2, city2, onChange }) {
 
   const swapCards = () => {
     setRotated((prev) => !prev);
-
     setFrom((prevFrom) => {
       setTo(prevFrom);
       return to;
@@ -51,7 +50,6 @@ export default function FlightCard({ iata1, city1, iata2, city2, onChange }) {
             })
           }
         />
-
         <Card
           iata={to.iata}
           city={to.city}
@@ -67,7 +65,6 @@ export default function FlightCard({ iata1, city1, iata2, city2, onChange }) {
           }
         />
       </div>
-
       <button className={styles.switch} onClick={swapCards}>
         <ArrowLeftRight size={24} className={rotated ? styles.rotated : ""} />
       </button>
@@ -77,30 +74,100 @@ export default function FlightCard({ iata1, city1, iata2, city2, onChange }) {
 
 function Card({ iata, city, onSelect, isCountry, country }) {
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const cardRef = useRef(null);
+
+  // Rich query logic from FlightCardSelection
+  useEffect(() => {
+    if (!query.trim()) {
+      setResults([]);
+      return;
+    }
+    const lowerQuery = query.toLowerCase();
+
+    const matchedCountryEntries = Object.entries(countriesData).filter(
+      ([code, countryName]) => countryName.toLowerCase().includes(lowerQuery)
+    );
+
+    const countryResults = matchedCountryEntries.map(([code, countryName]) => ({
+      origin_iata: code,
+      origin_city: "",
+      origin_country: countryName,
+      isCountry: true,
+    }));
+
+    const airportResults = Object.entries(airportsData)
+      .filter(([iata, airport]) => {
+        const countryName = countriesData[airport.country] || "";
+        if (matchedCountryEntries.some(([code]) => airport.country === code))
+          return true;
+        return (
+          iata.toLowerCase().includes(lowerQuery) ||
+          airport.city.toLowerCase().includes(lowerQuery) ||
+          airport.name.toLowerCase().includes(lowerQuery) ||
+          countryName.toLowerCase().includes(lowerQuery)
+        );
+      })
+      .map(([iata, airport]) => ({
+        origin_iata: iata,
+        origin_city: airport.city,
+        origin_country: countriesData[airport.country] || airport.country,
+        isCountry: false,
+      }));
+
+    setResults([...countryResults, ...airportResults]);
+  }, [query]);
+
+  // Click-outside to close
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (cardRef.current && !cardRef.current.contains(e.target)) {
+        setOpen(false);
+        setQuery("");
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   const handleSelect = (origin) => {
     onSelect(origin);
     setOpen(false);
+    setQuery("");
+    setResults([]);
   };
 
   const countryName = country || countriesData[iata];
 
   return (
-    <div className={styles.card} onClick={() => setOpen(true)}>
-      <h1 className={styles.title}>
-        {iata || "Select"}
-      </h1>
-
+    <div
+      ref={cardRef}
+      className={styles.card}
+      onClick={() => { if (!open) setOpen(true); }}
+      style={{ position: "relative" }}
+    >
+      <h1 className={styles.title}>{iata || "Select"}</h1>
       <p className={styles.subtitle}>
         {isCountry ? countryName || "Select" : city || "City"}
       </p>
-
       {open && (
         <div
-          className={styles.overlay}
-          onClick={(e) => e.stopPropagation()}
+          style={{
+            position: "absolute",
+            top: "100%",
+            left: 0,
+            width: "100%",
+            zIndex: 1000,
+          }}
         >
-          <FlightCardSelection onSelect={handleSelect} />
+          <SearchBox width="100%" height="40px" onChange={setQuery} />
+          <SearchResults
+            width="100%"
+            height="300px"
+            results={results}
+            onSelect={handleSelect}
+          />
         </div>
       )}
     </div>
