@@ -3,7 +3,7 @@ import SearchResults from "../components/FlightCard/Search/SearchResults";
 import { useLang } from "../context/LangContext";
 import styles from "./FlightStatus.module.css";
 
-export default function FlightStatus({ onBook, onCheckIn, onMyFlights }) {
+export default function FlightStatus() {
   const { en } = useLang();
 
   const [route, setRoute] = useState({
@@ -28,6 +28,7 @@ export default function FlightStatus({ onBook, onCheckIn, onMyFlights }) {
       },
     }));
   };
+
   return (
     <div className={styles.page}>
       <div className={styles.panel}>
