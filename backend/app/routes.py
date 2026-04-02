@@ -358,7 +358,6 @@ def cancel_booking(booking_id):
                 WHERE booking_id = %s
             """, (booking_id,))
 
-            # refund outbound
             cur.execute("""
                 UPDATE daily_flights
                 SET seats_left = seats_left + %s
