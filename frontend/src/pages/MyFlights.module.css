@@ -14,34 +14,6 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
-.tabs {
-  display: flex;
-  border-radius: 12px 12px 0 0;
-  overflow: hidden;
-}
-
-.tab {
-  flex: 1;
-  padding: 14px 12px;
-  border: none;
-  font-size: 15px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  background: #d4d4d4;
-  color: #333;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.tab:hover:not(.tabActive) {
-  background: #c8c8c8;
-}
-
-.tabActive {
-  background: #444;
-  color: #fff;
-}
-
 .content {
   padding: 28px 24px 8px;
 }
@@ -296,11 +268,6 @@
 }
 
 @media (max-width: 700px) {
-  .tab {
-    font-size: 12px;
-    padding: 12px 6px;
-  }
-
   .title {
     font-size: 1.65rem;
   }
@@ -322,4 +289,82 @@
   .secondaryBtn {
     width: 100%;
   }
+}
+
+.expandSection {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+
+.expandOpen {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.expandInner {
+  border-top: 0.5px solid #e5e5e5;
+  padding: 1rem 1.25rem;
+}
+
+.expandStatusRow {
+  margin-bottom: 14px;
+}
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eaf3de;
+  color: #3b6d11;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3b6d11;
+}
+
+.expandSectionTitle {
+  font-size: 13px;
+  font-weight: 500;
+  color: #888;
+  margin: 16px 0 10px;
+}
+
+.expandGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.expandCard {
+  background: #f5f5f3;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.expandCardLabel {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.expandCardValue {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.expandCardSub {
+  font-size: 12px;
+  color: #888;
+  margin-top: 2px;
 }
