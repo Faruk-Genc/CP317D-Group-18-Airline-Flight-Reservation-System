@@ -277,7 +277,6 @@ export default function MyFlights({
                         </button>
                       </div>
 
-                      {/* Expandable trip detail section */}
                       <div className={`${styles.expandSection} ${isExpanded ? styles.expandOpen : ""}`}>
                         <div className={styles.expandInner}>
 
@@ -288,7 +287,6 @@ export default function MyFlights({
                             </span>
                           </div>
 
-                          {/* Outbound flight */}
                           <p className={styles.expandSectionTitle}>
                             {en ? "Outbound flight" : "Vol aller"}
                           </p>
@@ -317,13 +315,13 @@ export default function MyFlights({
                             </div>
                             <div className={styles.expandCard}>
                               <div className={styles.expandCardLabel}>
-                                {en ? "Flight" : "Vol"}
+                                {en ? "Flight number" : "Numéro du vol"}
                               </div>
                               <div className={styles.expandCardValue}>
                                 {trip.flightNumber ?? "—"}
                               </div>
                               <div className={styles.expandCardSub}>
-                                {trip.aircraft ?? (en ? "Aircraft TBD" : "Appareil TBD")}
+                                {trip.aircraft ?? (en ? "Aircraft B737" : "Appareil B737")}
                               </div>
                             </div>
                             <div className={styles.expandCard}>
@@ -331,7 +329,7 @@ export default function MyFlights({
                                 {en ? "Gate" : "Porte"}
                               </div>
                               <div className={styles.expandCardValue}>
-                                {trip.gate ?? (en ? "TBD" : "TBD")}
+                                {trip.gate ?? (en ? "AH4" : "AH4")}
                               </div>
                               <div className={styles.expandCardSub}>
                                 {en ? "Check back closer to departure" : "Vérifiez avant le départ"}
