@@ -382,6 +382,63 @@ def cancel_booking(booking_id):
         conn.close()
 
 
+@api.route("/checkin", methods=["GET"])
+def checkin():
+    conn = get_connection()
+
+    booking_id = request.args.get("booking_id")
+    flight_no = request.args.get("flight_no")
+    last_name = request.args.get("last_name")
+
+    try:
+        with conn.cursor() as cur:
+            if booking_id:
+                cur.execute("""
+                    SELECT *
+                    FROM user_bookings ub
+                    JOIN users u ON ub.user_id = u.id
+                    JOIN daily_flights df 
+                        ON ub.departing_flight_no = df.flight_no
+                        AND ub.departure_time = df.departure_time
+                    WHERE ub.booking_id = %s
+                """, (booking_id,))
+
+                row = cur.fetchone()
+
+                if not row:
+                    return jsonify({"error": "Booking not found"}), 404
+
+                return jsonify(row)
+
+            if flight_no and last_name:
+                cur.execute("""
+                    SELECT *
+                    FROM user_bookings ub
+                    JOIN users u ON ub.user_id = u.id
+                    JOIN daily_flights df 
+                        ON ub.departing_flight_no = df.flight_no
+                        AND ub.departure_time = df.departure_time
+                    WHERE df.flight_no = %s
+                    AND u.surname ILIKE %s
+                """, (flight_no, last_name))
+
+                row = cur.fetchone()
+
+                if not row:
+                    return jsonify({"error": "No matching booking found"}), 404
+
+                return jsonify(row)
+
+            return jsonify({
+                "error": "Provide either booking_id OR flight_no + last_name"
+            }), 400
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        conn.close()
+
 @api.route("/bookings/lookup/<booking_id>", methods=["GET"])
 def lookup_booking(booking_id):
     conn = get_connection()

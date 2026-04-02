@@ -5,7 +5,6 @@
   border-radius: 12px;
   padding: 0 0 28px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
 }
 .mainContainer {
   min-height: 89vh;
@@ -185,4 +184,22 @@
 }
 .bookLink:hover {
   color: #2a0660;
+}
+
+
+.panelExpanded {
+  transition: all 0.4s ease;
+}
+
+.resultCard {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 10px;
+  background: #1e1e1e;
+  color: white;
+}
+
+.error {
+  margin-top: 10px;
+  color: red;
 }
