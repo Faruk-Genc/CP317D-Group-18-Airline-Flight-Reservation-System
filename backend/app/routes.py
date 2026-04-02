@@ -381,3 +381,117 @@ def cancel_booking(booking_id):
 
     finally:
         conn.close()
+
+
+@api.route("/bookings/lookup/<booking_id>", methods=["GET"])
+def lookup_booking(booking_id):
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT
+                    -- Booking Info
+                    ub.booking_id,
+                    ub.passengers,
+                    ub.cabin_type,
+                    ub.departure_time,
+                    ub.return_time,
+
+                    -- User Info (no password_hash)
+                    u.id AS user_id,
+                    u.username,
+                    u.email,
+                    u.phone_number,
+                    u.forename,
+                    u.surname,
+                    u.street,
+                    u.city,
+                    u.province,
+                    u.postal_code,
+                    u.country,
+
+                    -- Departing Flight
+                    df.flight_no         AS dep_flight_no,
+                    df.departure_time    AS dep_departure_time,
+                    df.arrival_time      AS dep_arrival_time,
+                    df.origin_iata       AS dep_origin_iata,
+                    df.origin_name       AS dep_origin_name,
+                    df.origin_city       AS dep_origin_city,
+                    df.origin_country    AS dep_origin_country,
+                    df.destination_iata  AS dep_destination_iata,
+                    df.destination_name  AS dep_destination_name,
+                    df.destination_city  AS dep_destination_city,
+                    df.destination_country AS dep_destination_country,
+                    df.aircraft          AS dep_aircraft,
+                    df.airline           AS dep_airline,
+                    df.distance_km       AS dep_distance_km,
+                    df.base_cost_cad     AS dep_base_cost_cad,
+
+                    -- Returning Flight (NULL if one-way)
+                    rf.flight_no         AS ret_flight_no,
+                    rf.departure_time    AS ret_departure_time,
+                    rf.arrival_time      AS ret_arrival_time,
+                    rf.origin_iata       AS ret_origin_iata,
+                    rf.origin_name       AS ret_origin_name,
+                    rf.origin_city       AS ret_origin_city,
+                    rf.origin_country    AS ret_origin_country,
+                    rf.destination_iata  AS ret_destination_iata,
+                    rf.destination_name  AS ret_destination_name,
+                    rf.destination_city  AS ret_destination_city,
+                    rf.destination_country AS ret_destination_country,
+                    rf.aircraft          AS ret_aircraft,
+                    rf.airline           AS ret_airline,
+                    rf.distance_km       AS ret_distance_km,
+                    rf.base_cost_cad     AS ret_base_cost_cad
+
+                FROM user_bookings ub
+                JOIN users u
+                    ON ub.user_id = u.id
+                JOIN daily_flights df
+                    ON ub.departing_flight_no = df.flight_no
+                    AND ub.departure_time = df.departure_time
+                LEFT JOIN daily_flights rf
+                    ON ub.returning_flight_no = rf.flight_no
+                    AND ub.return_time = rf.departure_time
+                WHERE ub.booking_id = %s
+            """, (booking_id,))
+
+            booking = cur.fetchone()
+
+            if not booking:
+                return jsonify({"error": "Booking not found"}), 404
+            
+            booking = dict(booking)
+            for key, val in booking.items():
+                if isinstance(val, datetime):
+                    booking[key] = val.isoformat()
+
+            return jsonify(booking), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        conn.close()
+
+@api.route("/flights/<flight_no>", methods=["GET"])
+def get_flight(flight_no):
+    conn = get_connection()
+
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT * FROM daily_flights WHERE flight_no = %s",
+                (flight_no,)
+            )
+            row = cur.fetchone()
+
+            if not row:
+                return jsonify({"error": "Flight not found"}), 404
+
+            return jsonify(row)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        conn.close()
