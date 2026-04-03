@@ -233,9 +233,15 @@ export default function FlightStatus() {
                                                                                         month: "long",
                                                                                         day: "numeric",
                                                                                       })}</span>
-                      <span style={{ fontSize: "16px" }}><strong> {new Date(flight.departure_time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</strong></span>
-                      <span className = {styles.statusBadge}>On time</span>
+                        <span style={{ fontSize: "16px" }}><strong> {new Date(flight.departure_time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</strong></span>
+                      {(() => {
+                        const now = new Date();
+                        if (new Date(flight?.arrival_time) < now) return <span className={styles.statusBadge}>Arrived</span>;
+                        if (new Date(flight?.departure_time) < now) return <span className={styles.statusBadgeYellow}>Departed</span>;
+                        return <span className={styles.statusBadge}>On Time</span>;
+                      })()}
                       </div>
+                    
       
                   </div>
                 ))
