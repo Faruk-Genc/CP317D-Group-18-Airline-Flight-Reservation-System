@@ -1,9 +1,10 @@
 .panel {
   width: min(1100px, 100%);
   margin-top: 8px;
-  background: #f0f0f0;
+  background: #fff;
   border-radius: 12px;
   padding: 0 0 28px;
+  border: 2px solid #e0e0e0;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 .mainContainer {
@@ -26,7 +27,16 @@
   padding: 80px 0;
   gap: 30px;
 }
-
+.ontimeBadge {
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 700;
+  color: #380875;
+  background: #59d909;
+  border: 1px solid #d8c7ff;
+  border-radius: 999px;
+  padding: 6px 10px;
+}
 .headerRow {
   padding: 28px 0 0 24px;
 }

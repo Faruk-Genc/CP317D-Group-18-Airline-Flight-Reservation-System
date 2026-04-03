@@ -3,6 +3,8 @@ import SearchResults from "../components/FlightCard/Search/SearchResults";
 import { useLang } from "../context/LangContext";
 import styles from "./FlightStatus.module.css";
 
+
+
 export default function FlightStatus() {
   const { en } = useLang();
 
@@ -11,11 +13,57 @@ export default function FlightStatus() {
     to: { text: "", selected: null },
   });
 
-  const [departureDate, setDepartureDate] = useState("");
-  const [arrivalDate, setArrivalDate] = useState("");
+  const [departureDate, setDepartureDate] = useState(new Date().toISOString().split("T")[0]);
+  const [flight_no, setFlightNo] = useState("");
+  const [flights, setFlights] = useState([]);
 
   const handleSearch = (e) => {
     e.preventDefault();
+    console.log(route, departureDate, flight_no)
+
+    if (flight_no) {
+      async function loadFlightsByNumber() {
+        try {
+            const res = await fetch(`/api/flights/${flight_no}`)
+            const data = await res.json();
+          if (!res.ok) {
+            setFlights([])
+            return;
+            }
+            setFlights([data] ?? []);
+            console.log("flight", data)
+          }
+          catch (err) {
+          console.error(err)
+          }
+      }
+      loadFlightsByNumber();
+    }
+      
+    else {
+      let origin = route.from?.selected?.origin_iata ?? route.from.text.trim().toUpperCase()
+      let destination = route.to?.selected?.origin_iata ?? route.to.text.trim().toUpperCase()
+      const params = new URLSearchParams({
+        origin,
+        destination,
+        departure_date: departureDate,
+      });
+      async function loadFlights() {
+        try {
+          const res = await fetch(`/api/flights/search?${params}`);
+          const data = await res.json();
+          if (!res.ok) {
+            setFlights([])
+            return;
+            }
+          setFlights(data.outbound ?? []);
+          console.log(flights)
+        } catch (err) {
+          console.error(err)
+        }
+      }
+      loadFlights();
+    }
   };
 
   const handleSelect = (type, data) => {
@@ -57,7 +105,7 @@ export default function FlightStatus() {
                       className={styles.fieldInput}
                       type="text"
                       autoComplete="off"
-                      placeholder="IATA or Country"
+                      placeholder="Departing Airport"
                       value={route.from.text}
                       onChange={(e) =>
                         setRoute((prev) => ({
@@ -86,7 +134,7 @@ export default function FlightStatus() {
                       className={styles.fieldInput}
                       type="text"
                       autoComplete="off"
-                      placeholder="IATA or Country"
+                      placeholder="Arriving Airport"
                       value={route.to.text}
                       onChange={(e) =>
                         setRoute((prev) => ({
@@ -103,40 +151,48 @@ export default function FlightStatus() {
                       query={route.to.text}
                       onSelect={(data) => handleSelect("to", data)}
                     />
-                  </div>
+                  </div>                  
                 </div>
+                <div className={styles.field}>
+                  <label className = {styles.fieldLabel}>
+                    {"Departure Date"}
+                  </label>
+                  <input 
+                    className = {styles.fieldInput}
+                    type="date"
+                    value={departureDate}
+                    onChange={(e) =>
+                        setDepartureDate(e.target.value)
+                      }
+                  ></input>
+                </div>
+
+                
 
               </div>
 
               <h3 className={styles.divider} aria-hidden="true">
-                {en ? "and/or" : "et/ou"}
+                {en ? "or" : "et/ou"}
               </h3>
+              
+              <div className={styles.field}>
+                <label className={styles.fieldLabel}>
+                  {"Flight Number"}
+                </label>
+                <input
+                  className={styles.fieldInput}
+                  placeholder="Enter a Flight Number"
+                  autoComplete="on"
+                  name = "flight_no"
+                  type="text"
+                  value = {flight_no}
+                  onChange={(e) => 
+                    setFlightNo(e.target.value)
+                  }
+                />
+            </div>
 
-              <div className={styles.columnFlight}>
-                <div className={styles.field}>
-                  <label className={styles.fieldLabel}>
-                    {en ? "Departure" : "Départ"}
-                  </label>
-                  <input
-                    className={styles.fieldInput}
-                    type="date"
-                    value={departureDate}
-                    onChange={(e) => setDepartureDate(e.target.value)}
-                  />
-                </div>
-
-                <div className={styles.field}>
-                  <label className={styles.fieldLabel}>
-                    {en ? "Return" : "Retour"}
-                  </label>
-                  <input
-                    className={styles.fieldInput}
-                    type="date"
-                    value={arrivalDate}
-                    onChange={(e) => setArrivalDate(e.target.value)}
-                  />
-                </div>
-              </div>
+              
             </div>
           </div>
 
@@ -144,14 +200,46 @@ export default function FlightStatus() {
             <button type="submit" className={styles.searchBtn}>
               {en ? "Search" : "Rechercher"}
             </button>
-            <div className={styles.emptyState}>
-              <h3>{en ? "No trips found" : "Aucun voyage trouvé"}</h3>
-              <p>
-                {en
-                  ? "Try a different booking number or city."
-                  : "Essayez un autre numéro de réservation ou une autre ville."}
-              </p>
-            </div>
+
+            
+            
+          </div>
+
+          <div className = {styles.resultList}>
+
+          {flights.length == 0 ? (
+              <div className={styles.emptyState}>
+                <h3>{en ? "No trips found" : "Aucun voyage trouvé"}</h3>
+                <p>
+                  {en
+                    ? "Try a different booking number or city."
+                    : "Essayez un autre numéro de réservation ou une autre ville."}
+                </p>
+              </div>) :
+              (
+                flights.map((flight) => (
+                  <div
+                    key={flight?.flight_no}
+                    className={styles.resultCard}>
+                      <div className= {styles.resultCardLeft}>
+                        <strong>{flight.flight_no}</strong>
+                        <span>{flight.origin_city} ({flight.origin_iata}) → {flight.destination_city} ({flight.destination_iata})</span>
+                      </div>
+                      
+                      <div className={styles.resultCardRight}>
+                        <span>{new Date(flight.departure_time).toLocaleDateString([], {
+                                                                                        weekday: "long",
+                                                                                        year: "numeric",
+                                                                                        month: "long",
+                                                                                        day: "numeric",
+                                                                                      })}</span>
+                      <span style={{ fontSize: "16px" }}><strong> {new Date(flight.departure_time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</strong></span>
+                      <span className = {styles.statusBadge}>On time</span>
+                      </div>
+      
+                  </div>
+                ))
+              )}
           </div>
         </form>
       </div>

@@ -8,9 +8,10 @@
 .panel {
   max-width: 1100px;
   margin: 0 auto;
-  background: #f0f0f0;
+  background: #fff;
   border-radius: 12px;
   padding: 0 0 28px;
+  border: 2px solid #e0e0e0;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
