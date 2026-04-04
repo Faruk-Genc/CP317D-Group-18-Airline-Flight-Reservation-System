@@ -18,7 +18,10 @@ function computeResults(query) {
   }));
 
   const airportResults = Object.entries(airportsData)
-    .filter(([iata]) => iata.toLowerCase().includes(lowerQuery))
+    .filter(([iata, airport]) =>
+      iata.toLowerCase().includes(lowerQuery) ||
+      (airport.city && airport.city.toLowerCase().includes(lowerQuery))
+    )
     .map(([iata, airport]) => ({
       origin_iata: iata,
       origin_city: airport.city,
@@ -41,26 +44,61 @@ export default function SearchResults({ width, height, query, results, onSelect 
         backgroundColor: "#fff",
         overflowY: height ? "auto" : "visible",
         maxHeight: height || "none",
+        border: "1.5px solid #e2e8f0",
+        borderRadius: "10px",
+        boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)",
+        marginTop: "4px",
+        overflow: "hidden",
       }}
     >
-      {items.map((item) => (
+      {items.map((item, index) => (
         <div
           key={
             item.isCountry
               ? `country-${item.origin_iata}`
               : `${item.origin_iata}-${item.origin_city}-${item.origin_country}`
           }
-          onClick={() => onSelect?.(item)}
-          style={{
-            padding: "8px",
-            borderBottom: "1px solid #ccc",
-            cursor: "pointer",
-            fontWeight: item.isCountry ? "600" : "inherit",
+          onMouseDown={(e) => {
+            e.preventDefault();
+            onSelect?.(item);
           }}
+          style={{
+            padding: "10px 14px",
+            borderBottom: index < items.length - 1 ? "1px solid #f1f5f9" : "none",
+            cursor: "pointer",
+            color: "#0f172a",
+            fontSize: "14px",
+            backgroundColor: "#fff",
+            transition: "background 0.15s",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1px",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#eff6ff")}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#fff")}
         >
-          {item.isCountry
-            ? `${item.origin_country} (${item.origin_iata})`
-            : `${item.origin_city} (${item.origin_iata}) – ${item.origin_country}`}
+          {item.isCountry ? (
+            <>
+              <span style={{ fontWeight: 600, color: "#0f172a" }}>
+                {item.origin_country}
+              </span>
+              <span style={{ fontSize: "11px", color: "#94a3b8", fontWeight: 500 }}>
+                {item.origin_iata} · Country
+              </span>
+            </>
+          ) : (
+            <>
+              <span style={{ fontWeight: 600, color: "#0f172a" }}>
+                {item.origin_city}{" "}
+                <span style={{ color: "#3b82f6", fontFamily: "monospace" }}>
+                  ({item.origin_iata})
+                </span>
+              </span>
+              <span style={{ fontSize: "11px", color: "#94a3b8", fontWeight: 500 }}>
+                {item.origin_country}
+              </span>
+            </>
+          )}
         </div>
       ))}
     </div>
