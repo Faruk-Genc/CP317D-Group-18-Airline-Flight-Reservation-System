@@ -80,6 +80,7 @@ function PassengerForm({ index, data, onChange, autoFilled, errors = {} }) {
             value={data.firstName}
             onChange={set("firstName")}
             placeholder="First name"
+            disabled={autoFilled}
           />
           {errors.firstName && <span className={styles.fieldError}>{errors.firstName}</span>}
         </div>
@@ -94,6 +95,7 @@ function PassengerForm({ index, data, onChange, autoFilled, errors = {} }) {
             value={data.lastName}
             onChange={set("lastName")}
             placeholder="Last name"
+            disabled={autoFilled}
           />
           {errors.lastName && <span className={styles.fieldError}>{errors.lastName}</span>}
         </div>
@@ -105,6 +107,7 @@ function PassengerForm({ index, data, onChange, autoFilled, errors = {} }) {
               checked={data.isUnder18}
               onChange={set("isUnder18")}
               className={styles.checkbox}
+              disabled={autoFilled}
             />
             Under 18 years old
           </label>
@@ -120,7 +123,7 @@ function PassengerForm({ index, data, onChange, autoFilled, errors = {} }) {
             value={data.phone}
             onChange={set("phone")}
             placeholder="+1 (000) 000-0000"
-            disabled={data.isUnder18}
+            disabled={data.isUnder18 || autoFilled}
           />
           {errors.phone && <span className={styles.fieldError}>{errors.phone}</span>}
         </div>
@@ -135,7 +138,7 @@ function PassengerForm({ index, data, onChange, autoFilled, errors = {} }) {
             value={data.email}
             onChange={set("email")}
             placeholder="email@example.com"
-            disabled={data.isUnder18}
+            disabled={data.isUnder18 || autoFilled}
           />
           {errors.email && <span className={styles.fieldError}>{errors.email}</span>}
         </div>
