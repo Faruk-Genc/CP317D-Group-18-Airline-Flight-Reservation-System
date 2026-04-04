@@ -193,7 +193,6 @@ def generate_daily_flights(date_obj, n_flights):
         )
         return round_to_5_min(dt)
         
-    #generate flights from each hub
     for origin in HUBS:
         for destination in HUBS:
             if origin == destination:
@@ -205,7 +204,7 @@ def generate_daily_flights(date_obj, n_flights):
                 continue
 
 
-            for _ in range(random.randint(2,4)): # generate more flights between hubs
+            for _ in range(random.randint(2,4)): 
                 flight_no = f"{IATA}{flight_counter+1000}-{date_obj:%y%m%d}"
                 flight_counter += 1
                 if dist_km < 3000:
@@ -372,42 +371,66 @@ def create_table(conn):
 def update_schedule():
     today = datetime.now(tz.utc).date()
     conn = get_connection()
+
     try:
         create_table(conn)
+
         with conn.cursor() as cur:
             cur.execute("""
-                DELETE FROM daily_flights
-                WHERE departure_time::date < %s
-                   OR departure_time::date > %s
+                DELETE FROM daily_flights df
+                WHERE (
+                    df.departure_time::date < %s
+                    OR df.departure_time::date > %s
+                )
+                AND NOT EXISTS (
+                    SELECT 1 FROM user_bookings ub
+                    WHERE 
+                        (
+                            ub.departing_flight_no = df.flight_no
+                            AND ub.departure_time = df.departure_time
+                        )
+                        OR
+                        (
+                            ub.returning_flight_no = df.flight_no
+                            AND ub.return_time = df.departure_time
+                        )
+                )
             """, (today, today + timedelta(days=DAYS_AHEAD)))
+
             conn.commit()
 
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT DISTINCT departure_time::date FROM daily_flights
+                SELECT DISTINCT departure_time::date 
+                FROM daily_flights
                 WHERE departure_time::date >= %s
                   AND departure_time::date <= %s
             """, (today, today + timedelta(days=DAYS_AHEAD)))
+
             existing_dates = {row[0] for row in cur.fetchall()}
 
         all_flights = []
         for day_offset in range(DAYS_AHEAD):
             schedule_date = today + timedelta(days=day_offset)
+
             if schedule_date in existing_dates:
                 continue
+
             flights = generate_daily_flights(schedule_date, FLIGHTS_PER_DAY)
             print(f"generated {len(flights)} flights for {schedule_date}")
             all_flights.extend(flights)
 
         if all_flights:
-            print("Inserting...")
+
             with conn.cursor() as cur:
                 csv_buffer = StringIO()
+
                 for flight in all_flights:
                     row = "\t".join(str(v) for v in flight)
                     csv_buffer.write(row + "\n")
+
                 csv_buffer.seek(0)
-                
+
                 cur.copy_from(
                     csv_buffer,
                     'daily_flights',
@@ -421,8 +444,10 @@ def update_schedule():
                         'base_cost_cad', 'seats_left'
                     )
                 )
+
             print("Finished")
             conn.commit()
+
     finally:
         conn.close()
 
