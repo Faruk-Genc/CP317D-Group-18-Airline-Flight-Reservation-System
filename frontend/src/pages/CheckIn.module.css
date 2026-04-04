@@ -1,21 +1,4 @@
-.panel {
-  width: min(1100px, 100%);
-  margin-top: 8px;
-  background: #fff;
-  border-radius: 12px;
-  padding: 0 0 28px;
-  border: 2px solid #e0e0e0;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-}
-.mainContainer {
-  min-height: 89vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 20px 24px 0;
-  box-sizing: border-box;
-}
+
 .inputContainer {
   display: flex;
   flex-direction: column;
@@ -24,7 +7,7 @@
   margin: 0 auto;
   align-items: center;
   justify-content: center;
-  padding: 80px 0;
+  padding: 20px 0 30px;
   gap: 30px;
 }
 .ontimeBadge {
@@ -37,15 +20,13 @@
   border-radius: 999px;
   padding: 6px 10px;
 }
-.headerRow {
-  padding: 28px 0 0 24px;
-}
 
 .title {
-  font-size: 2rem;
+  font-size: 28px;
   font-weight: 700;
-  color: #474747;
+  color: #0f172a;
   margin: 0 0 6px;
+  letter-spacing: -0.5px;
 }
 
 .subtitle {
@@ -92,9 +73,9 @@
   display: flex;
   justify-content: center;
   margin-top: 0px;
-  margin-bottom: 50px;
 }
 .searchBtn {
+  margin: auto;
   min-width: 250px;
   min-height: 50px;
   padding: 12px 32px;
@@ -212,4 +193,367 @@
 .error {
   margin-top: 10px;
   color: red;
+}
+
+.mainContainer {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px 80px;
+}
+
+.panel {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 2px 24px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  width: 100%;
+  height: 480px;
+  max-width: 680px;
+  transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.panelExpanded {
+  max-width: 760px;
+  height: auto;
+}
+
+.panelExpandedDouble {
+  max-width: 1100px;
+  height: auto;
+}
+
+.headerRow {
+  margin-bottom: 28px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 6px;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+
+.inputContainer {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.fieldBlock {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 200px;
+}
+
+.fieldLabel {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 7px;
+}
+
+.searchInput {
+  height: 44px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0 14px;
+  font-size: 15px;
+  color: #0f172a;
+  background: #f8fafc;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.searchInput:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+  background: #fff;
+}
+
+.searchInput::placeholder {
+  color: #cbd5e1;
+}
+
+.searchWrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.searchBtn {
+  height: 44px;
+  padding: 0 28px;
+  background: #1d4ed8;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.searchBtn:hover {
+  background: #1e40af;
+}
+
+.searchBtn:active {
+  transform: scale(0.98);
+}
+
+.error {
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.resultsSection {
+  margin-top: 32px;
+  animation: fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.passengerBanner {
+  background: linear-gradient(135deg, #1d4ed8 0%, #0ea5e9 100%);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.passengerName {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.3px;
+  flex: 1;
+}
+
+.bookingRef {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: monospace;
+}
+
+.tripBadge {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.cardsRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.cardsRowDouble {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 760px) {
+  .cardsRowDouble {
+    grid-template-columns: 1fr;
+  }
+}
+
+.flightCard {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 22px 22px 18px;
+  display: flex;
+  flex-direction: column;
+  animation: cardPop 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.flightCard:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+@keyframes cardPop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.cardLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #3b82f6;
+  background: #eff6ff;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.flightNo {
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  font-family: monospace;
+}
+
+.routeRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.routeEndpoint {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.routeEndpointRight {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.iataCode {
+  font-size: 30px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.cityName {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 110px;
+}
+
+.timeLabel {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-top: 6px;
+}
+
+.dateLabel {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.routeMiddle {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 6px;
+}
+
+.routeLine {
+  display: flex;
+  align-items: center;
+  width: 60px;
+  position: relative;
+}
+
+.routeLine::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1.5px;
+  background: #cbd5e1;
+  z-index: 0;
+}
+
+.planeDot {
+  font-size: 14px;
+  z-index: 1;
+  position: relative;
+  margin: 0 auto;
+  color: #3b82f6;
+}
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 8px;
+  padding-top: 16px;
+  border-top: 1.5px solid #e2e8f0;
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detailKey {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+}
+
+.detailVal {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
 }

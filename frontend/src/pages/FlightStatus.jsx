@@ -3,7 +3,14 @@ import SearchResults from "../components/FlightCard/Search/SearchResults";
 import { useLang } from "../context/LangContext";
 import styles from "./FlightStatus.module.css";
 
-
+function getStatus(flight) {
+  const now = new Date();
+  if (new Date(flight.arrival_time) < now)
+    return <span className={styles.statusBadgeGray}>Arrived</span>;
+  if (new Date(flight.departure_time) < now)
+    return <span className={styles.statusBadgeYellow}>Departed</span>;
+  return <span className={styles.statusBadge}>On Time</span>;
+}
 
 export default function FlightStatus() {
   const { en } = useLang();
@@ -13,53 +20,48 @@ export default function FlightStatus() {
     to: { text: "", selected: null },
   });
 
-  const [departureDate, setDepartureDate] = useState(new Date().toISOString().split("T")[0]);
+  const [departureDate, setDepartureDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const [flight_no, setFlightNo] = useState("");
   const [flights, setFlights] = useState([]);
+  const [searched, setSearched] = useState(false);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log(route, departureDate, flight_no)
+    setSearched(true);
 
     if (flight_no) {
       async function loadFlightsByNumber() {
         try {
-            const res = await fetch(`/api/flights/${flight_no}`)
-            const data = await res.json();
-          if (!res.ok) {
-            setFlights([])
-            return;
-            }
-            setFlights([data] ?? []);
-            console.log("flight", data)
-          }
-          catch (err) {
-          console.error(err)
-          }
+          const res = await fetch(`/api/flights/${flight_no}`);
+          const data = await res.json();
+          setFlights(res.ok ? [data] : []);
+        } catch (err) {
+          console.error(err);
+          setFlights([]);
+        }
       }
       loadFlightsByNumber();
-    }
-      
-    else {
-      let origin = route.from?.selected?.origin_iata ?? route.from.text.trim().toUpperCase()
-      let destination = route.to?.selected?.origin_iata ?? route.to.text.trim().toUpperCase()
+    } else {
+      const origin =
+        route.from?.selected?.origin_iata ?? route.from.text.trim().toUpperCase();
+      const destination =
+        route.to?.selected?.origin_iata ?? route.to.text.trim().toUpperCase();
       const params = new URLSearchParams({
         origin,
         destination,
         departure_date: departureDate,
       });
+
       async function loadFlights() {
         try {
           const res = await fetch(`/api/flights/search?${params}`);
           const data = await res.json();
-          if (!res.ok) {
-            setFlights([])
-            return;
-            }
-          setFlights(data.outbound ?? []);
-          console.log(flights)
+          setFlights(res.ok ? data.outbound ?? [] : []);
         } catch (err) {
-          console.error(err)
+          console.error(err);
+          setFlights([]);
         }
       }
       loadFlights();
@@ -67,13 +69,19 @@ export default function FlightStatus() {
   };
 
   const handleSelect = (type, data) => {
-    const label = data.isCountry ? data.origin_country : data.origin_iata;
+    const label = data.isCountry
+      ? data.origin_country
+      : `${data.origin_city} (${data.origin_iata})`;
     setRoute((prev) => ({
       ...prev,
-      [type]: {
-        text: label,
-        selected: data,
-      },
+      [type]: { text: label, selected: data },
+    }));
+  };
+
+  const handleFieldChange = (type, value) => {
+    setRoute((prev) => ({
+      ...prev,
+      [type]: { text: value, selected: null },
     }));
   };
 
@@ -82,7 +90,7 @@ export default function FlightStatus() {
       <div className={styles.panel}>
         <div className={styles.headerRow}>
           <h1 className={styles.title}>
-            {en ? "Flight Status" : "Statut"}
+            {en ? "Flight Status" : "Statut de vol"}
           </h1>
           <p className={styles.subtitle}>
             {en
@@ -95,7 +103,6 @@ export default function FlightStatus() {
           <div className={styles.formArea}>
             <div className={styles.formRow}>
               <div className={styles.columnFlight}>
-
                 <div className={styles.hoverWrapper}>
                   <div className={styles.field}>
                     <label className={styles.fieldLabel}>
@@ -105,24 +112,21 @@ export default function FlightStatus() {
                       className={styles.fieldInput}
                       type="text"
                       autoComplete="off"
-                      placeholder="Departing Airport"
+                      placeholder={en ? "Departing airport or city" : "Aéroport ou ville de départ"}
                       value={route.from.text}
-                      onChange={(e) =>
-                        setRoute((prev) => ({
-                          ...prev,
-                          from: { text: e.target.value, selected: null },
-                        }))
-                      }
+                      onChange={(e) => handleFieldChange("from", e.target.value)}
                     />
                   </div>
-                  <div className={styles.searchDropdown}>
-                    <SearchResults
-                      width="100%"
-                      height={200}
-                      query={route.from.text}
-                      onSelect={(data) => handleSelect("from", data)}
-                    />
-                  </div>
+                  {!route.from.selected && (
+                    <div className={styles.searchDropdown}>
+                      <SearchResults
+                        width="100%"
+                        height={200}
+                        query={route.from.text}
+                        onSelect={(data) => handleSelect("from", data)}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div className={styles.hoverWrapper}>
@@ -134,65 +138,54 @@ export default function FlightStatus() {
                       className={styles.fieldInput}
                       type="text"
                       autoComplete="off"
-                      placeholder="Arriving Airport"
+                      placeholder={en ? "Arriving airport or city" : "Aéroport ou ville d'arrivée"}
                       value={route.to.text}
-                      onChange={(e) =>
-                        setRoute((prev) => ({
-                          ...prev,
-                          to: { text: e.target.value, selected: null },
-                        }))
-                      }
+                      onChange={(e) => handleFieldChange("to", e.target.value)}
                     />
                   </div>
-                  <div className={styles.searchDropdown}>
-                    <SearchResults
-                      width="100%"
-                      height={200}
-                      query={route.to.text}
-                      onSelect={(data) => handleSelect("to", data)}
-                    />
-                  </div>                  
+                  {!route.to.selected && (
+                    <div className={styles.searchDropdown}>
+                      <SearchResults
+                        width="100%"
+                        height={200}
+                        query={route.to.text}
+                        onSelect={(data) => handleSelect("to", data)}
+                      />
+                    </div>
+                  )}
                 </div>
+
                 <div className={styles.field}>
-                  <label className = {styles.fieldLabel}>
-                    {"Departure Date"}
+                  <label className={styles.fieldLabel}>
+                    {en ? "Departure Date" : "Date de départ"}
                   </label>
-                  <input 
-                    className = {styles.fieldInput}
+                  <input
+                    className={styles.fieldInput}
                     type="date"
                     value={departureDate}
-                    onChange={(e) =>
-                        setDepartureDate(e.target.value)
-                      }
-                  ></input>
+                    onChange={(e) => setDepartureDate(e.target.value)}
+                  />
                 </div>
-
-                
-
               </div>
 
               <h3 className={styles.divider} aria-hidden="true">
-                {en ? "or" : "et/ou"}
+                {en ? "or" : "ou"}
               </h3>
-              
+
               <div className={styles.field}>
                 <label className={styles.fieldLabel}>
-                  {"Flight Number"}
+                  {en ? "Flight Number" : "Numéro de vol"}
                 </label>
                 <input
                   className={styles.fieldInput}
-                  placeholder="Enter a Flight Number"
+                  placeholder={en ? "e.g. AC123" : "ex. AC123"}
                   autoComplete="on"
-                  name = "flight_no"
+                  name="flight_no"
                   type="text"
-                  value = {flight_no}
-                  onChange={(e) => 
-                    setFlightNo(e.target.value)
-                  }
+                  value={flight_no}
+                  onChange={(e) => setFlightNo(e.target.value.toUpperCase())}
                 />
-            </div>
-
-              
+              </div>
             </div>
           </div>
 
@@ -200,52 +193,55 @@ export default function FlightStatus() {
             <button type="submit" className={styles.searchBtn}>
               {en ? "Search" : "Rechercher"}
             </button>
-
-            
-            
           </div>
 
-          <div className = {styles.resultList}>
-
-          {flights.length == 0 ? (
+          <div className={styles.resultList}>
+            {searched && flights.length === 0 ? (
               <div className={styles.emptyState}>
-                <h3>{en ? "No trips found" : "Aucun voyage trouvé"}</h3>
+                <h3>{en ? "No flights found" : "Aucun vol trouvé"}</h3>
                 <p>
                   {en
-                    ? "Try a different booking number or city."
-                    : "Essayez un autre numéro de réservation ou une autre ville."}
+                    ? "Try a different route, date, or flight number."
+                    : "Essayez un autre itinéraire, une autre date ou un autre numéro de vol."}
                 </p>
-              </div>) :
-              (
-                flights.map((flight) => (
-                  <div
-                    key={flight?.flight_no}
-                    className={styles.resultCard}>
-                      <div className= {styles.resultCardLeft}>
-                        <strong>{flight.flight_no}</strong>
-                        <span>{flight.origin_city} ({flight.origin_iata}) → {flight.destination_city} ({flight.destination_iata})</span>
+              </div>
+            ) : (
+              flights.map((flight) => (
+                <div key={flight.flight_no} className={styles.resultCard}>
+                  <div className={styles.resultCardLeft}>
+                    <strong>{flight.flight_no}</strong>
+                    <div className={styles.route}>
+                      <div>
+                        <div className={styles.iataCode}>{flight.origin_iata}</div>
+                        <div className={styles.cityName}>{flight.origin_city}</div>
                       </div>
-                      
-                      <div className={styles.resultCardRight}>
-                        <span>{new Date(flight.departure_time).toLocaleDateString([], {
-                                                                                        weekday: "long",
-                                                                                        year: "numeric",
-                                                                                        month: "long",
-                                                                                        day: "numeric",
-                                                                                      })}</span>
-                        <span style={{ fontSize: "16px" }}><strong> {new Date(flight.departure_time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</strong></span>
-                      {(() => {
-                        const now = new Date();
-                        if (new Date(flight?.arrival_time) < now) return <span className={styles.statusBadge}>Arrived</span>;
-                        if (new Date(flight?.departure_time) < now) return <span className={styles.statusBadgeYellow}>Departed</span>;
-                        return <span className={styles.statusBadge}>On Time</span>;
-                      })()}
+                      <span className={styles.routeArrow}>✈</span>
+                      <div>
+                        <div className={styles.iataCode}>{flight.destination_iata}</div>
+                        <div className={styles.cityName}>{flight.destination_city}</div>
                       </div>
-                    
-      
+                    </div>
                   </div>
-                ))
-              )}
+
+                  <div className={styles.resultCardRight}>
+                    <span className={styles.dateText}>
+                      {new Date(flight.departure_time).toLocaleDateString([], {
+                        weekday: "short",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                    <span className={styles.timeText}>
+                      {new Date(flight.departure_time).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                    {getStatus(flight)}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </form>
       </div>

@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from "react";
 import { useLang } from "../context/LangContext";
 import styles from "./MyFlights.module.css";
 import { useUser } from "../context/UserContext";
+import airports from "../../../scripts/flightgenerator/data/airports.json";
 
 
 function formatDate(dateString) {
@@ -99,6 +100,8 @@ export default function MyFlights({
       .map((trip) => {
         const isPast = new Date(trip.departure_time) < new Date();
         const isRoundTrip = !!trip.return_time;
+        const hoursUntilDeparture = (new Date(trip.departure_time) - new Date()) / (1000 * 60 * 60);
+        const gateVisible = hoursUntilDeparture <= 48;
         return {
           bookingNumber: trip.booking_id,
           city: trip.destination_city,
@@ -119,6 +122,10 @@ export default function MyFlights({
           passengerNames: trip.passenger_names || null,
           terminal: trip.terminal || null,
           gate: trip.gate || null,
+          gateVisible,
+          returnGate: trip.return_gate || null,
+          returnFlightNumber: trip.return_flight_number || null,
+          returnAircraft: trip.return_aircraft || null,
           raw: trip,
         };
       })
@@ -140,7 +147,7 @@ export default function MyFlights({
         <div className={styles.content}>
           <div className={styles.headerRow}>
             <div>
-              <h1 className={styles.title}>{en ? "Trips" : "Voyages"}</h1>
+              <h1 className={styles.title}>{en ? "My Flights" : "Mes voyages"}</h1>
               <p className={styles.subtitle}>
                 {en
                   ? "View and manage your upcoming and past bookings."
@@ -199,15 +206,23 @@ export default function MyFlights({
                           <span>{trip.city}</span>
                         </div>
                       )}
+                      <p className={styles.ticketNumberImg}>{trip.returnFlightNumber} </p>
                     </div>
 
                     <div className={styles.tripBody}>
                       <div className={styles.tripTop}>
                         <div>
                           <h2 className={styles.tripCity}>{trip.city}</h2>
-                          <p className={styles.tripAirport}>{trip.airport}</p>
+                          <p className={styles.ticketNumber}>{trip.returnFlightNumber} </p>
+                          <p className={styles.tripAirport}>
+                            {trip.airport}{airports[trip.airport] ? ` · ${airports[trip.airport].name}` : ""}
+                          </p>
                         </div>
-                        <span className={styles.tripBadge}>
+                       <span
+                          className={`${styles.tripBadge} ${
+                            trip.status === "upcoming" ? styles.upcoming : styles.past
+                          }`}
+                        >
                           {trip.status === "upcoming"
                             ? en ? "Upcoming" : "À venir"
                             : en ? "Past" : "Passé"}
@@ -296,7 +311,7 @@ export default function MyFlights({
                                 {en ? "Departure" : "Départ"}
                               </div>
                               <div className={styles.expandCardValue}>
-                                {trip.originIata ?? "—"} → {trip.airport}
+                                {trip.originIata ?? "—"}
                               </div>
                               <div className={styles.expandCardSub}>
                                 {formatDate(trip.startDate)} · {formatTime(trip.startDate)}
@@ -321,7 +336,7 @@ export default function MyFlights({
                                 {trip.flightNumber ?? "—"}
                               </div>
                               <div className={styles.expandCardSub}>
-                                {trip.aircraft ?? (en ? "Aircraft B737" : "Appareil B737")}
+                                {trip.aircraft ?? "—"}
                               </div>
                             </div>
                             <div className={styles.expandCard}>
@@ -329,10 +344,12 @@ export default function MyFlights({
                                 {en ? "Gate" : "Porte"}
                               </div>
                               <div className={styles.expandCardValue}>
-                                {trip.gate ?? (en ? "AH4" : "AH4")}
+                                {trip.gateVisible ? (trip.gate ?? "—") : "—"}
                               </div>
                               <div className={styles.expandCardSub}>
-                                {en ? "Check back closer to departure" : "Vérifiez avant le départ"}
+                                {trip.gateVisible
+                                  ? en ? "Gate is now available" : "Porte disponible"
+                                  : en ? "Available 48 hours before departure" : "Disponible 48h avant le départ"}
                               </div>
                             </div>
                           </div>
@@ -348,7 +365,7 @@ export default function MyFlights({
                                     {en ? "Departure" : "Départ"}
                                   </div>
                                   <div className={styles.expandCardValue}>
-                                    {trip.airport} → {trip.originIata ?? "—"}
+                                    {trip.airport}
                                   </div>
                                   <div className={styles.expandCardSub}>
                                     {formatDate(trip.endDate)} · {formatTime(trip.endDate)}
@@ -365,6 +382,30 @@ export default function MyFlights({
                                     {trip.returnArrivalTime
                                       ? `${formatDate(trip.returnArrivalTime)} · ${formatTime(trip.returnArrivalTime)}`
                                       : "—"}
+                                  </div>
+                                </div>
+                                <div className={styles.expandCard}>
+                                  <div className={styles.expandCardLabel}>
+                                    {en ? "Flight number" : "Numéro du vol"}
+                                  </div>
+                                  <div className={styles.expandCardValue}>
+                                    {trip.returnFlightNumber ?? "—"}
+                                  </div>
+                                  <div className={styles.expandCardSub}>
+                                    {trip.returnAircraft ?? "—"}
+                                  </div>
+                                </div>
+                                <div className={styles.expandCard}>
+                                  <div className={styles.expandCardLabel}>
+                                    {en ? "Gate" : "Porte"}
+                                  </div>
+                                  <div className={styles.expandCardValue}>
+                                    {trip.gateVisible ? (trip.returnGate ?? "—") : "—"}
+                                  </div>
+                                  <div className={styles.expandCardSub}>
+                                    {trip.gateVisible
+                                      ? en ? "Gate is now available" : "Porte disponible"
+                                      : en ? "Available 48 hours before departure" : "Disponible 48h avant le départ"}
                                   </div>
                                 </div>
                               </div>
@@ -404,7 +445,6 @@ export default function MyFlights({
 
                         </div>
                       </div>
-                      {/* End expandable section */}
 
                     </div>
                   </article>
