@@ -1,5 +1,6 @@
 .reviewPage {
   padding: 24px;
+  color: #111;
 }
 
 .reviewTopbar {
@@ -8,14 +9,6 @@
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 18px;
-}
-
-.reviewPage {
-  color: #111;
-}
-
-.reviewCard {
-  color: #111;
 }
 
 .reviewTitle h2 {
@@ -47,6 +40,52 @@
   color: #c00;
 }
 
+.viewTabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #e6e6e6;
+}
+
+.viewTab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.viewTab:hover {
+  color: #111;
+}
+
+.viewTabActive {
+  color: #111;
+  border-bottom-color: #111;
+}
+
+.viewTabError {
+  color: #c00;
+}
+
+.tabErrorDotInline {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #c00;
+  flex-shrink: 0;
+}
+
 .reviewGrid {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
@@ -64,6 +103,7 @@
   border: 1px solid #e6e6e6;
   border-radius: 14px;
   padding: 20px;
+  color: #111;
 }
 
 .reviewCard h3 {
@@ -151,6 +191,7 @@
   cursor: pointer;
   border: 1px solid #ddd;
   background: white;
+  font-size: 14px;
 }
 
 .primary {
@@ -174,6 +215,16 @@
   margin-top: 10px;
   color: #c00;
   font-size: 13px;
+}
+
+.linkBtn {
+  background: none;
+  border: none;
+  color: #c00;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
 }
 
 .tripOptionsBox {
@@ -210,4 +261,224 @@
     grid-template-columns: 1fr;
     gap: 12px;
   }
+}
+
+.passengerSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.passengerSectionTitle {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.passengerTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.passengerTab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  background: white;
+  cursor: pointer;
+  color: #555;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.passengerTab:hover {
+  border-color: #aaa;
+  color: #111;
+}
+
+.passengerTabActive {
+  background: #111;
+  border-color: #111;
+  color: white;
+}
+
+.passengerTabError {
+  border-color: #c00;
+  color: #c00;
+}
+
+.passengerTabActive.passengerTabError {
+  background: #c00;
+  border-color: #c00;
+  color: white;
+}
+
+.tabErrorDot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.passengerForm {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+
+.passengerFormLocked {
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+}
+
+.passengerFormLocked .fieldInput {
+  background: #ececec;
+  color: #555;
+  cursor: not-allowed;
+  border-color: #e0e0e0;
+}
+
+.lockedBadge {
+  font-size: 11px;
+  font-weight: 500;
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.passengerHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.passengerLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111;
+}
+
+.passengerFields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.fieldGroupCheckbox {
+  grid-column: 1 / -1;
+  padding: 2px 0;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fieldDisabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.fieldLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+}
+
+.req {
+  color: #c00;
+}
+
+.fieldInput {
+  padding: 7px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  font-size: 14px;
+  background: white;
+  color: #111;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.fieldInput:focus {
+  border-color: #111;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+}
+
+.inputError {
+  border-color: #c00 !important;
+}
+
+.fieldError {
+  font-size: 11px;
+  color: #c00;
+  margin-top: 1px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #111;
+  cursor: pointer;
+}
+
+.checkbox {
+  width: 15px;
+  height: 15px;
+  accent-color: #111;
+  cursor: pointer;
+}
+
+.passengerNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.passengerNavBtn {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  color: #111;
+  transition: background 0.12s;
+}
+
+.passengerNavBtn:hover:not(:disabled) {
+  background: #f3f4f6;
+}
+
+.passengerNavBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.passengerNavCount {
+  font-size: 13px;
+  color: #888;
+  font-weight: 600;
 }
