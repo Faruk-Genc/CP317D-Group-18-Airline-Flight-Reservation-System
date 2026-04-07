@@ -20,7 +20,7 @@ scripts/          Helper scripts
 Requires python3 and Node.js
 
 ```python setup.py```
-password: ```npg_WIoOsj86URTn```
+Please reference credentials.txt in submission for database password
 
 ### Neon Dashboard
 Neon PostgreSQL serverless dashboard
