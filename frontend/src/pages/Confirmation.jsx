@@ -207,33 +207,10 @@ export default function Confirmation({ booking, onBackHome }) {
                                     <span>{formatMoney(total, currency)}</span>
                                 </div>
                             </div>
-                            <p className={`${styles.muted} ${styles.small}`}>
-                                Demo note: passenger names and ticket numbers will be added later when the passenger
-                                details page is implemented.<br/>
-                                Hey {user?.forename} {user?.surname}! 😎
-                            </p>
                         </div>
                     </div>
 
-                    <div className={styles.ticketRight}>
-                        <div className={styles.qrCard}>
-                            <div className={styles.qrBox} />
-                            <div className={styles.qrText}>
-                                <div className={styles.qrTitle}>Boarding pass</div>
-                                <div className={`${styles.muted} ${styles.small}`}>
-                                    QR code placeholder (will be generated later)
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className={styles.helpCard}>
-                            <div className={styles.helpTitle}>Need help?</div>
-                            <div className={`${styles.muted} ${styles.small}`}>
-                                This is a demo confirmation screen. Check-in and My Flights lookup will be wired
-                                later.
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
 
                 <div className={styles.ticketFooter}>

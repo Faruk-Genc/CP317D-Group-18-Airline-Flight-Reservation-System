@@ -51,7 +51,6 @@ export default function TripOptions({
                   {en ? "Round Trip" : "Aller-Retour"}
                 </option>
                 <option value="one-way">{en ? "One Way" : "Aller Simple"}</option>
-                <option value="multi">{en ? "Multi-City" : "Multi-Villes"}</option>
               </select>
             </div>
 
