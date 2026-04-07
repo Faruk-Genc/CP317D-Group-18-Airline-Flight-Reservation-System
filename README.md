@@ -17,8 +17,13 @@ scripts/          Helper scripts
 ```
 
 ## Quick start
+Requires python3 and Node.js
+
 ```python setup.py```
 password: ```npg_WIoOsj86URTn```
+Test account
+Username: Test
+Password: CP317
 
 ### Neon Dashboard
 Neon PostgreSQL serverless dashboard
