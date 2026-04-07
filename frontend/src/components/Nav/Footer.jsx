@@ -3,8 +3,53 @@ import logo from "../../assets/logo/airline-logo.svg";
 import { ExternalLink } from "lucide-react";
 import { useLang } from "../../context/LangContext";
 
-export default function Footer() {
+export default function Footer({ onNavigate }) {
   const { en } = useLang();
+
+  const footerSections = [
+    {
+      title: en ? "About Air Laurier" : "À propos d'Air Laurier",
+      links: [
+        { label: en ? "About us" : "À propos de nous", page: "about" },
+        { label: en ? "Careers" : "Carrières", page: "careers" },
+        { label: en ? "News Hub " : "Actualités ", external: true, url: "https://simpleflying.com/category/aviation-news/"},
+        { label: en ? "Investor Relations " : "Relations investisseurs ", external: true, url: "https://www.iata.org/en/publications/economics/" },
+        { label: en ? "Business Travel " : "Voyages d'affaires ", external: true, url: "https://www.travelctm.com/global/"},
+        { label: en ? "Travel Agents " : "Agences de voyage ", external: true, url: "https://www.iata.org/en/services/travel-agency-program/"},
+        { label: en ? "Mobile App " : "Application mobile ", external: true, url: "https://apps.microsoft.com/search?query=Air+Laurier&hl=en-GB&gl=CA"},
+      ],
+    },
+    {
+      title: en ? "Customer Service" : "Service client",
+      links: [
+        { label: en ? "Help Center" : "Centre d'aide", page: "help-center" },
+        { label: en ? "Message Us" : "Envoyez-nous un message", page: "message-us" },
+        { label: en ? "Comment/Complaint" : "Commentaire/Plainte", page: "complaint" },
+      ],
+    },
+    {
+      title: en ? "Site Support" : "Assistance du site",
+      links: [
+        { label: en ? "Login help" : "Aide à la connexion", page: "login-help" },
+        { label: en ? "Site Map" : "Plan du site", page: "site-map" },
+        { label: en ? "Browser Compatibility" : "Compatibilité des navigateurs", page: "browser" },
+        { label: en ? "Accessibility" : "Accessibilité", page: "accessibility" },
+        { label: en ? "Booking Information" : "Informations sur les réservations", page: "booking-info" },
+        { label: en ? "Tracking Preferences" : "Préférences de suivi", page: "tracking" },
+      ],
+    },
+    {
+      title: en ? "Company" : "Entreprise",
+      links: [
+        { label: en ? "Customer Commitment" : "Engagement client", page: "commitment" },
+        { label: en ? "Tarmac Delay Plan" : "Plan de retard sur le tarmac", page: "tarmac" },
+        { label: en ? "Legal" : "Mentions légales", page: "legal" },
+        { label: en ? "Sustainability" : "Durabilité", page: "sustainability" },
+        { label: en ? "Contract of Carriage" : "Contrat de transport", page: "contract" },
+        { label: en ? "Privacy & Security" : "Confidentialité et sécurité", page: "privacy" },
+      ],
+    },
+  ];
 
   return (
     <section className={styles.bar}>
@@ -15,55 +60,32 @@ export default function Footer() {
         <br/>
         <hr style={{ border: "none", borderTop: "2px solid #333"}} />
         <br/>
-
         <nav className={styles.columns}>
-          <div className={styles.group}>
-            <h4>{en ? "About Air Laurier" : "À propos d'Air Laurier"}</h4>
-            <ul>
-              <li>{en ? "About us" : "À propos de nous"}</li>
-              <li>{en ? "Careers" : "Carrières"}</li>
-              <li>{en ? "News Hub" : "Actualités"} <ExternalLink size={14}/></li>
-              <li>{en ? "Investor Relations" : "Relations investisseurs"} <ExternalLink size={14}/></li>
-              <li>{en ? "Business Travel" : "Voyages d'affaires"} <ExternalLink size={14}/></li>
-              <li>{en ? "Travel Agents" : "Agences de voyage"} <ExternalLink size={14}/></li>
-              <li>{en ? "Mobile App" : "Application mobile"}</li>
-            </ul>
-          </div>
+          {footerSections.map((section, i) => (
+            <div key={i} className={styles.group}>
+              <h4>{section.title}</h4>
 
-          <div className={styles.group}>
-            <h4>{en ? "Customer Service" : "Service client"}</h4>
-            <ul>
-              <li>{en ? "Help Center" : "Centre d'aide"}</li>
-              <li>{en ? "Message Us" : "Envoyez-nous un message"}</li>
-              <li>{en ? "Comment/Complaint" : "Commentaire/Plainte"}</li>
-            </ul>
-          </div>
-
-          <div className={styles.group}>
-            <h4>{en ? "Site Support" : "Assistance du site"}</h4>
-            <ul>
-              <li>{en ? "Login help" : "Aide à la connexion"}</li>
-              <li>{en ? "Site Map" : "Plan du site"}</li>
-              <li>{en ? "Browser Compatibility" : "Compatibilité des navigateurs"}</li>
-              <li>{en ? "Accessibility" : "Accessibilité"}</li>
-              <li>{en ? "Booking Information" : "Informations sur les réservations"}</li>
-              <li>{en ? "Tracking Preferences" : "Préférences de suivi"}</li>
-            </ul>
-          </div>
-
-          <div className={styles.group}>
-            <h4>{en ? "Company" : "Entreprise"}</h4>
-            <ul>
-              <li>{en ? "Customer Commitment" : "Engagement client"}</li>
-              <li>{en ? "Tarmac Delay Plan" : "Plan de retard sur le tarmac"}</li>
-              <li>{en ? "Legal" : "Mentions légales"}</li>
-              <li>{en ? "Sustainability" : "Durabilité"}</li>
-              <li>{en ? "Contract of Carriage" : "Contrat de transport"}</li>
-              <li>{en ? "Privacy & Security" : "Confidentialité et sécurité"}</li>
-            </ul>
-          </div>
+              <ul>
+                {section.links.map((link, j) => (
+                  <li
+                    key={j}
+                    onClick={() => {
+                      if (link.external && link.url) {
+                        window.open(link.url, "_blank");
+                      } else if (link.page) {
+                        onNavigate?.(link.page);
+                      }
+                    }}
+                    style={{ cursor: link.page ? "pointer" : "default" }}
+                  >
+                    {link.label}
+                    {link.external && <ExternalLink size={14} />}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </nav>
-
         <div className={styles.info}>
           <span>© 2026 Air Laurier, Inc</span>
           <span>{en ? "Privacy Policy" : "Politique de confidentialité"}</span>

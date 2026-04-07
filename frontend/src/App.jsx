@@ -8,6 +8,8 @@ import HeroMessage from "./components/HeroComponents/HeroMessage";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import FlightStatus from "./pages/FlightStatus";
+import infoPages from "./data/infoPages";
+import InfoPages from "./pages/InfoPages";
 import CheckIn from "./pages/CheckIn";
 import MyFlights from "./pages/MyFlights";
 import AdminPanel from "./pages/AdminPanel";
@@ -24,7 +26,12 @@ function App() {
   const { user } = useUser();
   const validPages = [
     "home", "sign-in", "sign-up", "results", "trip-review",
-    "confirmation", "flight-status", "check-in", "my-flights", "admin-panel"
+    "confirmation", "flight-status", "check-in", "my-flights", 
+    "admin-panel", "about",   "careers",   "mobile-app",   
+    "help-center",   "message-us",   "complaint",   "login-help",   
+    "site-map",   "browser",   "accessibility",   "booking-info",   
+    "tracking",   "commitment",   "tarmac",   "legal",   
+    "sustainability",   "contract",   "privacy"
   ];
 
   const [currentPage, setCurrentPage] = useState(() => {
@@ -374,9 +381,25 @@ function App() {
             onMyFlights={() => navigateToPage("my-flights")}
           />
         )}
+
+        {infoPages[currentPage] && (
+          <InfoPages
+            title={infoPages[currentPage].title}
+            intro={infoPages[currentPage].intro}
+            sections={infoPages[currentPage].sections}
+            onBackHome={() => navigateToPage("home")}
+            showTextBox={currentPage === "message-us" || currentPage === "complaint"}
+            textBoxPlaceholder={
+              currentPage === "complaint"
+                ? "Describe your complaint here..."
+                : "Write your message here..."
+            }
+            onTextSubmit={(value) => console.log("Submitted:", value)}
+          />
+        )}
       </div>
 
-      <Footer />
+      <Footer onNavigate={navigateToPage} />
     </>
   );
 }
