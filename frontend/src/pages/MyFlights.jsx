@@ -276,13 +276,7 @@ export default function MyFlights({
                             ? en ? "Hide trip" : "Masquer"
                             : en ? "View trip" : "Voir le voyage"}
                         </button>
-                        <button
-                          type="button"
-                          className={styles.secondaryBtn}
-                          onClick={() => onManageBooking?.(trip)}
-                        >
-                          {en ? "Manage booking" : "Gérer la réservation"}
-                        </button>
+                        
                         <button
                           type="button"
                           className={styles.secondaryBtn}
