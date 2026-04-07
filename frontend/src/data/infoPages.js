@@ -1,103 +1,247 @@
 const infoPages = {
-    about: {
-      title: "About Us",
-      intro:
-        "Welcome to our airline reservation system — your all-in-one platform for discovering, booking, and managing flights with ease. Our goal is to simplify every step of the travel experience, from the moment you begin searching for a destination to the time you arrive at your final stop.",
-      sections: [
-        {
-          heading: "Who We Are",
-          text:
-            "We are a team of developers and designers focused on creating a modern, user-friendly flight booking experience. This platform was built with the idea that travel planning should be simple, transparent, and efficient. Instead of navigating complicated systems or unclear pricing, users can rely on our platform to provide clear options and a smooth booking process."
-        },
-        {
-          heading: "Our Mission",
-          text:
-            "Our mission is to make travel more accessible by providing an intuitive system that allows users to quickly find and book flights that suit their needs. We aim to reduce the stress that often comes with planning trips by offering a streamlined experience that prioritizes clarity, speed, and convenience."
-        },
-        {
-          heading: "What We Offer",
-          text:
-            "Our platform is designed to support users at every stage of their journey.",
-          list: [
-            "A powerful and easy-to-use flight search system that allows users to explore different routes and options",
-            "A clean and simple booking interface that minimizes confusion and saves time",
-            "Real-time flight status updates so users can stay informed about their trips",
-            "A convenient check-in feature that helps users prepare for their flights ahead of time",
-            "A personalized 'My Flights' section where users can view and manage their bookings"
-          ]
-        },
-        {
-          heading: "Our Approach",
-          text:
-            "We believe that technology should make life easier, not more complicated. That’s why we focus on clean design, clear information, and responsive functionality. Every part of the platform is designed to reduce unnecessary steps and provide a smooth, consistent experience across all pages."
-        },
-        {
-          heading: "Our Vision",
-          text:
-            "We envision a future where booking and managing travel is completely stress-free. By continuing to improve our platform and refine the user experience, we aim to create a reliable system that people can trust whenever they plan a trip."
-        },
-        {
-          heading: "Built for Users",
-          text:
-            "Whether you are traveling for business, vacation, or personal reasons, our platform is built to support your journey. We understand that every trip is different, and we strive to provide tools that are flexible enough to meet a variety of travel needs."
-        }
-      ]
+  about: {
+    title: {
+      en: "About Us",
+      fr: "À propos de nous"
+    },
+    intro: {
+      en: "Welcome to our airline reservation system — your all-in-one platform for discovering, booking, and managing flights with ease. Our goal is to simplify every step of the travel experience, from the moment you begin searching for a destination to the time you arrive at your final stop.",
+      fr: "Bienvenue sur notre système de réservation de vols — votre plateforme tout-en-un pour découvrir, réserver et gérer des vols en toute simplicité. Notre objectif est de simplifier chaque étape de l'expérience de voyage, depuis le moment où vous commencez à chercher une destination jusqu'à votre arrivée à votre destination finale."
     },
 
+    sections: [
+      {
+        heading: {
+          en: "Who We Are",
+          fr: "Qui Nous Sommes"
+        },
+        text: [
+          {
+            en: "We are a team of developers and designers focused on creating a modern, user-friendly flight booking experience. This platform was built with the idea that travel planning should be simple, transparent, and efficient. Instead of navigating complicated systems or unclear pricing, users can rely on our platform to provide clear options and a smooth booking process.",
+            fr: "Nous sommes une équipe de développeurs et de designers axés sur la création d'une expérience de réservation de vol moderne et conviviale. Cette plateforme a été conçue avec l'idée que la planification des voyages devrait être simple, transparente et efficace. Au lieu de naviguer dans des systèmes compliqués ou des prix peu clairs, les utilisateurs peuvent compter sur notre plateforme pour fournir des options claires et un processus de réservation fluide."
+          }
+        ]
+      },
+
+      {
+        heading: {
+          en: "Our Mission",
+          fr: "Notre Mission"
+        },
+        text: [
+          {
+            en: "Our mission is to make travel more accessible by providing an intuitive system that allows users to quickly find and book flights that suit their needs. We aim to reduce the stress that often comes with planning trips by offering a streamlined experience that prioritizes clarity, speed, and convenience.",
+            fr: "Notre mission est de rendre le voyage plus accessible en fournissant un système intuitif qui permet aux utilisateurs de trouver et de réserver rapidement des vols adaptés à leurs besoins. Nous visons à réduire le stress qui accompagne souvent la planification des voyages en offrant une expérience simplifiée qui privilégie la clarté, la rapidité et la commodité."
+          }
+        ]
+      },
+
+      {
+        heading: {
+          en: "What We Offer",
+          fr: "Ce Que Nous Offrons"
+        },
+        text: [
+          {
+            en: "Our platform is designed to support users at every stage of their journey.",
+            fr: "Notre plateforme est conçue pour accompagner les utilisateurs à chaque étape de leur parcours."
+          }
+        ],
+        list: [
+          { en: "A powerful and easy-to-use flight search system that allows users to explore different routes and options", fr: "Un système de recherche de vols puissant et facile à utiliser qui permet aux utilisateurs d'explorer différentes routes et options" },
+          { en: "A clean and simple booking interface that minimizes confusion and saves time", fr: "Une interface de réservation claire et simple qui minimise la confusion et fait gagner du temps" },
+          { en: "Real-time flight status updates so users can stay informed about their trips", fr: "Des mises à jour en temps réel sur le statut des vols afin que les utilisateurs puissent rester informés de leurs voyages" },
+          { en: "A convenient check-in feature that helps users prepare for their flights ahead of time", fr: "Une fonctionnalité d'enregistrement pratique qui aide les utilisateurs à se préparer à leurs vols à l'avance" },
+          { en: "A personalized 'My Flights' section where users can view and manage their bookings", fr: "Une section 'Mes Vols' personnalisée où les utilisateurs peuvent consulter et gérer leurs réservations" }
+        ]
+      },
+
+      {
+        heading: {
+          en:"Our Approach",
+           fr: "Notre Approche"
+        },
+         text: [
+          {
+            en: "We believe that technology should make life easier, not more complicated. That’s why we focus on clean design, clear information, and responsive functionality. Every part of the platform is designed to reduce unnecessary steps and provide a smooth, consistent experience across all pages.",
+           fr: "Nous croyons que la technologie devrait simplifier la vie, et non la compliquer. C'est pourquoi nous mettons l'accent sur un design épuré, des informations claires et une fonctionnalité réactive. Chaque partie de la plateforme est conçue pour réduire les étapes inutiles et offrir une expérience fluide et cohérente sur toutes les pages."
+          }
+        ]
+      },
+
+      {
+        heading: {
+          en: "Our Vision",
+          fr: "Notre Vision"
+        },
+        text: [
+          {
+            en: "We envision a future where booking and managing travel is completely stress-free. By continuing to improve our platform and refine the user experience, we aim to create a reliable system that people can trust whenever they plan a trip.",
+            fr: "Nous envisageons un avenir où la réservation et la gestion des voyages sont complètement sans stress. En continuant à améliorer notre plateforme et à affiner l'expérience utilisateur, nous visons à créer un système fiable sur lequel les gens peuvent compter chaque fois qu'ils planifient un voyage."
+          }
+        ]
+      },
+
+      {
+        heading: {
+          en: "Built for Users",
+          fr: "Conçu pour les Utilisateurs"
+        },
+        text: [
+          {
+            en: "Whether you are traveling for business, vacation, or personal reasons, our platform is built to support your journey. We understand that every trip is different, and we strive to provide tools that are flexible enough to meet a variety of travel needs.",
+            fr: "Que vous voyagiez pour affaires, en vacances ou pour des raisons personnelles, notre plateforme est conçue pour soutenir votre parcours. Nous comprenons que chaque voyage est différent et nous nous efforçons de fournir des outils suffisamment flexibles pour répondre à une variété de besoins en matière de voyage."
+          }
+        ]
+      },
+    ]
+  },
+
     careers: {
-      title: "Careers",
-      intro:
-        "Join us in building a better travel experience. We are always looking for motivated individuals who are passionate about technology, design, and creating meaningful user experiences.",
+      title: {
+        en: "Careers",
+        fr: "Carrières"
+      },
+      intro: {
+        en: "Join us in building a better travel experience. We are always looking for motivated individuals who are passionate about technology, design, and creating meaningful user experiences.",
+        fr: "Rejoignez-nous pour construire une meilleure expérience de voyage. Nous sommes toujours à la recherche de personnes motivées, passionnées par la technologie, le design et la création d'expériences utilisateur significatives."
+      },
+
       sections: [
         {
-          heading: "Why Work With Us",
+          heading: {
+            en: "Why Work With Us",
+            fr: "Pourquoi Travailler Avec Nous"
+          },
           text: [
-            "We are focused on building a platform that makes travel simple and accessible. Our team values collaboration, creativity, and continuous learning. Working with us means being part of a project where your ideas can directly impact how users interact with our platform.",
-            "We encourage a supportive environment where team members can grow their skills, take initiative, and contribute to meaningful features."
+            {
+              en: "We are focused on creating a travel experience that is simple, comfortable, and reliable. Our goal is to make every step of your journey easy—from booking your flight to arriving at your destination. Flying with us means choosing a service that prioritizes your time, convenience, and overall experience.",
+              fr: "Nous nous concentrons sur la création d'une expérience de voyage qui soit simple, confortable et fiable. Notre objectif est de rendre chaque étape de votre voyage facile, de la réservation de votre vol à votre arrivée à destination. Voyager avec nous signifie choisir un service qui privilégie votre temps, votre confort et votre expérience globale."
+            },
+            {
+              en: "We aim to provide a smooth and stress-free journey where passengers can feel confident, informed, and well taken care of throughout their trip.",
+              fr: "Nous visons à offrir un voyage fluide et sans stress où les passagers peuvent se sentir en confiance, informés et bien pris en charge tout au long de leur voyage."
+            }
           ]
         },
+
         {
-          heading: "Our Culture",
-          text:
-            "Our culture is built on teamwork, accountability, and innovation. We believe that the best results come from open communication and a willingness to learn from one another. Whether working independently or as part of a group, everyone is encouraged to share ideas and contribute to improving the platform.",
+          heading: {
+            en: "Our Commitment",
+            fr: "Notre Engagement"
+          },
+          text: [
+            {
+              en: "Our commitment is built on reliability, transparency, and customer care. We believe that a great travel experience comes from clear communication and consistent service. Whether you are traveling for business or leisure, we strive to ensure every part of your journey meets your expectations.",
+              fr: "Notre engagement est fondé sur la fiabilité, la transparence et le soin apporté aux clients. Nous croyons qu'une excellente expérience de voyage repose sur une communication claire et un service constant. Que vous voyagiez pour affaires ou pour le loisir, nous nous efforçons de faire en sorte que chaque partie de votre voyage réponde à vos attentes."
+            }
+          ],
           list: [
-            "Clear communication and teamwork",
-            "A willingness to learn and improve",
-            "Attention to detail and user experience",
-            "Taking ownership of your work"
+            {
+              en: "Clear and timely communication",
+              fr: "Communication claire et opportune"
+            },
+            {
+              en: "Reliable and efficient service",
+              fr: "Un service fiable et efficace"
+            },
+            {
+              en: "Attention to comfort and convenience",
+              fr: "Attention au confort et à la commodité"
+            },
+            {
+              en: "A focus on customer satisfaction",
+              fr: "Un souci de la satisfaction client"
+            }
           ]
         },
+
         {
-          heading: "Opportunities",
-          text:
-            "We offer opportunities for individuals interested in different areas of development and design. Some areas you can contribute to include:",
+          heading: {
+            en: "Services We Offer",
+            fr: "Services Que Nous Offrons"
+          },
+          text: [
+            {
+              en: "We provide a range of services designed to improve your travel experience. Some of the key features available to you include:",
+              fr: "Nous offrons des services conçus pour améliorer votre expérience de voyage. Certaines des fonctionnalités clés qui vous sont proposées incluent :"
+            }
+          ],
           list: [
-            "Front-end development (React, UI/UX design)",
-            "Back-end development (APIs, data handling)",
-            "Testing and quality assurance",
-            "Product design and user experience"
+            {
+              en: "Easy flight booking and management",
+              fr: "Réservation et gestion de vol faciles"
+            },
+            {
+              en: "Real-time flight updates and notifications",
+              fr: "Mises à jour et notifications de vol en temps réel"
+            },
+            {
+              en: "Flexible travel options and support",
+              fr: "Options de voyage flexibles et assistance"
+            },
+            {
+              en: "Comfort-focused seating and onboard experience",
+              fr: "Sièges axés sur le confort et expérience à bord"
+            }
           ]
         },
+
         {
-          heading: "What We Look For",
-          text:
-            "We are looking for individuals who are motivated, reliable, and eager to learn. Ideal candidates are those who:",
+          heading: {
+            en: "What You Can Expect",
+            fr: "Ce que vous pouvez attendre"
+          },
+          text: [
+            {
+              en: "We are dedicated to delivering a high-quality travel experience for every passenger. When you fly with us, you can expect:",
+              fr: "Nous nous engageons à offrir une expérience de voyage de haute qualité à chaque passager. Lorsque vous volez avec nous, vous pouvez vous attendre à :"
+            }
+          ],
           list: [
-            "Have a strong interest in technology and development",
-            "Are comfortable working in a team environment",
-            "Take initiative and are willing to solve problems",
-            "Pay attention to detail and care about user experience"
+            {
+              en: "A smooth and simple booking process",
+              fr: "Un processus de réservation fluide et simple"
+            },
+            {
+              en: "Helpful and responsive customer support",
+              fr: "Un support client utile et réactif"
+            },
+            {
+              en: "A focus on safety and reliability",
+              fr: "Un accent sur la sécurité et la fiabilité"
+            },
+            {
+              en: "A comfortable and efficient journey",
+              fr: "Un voyage confortable et efficace"
+            }
           ]
         },
+
         {
-          heading: "Growth and Learning",
-          text:
-            "We believe that growth is an important part of any role. By working on this platform, you will gain hands-on experience with real-world development tools, collaboration workflows, and problem-solving in a team environment."
+          heading: {
+            en: "Your Travel Experience",
+            fr: "Votre expérience de voyage"
+          },
+          text: [
+            {
+              en: "We understand that every journey matters. That’s why we focus on making travel more convenient, predictable, and enjoyable. From planning your trip to reaching your destination, we aim to provide an experience that feels seamless and dependable.",
+              fr: "Nous croyons que la croissance est une partie importante de tout rôle. En travaillant sur cette plateforme, vous acquerrez une expérience pratique avec des outils de développement réels, des flux de travail de collaboration et la résolution de problèmes dans un environnement d'équipe."
+            }
+          ]
         },
+
         {
-          heading: "Join Us",
-          text:
-            "If you are interested in contributing to a project that focuses on improving the travel experience, we would love to have you involved. This is a great opportunity to build your skills, gain experience, and be part of something meaningful."
+          heading: {
+            en: "Join Us",
+            fr: "Rejoignez-nous"
+          },
+          text: [
+            {
+              en: "If you are interested in contributing to a project that focuses on improving the travel experience, we would love to have you involved. This is a great opportunity to build your skills, gain experience, and be part of something meaningful.",
+              fr: "Si vous êtes intéressé à contribuer à un projet qui vise à améliorer l'expérience de voyage, nous serions ravis de vous impliquer. C'est une excellente opportunité de développer vos compétences, d'acquérir de l'expérience et de faire partie de quelque chose de significatif."
+            }
+          ]
         }
       ]
     },
