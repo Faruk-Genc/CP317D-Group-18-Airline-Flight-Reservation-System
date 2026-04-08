@@ -68,7 +68,7 @@ export default function InfoPages({
             />
 
             <button type="submit" className={styles.submitBtn}>
-              {en ? "Submit" : "..."}
+              {en ? "Submit" : "Soumettre"}
             </button>
           </form>
         )}
